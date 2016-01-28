@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>UI模型类的测试</title>
+</head>
+<body>
+<h1>UI模型测试</h1>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript">
+        var model = new yayoi.ui.model.JsonModel({
+            url: "/json/user-data.json",
+            method: "GET",
+            async: false,
+            parseData: function(result) {
+                return (result.code == 1)? result : null;
+            },
+            loadSuccess: function() {
+                yayoi.log.info("/", this.getValue("/"));
+                yayoi.log.info("/data/setting", this.getValue("/data/setting"));
+                yayoi.log.info("/data/setting/unknown", this.getValue("/data/setting/unknown"));
+                yayoi.log.info("/data/users", this.getValue("/data/users"));
+            }
+        });
+        model.load();
+
+        var form = new yayoi.ui.form.From({
+            
+            
+            
+        });
+    </script>
+</body>
+</html>

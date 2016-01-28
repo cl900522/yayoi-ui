@@ -2,19 +2,19 @@ yayoi.util.initPackages("yayoi.ui.common");
 
 yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     /**
-     * jquery selector to get container, 
+     * jquery selector to get container,
      * please reference to placeAt() function.
      * */
     this.selector;
-    this.container;
-    this.model;
+    this._container;
+    this._model;
 
     this.placeAt = function(selector) {
-        this.container = $(selector);
+        this.setContainer($(selector));
         this.render();
     };
     /**
-     * render function of component, 
+     * render function of component,
      * it will call beforeRender(); onRendering(); afterRender() functions in order
      */
     this.render = function() {
@@ -29,12 +29,18 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.afterRender = function() {
     };
     this.setModel = function(model) {
-        this.model = model;
+        this._model = model;
         this.render();
     };
     this.getModel = function() {
-        return this.model;
+        return this._model;
     };
+    this.setContainer = function(container){
+        this._container = container;
+    };
+    this.getContainer = function() {
+        return this._container;
+    }
     this._toextend = function (){
         this.init = function(params) {
             for(var p in params){
@@ -49,14 +55,97 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
 });
 
 yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", [], function(){
-    this.setValue = function() {
-        
+    this.title;
+    this.value;
+    this.formatter;
+
+    this.setTitle = function(title) {
+        this.title = title;
+    };
+    this.getTitle = function() {
+        return this.title;
+    }
+    this.setValue = function(value) {
+        this.value = value;
     };
     this.getValue = function() {
-        
+        return this.value;
+    }
+    this.setFormatter = function(formmater) {
+        this.formmater = formmater;
+    };
+    this.getFormatter = function() {
+        return this.formmater;
     }
 });
 
+yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.form.Component", [], function(){
+    this.title;
+    this.action;
+    this.method = "post";
+    this.columns = 2;
+    this.fields = [];
+    this.onRendering = function() {
+        var container = this.getContainer();
+        var formHtml = "<form class='yayoi-form' action'" + this.action + "' method='" + this.method + "' >"+
+            "<div class='yayoi-form-head'><span></span></div>" +
+            "<table class='yayoi-form-body'>" +
+            "" +
+            "" +
+            "" +
+            "" +
+            "</table>" +
+            "<div class='yayoi-form-foot'>" +
+            "<input type='button' class='yayoi-button yayoi-button-cancel'>取消</input>" +
+            "<input type='reset' class='yayoi-button yayoi-button-reset'>重置</input>" +
+            "<input type='button' class='yayoi-button yayoi-button-submit'>确定</input>" +
+            "</div>" +
+            "</form>";
+        container.html(fromHtml);
+    };
+    this.afterRender = function () {
+        var container = this.getContainer();
+        container.find(".yaoyoi-button-cancel").bind("click", this.cancel);
+        container.find(".yaoyoi-button-reset").bind("click", this.reset);
+        container.find(".yaoyoi-button-submit").bind("click", this._submit);
+    };
+    this.cancel = function () {
+        yayoi.log.info("","you can defind your own cancel action here.")
+    };
+    this.reset = function (){
+        yayoi.log.info("","you can add your own reset action here.")
+    };
+    this._submit = function() {
+        this.onSubmit();
+        var container = this.getContainer();
+        var that = this;
+        container.find("form").ajaxSubmit({
+            success: that.success,
+            error: that.error
+        });
+    };
+    this.onSubmit = function() {
+        yayoi.log.info("","you can defind your own onSubmit action here.")
+    };
+    this.success = function(result){
+        yayoi.log.info("","you can defind your own success action here.")
+    };
+    this.error = function(error){
+        yayoi.log.info("","you can defind your own error action here.")
+    }
+});
+
+yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function(){
+    this.onRendering = function(){
+        var container = this.getContainer();
+        
+        
+        
+        container.html();
+    };
+});
+
+/********************old ones***********************/
 yayoi.util.extend("yayoi.ui.form.ImageViewer", "yayoi.ui.form.Field", [], function() {
     this.imgTagId = "";
     this.fileTagId = "";
