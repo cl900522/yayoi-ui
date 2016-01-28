@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UI框架测试</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+</head>
+<body>
+    <h1>UI框架测试</h1>
+    <div id='formId' style='width: 800px; height: 400px; margin:auto;'></div>
+    <script type="text/javascript">
+    $(function(){
+        var form = new yayoi.ui.form.Form({
+            title: "表单测试",
+            action: '/form/action',
+            method: 'post',
+            selector: '#formId',
+            cancel: function() {
+                
+            },
+            reset: function() {
+                
+            },
+            onSubmit: function() {
+                alert(1);
+            },
+            success: function() {
+                
+            },
+            error: function() {
+                
+            }
+        });
+    })
+    </script>
+</body>
+</html>

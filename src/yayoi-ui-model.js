@@ -29,13 +29,15 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
     };
     /* 被继承的函数原型
      */
-    this._toextend = function (){
-        this.init = function(params) {
-            for(var p in params){
-                this[p] = params[p];
-            }
+    this._genExtend = function (){
+        return function(params) {
+            this.init = function(params) {
+                for(var p in params){
+                    this[p] = params[p];
+                }
+            };
+            this.init(params);
         };
-        this.init(params);
     };
     /*解析路径为数组
      */

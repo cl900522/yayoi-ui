@@ -49,8 +49,8 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
 
     var newType = null;
 
-    if(baseType._toextend != null){
-        newType = baseType._toextend;
+    if(newPrototype._genExtend != null){
+        newType = newPrototype._genExtend();
     } else {
         newType = function (params){
             this.init = function(params) {
