@@ -1,12 +1,34 @@
 <html>
 <head>
+    <title>UI模型类的测试</title>
 </head>
 <body>
+<h1>UI模型测试</h1>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
     <script type="text/javascript">
-        var model = new yayoi.ui.model.JsonModel();
-        model
+        var model = new yayoi.ui.model.JsonModel({
+            url: "/json/user-data.json",
+            method: "GET",
+            async: false,
+            parseData: function(result) {
+                return (result.code == 1)? result : null;
+            },
+            loadSuccess: function() {
+                yayoi.log.info("/", this.getValue("/"));
+                yayoi.log.info("/data/setting", this.getValue("/data/setting"));
+                yayoi.log.info("/data/setting/unknown", this.getValue("/data/setting/unknown"));
+                yayoi.log.info("/data/users", this.getValue("/data/users"));
+            }
+        });
+        model.load();
+        model.setValue("/data/users/1/name/", "changed")
+        yayoi.log.info("/data/users/1/name/", model.getValue("/data/users/1/name/"));
+
+        model.setValue("/data/setting/opacity/","12");
+        yayoi.log.info("/data/setting/opacity/", model.getValue("/data/setting/opacity/"));
+        yayoi.log.info("/", model.getValue("/"));
     </script>
 </body>
 </html>

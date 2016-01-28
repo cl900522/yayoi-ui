@@ -3,19 +3,29 @@ window.yayoi = {
     log:{}
 };
 
-yayoi.log.error = function (loginfo){
-    console.error(loginfo)
+yayoi.log.error = function (domain){
+    console.error("error:" + domain)
+    for(var i=1; i<arguments.length; i++){
+        console.error(arguments[i]);
+    }
 }
-yayoi.log.info = function (loginfo){
-    console.info(loginfo)
+yayoi.log.info = function (domain){
+    console.info("info:" + domain)
+    for(var i=1; i<arguments.length; i++){
+        console.info(arguments[i]);
+    }
 }
 
-yayoi.util.initPackages = function(packagesStr){
+yayoi.util.initPackages = function(packagesStr, defaultInitObject){
     var packages = packagesStr.split(".");
     var currentPackage = window;
     for(var i=0; i<packages.length; i++){
         if(currentPackage["" + packages[i]] == null){
-            currentPackage["" + packages[i]] = {};
+            if(i == packages.length-1 && defaultInitObject != null){
+                currentPackage["" + packages[i]] = defaultInitObject;
+            } else {
+                currentPackage["" + packages[i]] = {};
+            }
         }
         currentPackage = currentPackage["" + packages[i]];
     }
@@ -37,8 +47,8 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
     }
     initFunction.call(newPrototype, usingTypes);
 
-    var newType = yayoi.util.initPackages(newTypePath);
-    
+    var newType = null;
+
     if(baseType._toextend != null){
         newType = baseType._toextend;
     } else {
@@ -51,6 +61,8 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
             this.init(params);
         }
     }
+
+    newType = yayoi.util.initPackages(newTypePath, newType);
 
     newType.prototype = newPrototype;
     newPrototype["_typeName"] = newTypePath;

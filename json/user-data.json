@@ -1,0 +1,24 @@
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "users": [
+            {
+                "name": "chenmx",
+                "age": 12
+            },
+            {
+                "name": "caijun",
+                "age": 11
+            },
+            {
+                "name": "test",
+                "age": 10
+            }
+        ],
+        "setting": {
+            "span": "5min",
+            "size": 30
+        }
+    }
+}

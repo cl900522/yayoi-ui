@@ -1,19 +1,34 @@
 yayoi.util.initPackages("yayoi.ui.model");
 
 yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
-    this.component;
-    this.getValue = function() {
+    /*根元素的值
+     * */
+    this._rootValue;
+    /*绑定的UI组件
+     */
+    this._component;
+    /*获取路径下的值
+     * */
+    this.getValue = function(path) {
         throw "Can not call getValue in base Model";
     };
-    this.setValue = function() {
+    /*设置路径的值
+     */
+    this.setValue = function(path, value) {
         throw "Can not call setModel in base Model";
     };
+    /*获取绑定的组件
+     */
     this.getComponent = function (){
-        return this.component;
+        return this._component;
     };
+    /*设置绑定的组件
+     */
     this.setComponent = function (component){
-        this.component = component;
+        this._component = component;
     };
+    /* 被继承的函数原型
+     */
     this._toextend = function (){
         this.init = function(params) {
             for(var p in params){
@@ -21,39 +36,72 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
             }
         };
         this.init(params);
-    }
+    };
+    /*解析路径为数组
+     */
+    this._parsePath = function(pathsStr){
+        var paths = pathsStr.split("/");
+        for(var i=0; i<paths.length; i++){
+            if(!paths[i]){
+                paths.splice(i, 1);
+                i--;
+            }
+        }
+        return paths;
+    };
+    /*设置根节点值
+     */
+    this.setRootValue = function (value) {
+        this._rootValue = value;
+    };
+    /*获取根节点值
+     */
+    this.getRootValue = function () {
+        return this._rootValue;
+    };
 });
 
 yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], function(){
-    this.rootValue = null;
     this.loaded = false;
+    this.url = "";
     this.method = "post";
     this.params = [];
+    this.async = true;
     this._parseData = function(result) {
-        this.loaded = true;
-        this.rootValue = this.parseData(result);
+        this.setRootValue(this.parseData(result));
+        if(!this.loaded){
+            this.loadSuccess();
+            this.loaded = true;
+        }
     };
     this.parseData = function(data) {
         return data;
-    }
-    this.load = function(){
+    };
+    this.load = function() {
         var that = this;
         $.ajax({
             url : that.url,
+            async : that.async,
             method : that.method,
+            dataType: "json",
             params : that.params,
-            success : that._parseData
+            success : function(result){
+                result = eval(result);
+                that._parseData(result);
+            },
+            error: function(e){
+                yayoi.log.info(e);
+            }
         });
-    }
-    this.setRootValue = function (value) {
-        this.rootValue = value;
-        if(this.getComponent() != null){
-            
+    };
+    this.getValue = function(pathsStr) {
+        var value = this.getRootValue();
+
+        var paths = this._parsePath(pathsStr);
+        if(paths.length == 0){
+            return value;
         }
-    }
-    this.getValue = function(valuePath) {
-        var paths = valuePath.split("/");
-        var value = this.rootValue;
+
         for(var i=0; i<paths.length; i++) {
             if(value != null && value[paths[i]] != null){
                 value = value["" + paths[i]];
@@ -63,21 +111,20 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
         }
         return value;
     };
-    this.setValue = function(valuePath, value) {
-        var paths = valuePath.split("/");
-        var parentPath = this.rootValue;
+    this.setValue = function(pathsStr, value) {
+        var parentPath = this.getRootValue();
+        var paths = this._parsePath(pathsStr);
+        if(paths.length == 0){
+            this.setRootValue(value);
+            return;
+        }
         for(var i=0; i<paths.length - 1; i++) {
             if(parentPath != null && parentPath[paths[i]] != null){
                 parentPath = parentPath["" + paths[i]];
             } else {
-                parentPath = null;
+                parentPath = {};
             }
         }
-        if(parentPath != null){
-            parentPath[paths[paths.length-1]] = value;
-        } else {
-            throw "there is no";
-        }
-        
+        parentPath[paths[paths.length-1]] = value;
     };
 });
