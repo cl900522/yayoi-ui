@@ -1,0 +1,27 @@
+<html>
+<head>
+</head>
+<body>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript">
+        var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
+            this.name = null;
+            this.age = null;
+            this.getAge = function() {
+                return this.age;
+            }
+        });
+        var mx = new People({
+            address : "Jiagnsu.Yizheng"
+        });
+        var nj = new People({
+            address : "Hubei,Yichang"
+        });
+        yayoi.log.info(yayoi.common.People);
+        mx.age = 12;
+        yayoi.log.info(mx);
+        nj.age = 11;
+        yayoi.log.info(nj);
+    </script>
+</body>
+</html>
