@@ -8,6 +8,10 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.selector;
     this._container;
     this._model;
+    this.visible = true;
+    /**parent component
+     */
+    this._parent,
 
     this.placeAt = function(selector) {
         this.setContainer($(selector));
@@ -56,31 +60,6 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     }
 });
 
-yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", [], function(){
-    this.title;
-    this.value;
-    this.formatter;
-
-    this.setTitle = function(title) {
-        this.title = title;
-    };
-    this.getTitle = function() {
-        return this.title;
-    }
-    this.setValue = function(value) {
-        this.value = value;
-    };
-    this.getValue = function() {
-        return this.value;
-    }
-    this.setFormatter = function(formmater) {
-        this.formmater = formmater;
-    };
-    this.getFormatter = function() {
-        return this.formmater;
-    }
-});
-
 yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], function(){
     this.title;
     this.action;
@@ -89,11 +68,30 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     this.fields = [];
     this.onRendering = function() {
         var container = this.getContainer();
-        var formHtml = "<form class='yayoi-form' action'" + this.action + "' method='" + this.method + "' >"+
+        var formHtml = "<form class='yayoi-form' action='" + this.action + "' method='" + this.method + "' >"+
             "<div class='yayoi-form-head'><span class='yayoi-form-head-title'>" + this.title + "</span></div>" +
-            "<table class='yayoi-form-body'>" +
-            "<tr class='yayoi-form-row'></tr>" +
-            "</table>" +
+            "<div class='yayoi-form-body'><table>";
+
+            var i=0
+            for(var i=0; i<this.fields.length; i++){
+                if (i % this.columns == 0) {
+                    formHtml += "<tr class='yayoi-form-row'>";
+                }
+                formHtml += "<td class='yayoi-form-cell' name='form-cell-" + i + "'>";
+                if (i % this.columns == this.columns - 1) {
+                    formHtml += "</tr>";
+                }
+            }
+
+            if(i%this.columns != 0){
+                while( i%this.columns != 0) {
+                    formHtml += "<td></td>";
+                    i++;
+                }
+                formHtml += "</tr>";
+            }
+
+            formHtml += "</table></div>" +
             "<div class='yayoi-form-foot'><div class='yayoi-form-foot-buttons'>" +
             "<input type='button' class='yayoi-button yayoi-button-cancel' value='取消' />" +
             "<input type='reset' class='yayoi-button yayoi-button-reset' value='重置' />" +
@@ -101,6 +99,12 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             "</div></div>" +
             "</form>";
         container.html(formHtml);
+
+        for(var i=0; i<this.fields.length; i++) {
+            var field = this.createField(this.fields[i]);
+            field.setContainer(container.find("td[name=form-cell-" + i + "]"));
+            field.render();
+        }
     };
     this.afterRender = function () {
         var container = this.getContainer();
@@ -138,15 +142,64 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     };
     this.error = function(error){
         yayoi.log.info("","you can defind your own error action here.")
+    };
+    this.createField = function(params) {
+        var field = null, fieldType = params["type"];
+        delete params["type"];
+
+        if(!fieldType){
+            throw "Can not decide the field type.";
+        }
+        switch (fieldType){
+            case "text":
+                field = new yayoi.ui.form.TextFiled(params);
+                break;
+            case "select":
+                break;
+            case "radio":
+                break;
+            default:
+                throw "Field type can not be supported";
+        }
+        return field;
     }
+});
+
+yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", ["yayoi.ui.form.TextField"], function(){
+    this.title = "";
+    this.value = "";
+    this.name;
+    this.formatter;
+    this.hint = "";
+
+    this.setTitle = function(title) {
+        this.title = title;
+    };
+    this.getTitle = function() {
+        return this.title;
+    }
+    this.setValue = function(value) {
+        this.value = value;
+    };
+    this.getValue = function() {
+        return this.value;
+    }
+    this.setFormatter = function(formmater) {
+        this.formmater = formmater;
+    };
+    this.getFormatter = function() {
+        return this.formmater;
+    };
 });
 
 yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function(){
     this.onRendering = function(){
         var container = this.getContainer();
-        
-        
-        
-        container.html();
+        var html = "<div class='yayoi-field'>" +
+            "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
+            "<div class='yayoi-field-value'>"+
+            "<input class='yayoi-field-input' placeholder='" + this.hint + "' type='text' value='' />" +
+            "</div></div>";
+        container.html(html);
     };
 });
