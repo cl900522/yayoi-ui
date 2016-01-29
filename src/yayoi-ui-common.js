@@ -25,12 +25,18 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         this.beforeRender();
         this.onRendering();
         this.afterRender();
+        this.initEvents();
+        this.afterEvents();
     }
     this.beforeRender = function() {
     };
     this.onRendering = function() {
     };
     this.afterRender = function() {
+    };
+    this.initEvents = function() {
+    };
+    this.afterEvents = function() {
     };
     this.setModel = function(model) {
         this._model = model;
@@ -44,7 +50,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     };
     this.getContainer = function() {
         return this._container;
-    }
+    };
     this._genExtend = function (){
         return function(params) {
             this.init = function(params) {
@@ -72,19 +78,33 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             "<div class='yayoi-form-head'><span class='yayoi-form-head-title'>" + this.title + "</span></div>" +
             "<div class='yayoi-form-body'><table>";
 
-            var i=0
-            for(var i=0; i<this.fields.length; i++){
-                if (i % this.columns == 0) {
+            for(var i=0; i<this.fields.length; i++) {
+                var field = this.createField(this.fields[i]);
+                this.fields[i] = field;
+            }
+
+            var i=0; totaColumns = this.columns;
+            for(i=0; i<this.fields.length; i++){
+                if (i % totaColumns == 0) {
                     formHtml += "<tr class='yayoi-form-row'>";
                 }
-                formHtml += "<td class='yayoi-form-cell' name='form-cell-" + i + "'>";
-                if (i % this.columns == this.columns - 1) {
+
+                var colspan = this.fields[i].colspan;
+                if(colspan > totaColumns - (i % totaColumns)){
+                    colspan = totaColumns - (i % totaColumns);
+                    this.fields[i].colspan = colspan;
+                }
+
+                formHtml += "<td class='yayoi-form-cell' name='form-cell-" + i + "' colspan='" + colspan + "'>";
+                if (i % totaColumns == totaColumns - 1) {
                     formHtml += "</tr>";
                 }
             }
 
-            if(i%this.columns != 0){
-                while( i%this.columns != 0) {
+            /**当field数量和column无法整除时，补齐剩余td标签
+             */
+            if(i % totaColumns != 0){
+                while( i % totaColumns != 0) {
                     formHtml += "<td></td>";
                     i++;
                 }
@@ -101,12 +121,11 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         container.html(formHtml);
 
         for(var i=0; i<this.fields.length; i++) {
-            var field = this.createField(this.fields[i]);
-            field.setContainer(container.find("td[name=form-cell-" + i + "]"));
-            field.render();
+            this.fields[i].setContainer(container.find("td[name=form-cell-" + i + "]"));
+            this.fields[i].render();
         }
     };
-    this.afterRender = function () {
+    this.initEvents = function () {
         var container = this.getContainer();
         var that =this;
         container.find(".yayoi-button-cancel").bind("click", function(){
@@ -120,10 +139,10 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         });
     };
     this.cancel = function () {
-        yayoi.log.info("","you can defind your own cancel action here.")
+        yayoi.log.info("", "you can defind your own cancel action here.")
     };
     this.reset = function (){
-        yayoi.log.info("","you can add your own reset action here.")
+        yayoi.log.info("", "you can add your own reset action here.")
     };
     this._submit = function() {
         this.onSubmit();
@@ -135,13 +154,26 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         });
     };
     this.onSubmit = function() {
-        yayoi.log.info("","you can defind your own onSubmit action here.")
+        yayoi.log.info("", "you can defind your own onSubmit action here.")
     };
     this.success = function(result){
-        yayoi.log.info("","you can defind your own success action here.")
+        yayoi.log.info("", "you can defind your own success action here.")
     };
     this.error = function(error){
-        yayoi.log.info("","you can defind your own error action here.")
+        yayoi.log.info("", "you can defind your own error action here.")
+    };
+    this.getField = function(arg1) {
+        if(arg1 instanceof Number) {
+            return this.fields[arg1];
+        }
+        if(arg1 instanceof String) {
+            for(var i=0; i<this.fields.length; i++) {
+                if(this.fields[i].name == arg1) {
+                    return this.fields[i];
+                }
+                return null;
+            }
+        }
     };
     this.createField = function(params) {
         var field = null, fieldType = params["type"];
@@ -158,6 +190,9 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
                 break;
             case "radio":
                 break;
+            case "textarea":
+                field = new yayoi.ui.form.TextArea(params);
+                break;
             default:
                 throw "Field type can not be supported";
         }
@@ -171,6 +206,7 @@ yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", ["yayoi.ui
     this.name;
     this.formatter;
     this.hint = "";
+    this.colspan = 1;
 
     this.setTitle = function(title) {
         this.title = title;
@@ -197,9 +233,221 @@ yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function
         var container = this.getContainer();
         var html = "<div class='yayoi-field'>" +
             "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
-            "<div class='yayoi-field-value'>"+
-            "<input class='yayoi-field-input' placeholder='" + this.hint + "' type='text' value='' />" +
+            "<div class='yayoi-field-value'>" +
+            "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='text' value='' />" +
             "</div></div>";
         container.html(html);
     };
+    this.setValue = function(value) {
+        var container = this.getContainer();
+        container.find("input").val(value);
+    };
+    this.getValue = function() {
+        var container = this.getContainer();
+        return container.find("input").val();
+    }
+});
+yayoi.util.extend("yayoi.ui.form.TextArea", "yayoi.ui.form.Field", [], function() {
+    this.onRendering = function(){
+        var container = this.getContainer();
+        var html = "<div class='yayoi-field'>" +
+            "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
+            "<div class='yayoi-field-value'>" +
+            "<textarea class='yayoi-field-textarea' name='" + this.name + "' placeholder='" + this.hint + "'></textarea>" +
+            "</div></div>";
+        container.html(html);
+    };
+    this.setValue = function(value) {
+        var container = this.getContainer();
+        container.find("input").val(value);
+    };
+    this.getValue = function() {
+        var container = this.getContainer();
+        return container.find("input").val();
+    }
+});
+
+yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], function() {
+    this.selections = []; //每个对象包含value, text
+    this.selected = -1;
+
+    this.onRendering = function() {
+        var container = this.getContainer();
+        var selectHtml = '<input class="stats_v" name="'+this.name+'" value="0" style="display: none;"/>'
+                +'<i class="inp_label">'+this.title+'：</i>'
+                +'<span class="stats_s">'
+        if( this.selected> 0 && this.selected < this.selections.length) {
+            selectHtml +='<input class="stats_i" type="text" value="' + this.selections[i].text + '" readonly />';
+        } else {
+            selectHtml +='<input class="stats_i" type="text" value="请选择" readonly />';
+        }
+        selectHtml +='<i class="icon-expand_more"></i></span>'
+            +'<ul class="stats_list" style="display: none;">'
+            +'<li><span class="stats_tit">选项<i class="tip"></i></span></li>'
+
+        for(var i=0; i<this.selections.length; i++) {
+            if(i==this.selected){
+                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '" class="select">' + this.selections[i].text + '</a></li>';
+            } else {
+                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '">' + this.selections[i].text + '</a></li>';
+            }
+        }
+
+        selectHtml += '</ul>';
+        container.html(selectHtml);
+    };
+    this.initEvents = function() {
+        var that = this;
+        var triggerSelect = this.container.find(".stats_s");
+        triggerSelect.bind("click", function() {
+            if ($(this).next(".stats_list").css("display") == 'block') {
+                that._hideSelections();
+            } else {
+                that._showSelections();
+            }
+        });
+
+        var selectArea = this.container.find(".stats_list a");
+        selectArea.bind("mouseover", function(){
+            $(this).addClass("stats_hov");
+        });
+        selectArea.bind("mouseout", function(){
+            $(this).removeClass("stats_hov");
+        });
+        selectArea.bind("click", function() {
+            that._hideSelections();
+            var param = $(this).attr("param");
+            that.select(param);
+        });
+    };
+    this._showSelections = function(){
+        this.container.css("border-color", "#00ce9b");
+        this.container.find(".stats_lis i").removeClass("icon-expand_more").addClass("icon-expand_less");
+        this.container.find(".stats_list").css("display", "block").removeClass("fadeOutDown").addClass("fadeInDown");
+        this.container.find(".stats_list").show();
+    };
+    this._hideSelections = function(){
+        this.container.css("border-color", "#DCDCDC");
+        this.container.find(".stats_s i").removeClass("icon-expand_less").addClass("icon-expand_more");
+        this.container.find(".stats_list").css("display", "none").removeClass("fadeInDown").addClass("fadeOutDown");
+        this.container.find(".stats_list").hide();
+    }
+    this.select = function(value){
+        var node = null;
+        for(var i=0; i<this.selections.length; i++){
+            if( "" + this.selections[i].value == "" + value){
+                this.selected = i;
+                node = this.selections[i];
+            }
+        }
+        if(node){
+            this.container.find("a").removeClass("select").removeClass("white");
+            this.container.find("a[param="+node.value+"]").addClass("white").addClass("select");
+
+            this.container.find(".stats_v").val(node.value);
+            this.container.find(".stats_i").val(node.text);
+        }
+    }
+    this.getTextOf = function(value) {
+        for(var i=0; i<this.selections.length; i++) {
+            if(""+value==this.selections[i].value){
+                return this.selections[i].text;
+            }
+        }
+        return "";
+    }
+});
+
+yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], function() {
+    this.selections = []; //每个对象包含value, text
+    this.selected = [];
+
+    this.onRendering = function() {
+        var container = this.getContainer();
+        var selectHtml = '<input class="stats_v" name="'+this.name+'" value="0" style="display: none;"/>'
+                +'<i class="inp_label">'+this.title+'：</i>'
+                +'<span class="stats_s">'
+        if( this.selected> 0 && this.selected < this.selections.length) {
+            selectHtml +='<input class="stats_i" type="text" value="' + this.selections[i].text + '" readonly />';
+        } else {
+            selectHtml +='<input class="stats_i" type="text" value="请选择" readonly />';
+        }
+        selectHtml +='<i class="icon-expand_more"></i></span>'
+            +'<ul class="stats_list" style="display: none;">'
+            +'<li><span class="stats_tit">选项<i class="tip"></i></span></li>'
+
+        for(var i=0; i<this.selections.length; i++) {
+            if(i==this.selected){
+                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '" class="select">' + this.selections[i].text + '</a></li>';
+            } else {
+                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '">' + this.selections[i].text + '</a></li>';
+            }
+        }
+
+        selectHtml += '</ul>';
+        container.html(selectHtml);
+    };
+    this.initEvents = function() {
+        var that = this;
+        var triggerSelect = this.container.find(".stats_s");
+        triggerSelect.bind("click", function() {
+            if ($(this).next(".stats_list").css("display") == 'block') {
+                that._hideSelections();
+            } else {
+                that._showSelections();
+            }
+        });
+
+        var selectArea = this.container.find(".stats_list a");
+        selectArea.bind("mouseover", function(){
+            $(this).addClass("stats_hov");
+        });
+        selectArea.bind("mouseout", function(){
+            $(this).removeClass("stats_hov");
+        });
+        selectArea.bind("click", function() {
+            that._hideSelections();
+            var param = $(this).attr("param");
+            that.select(param);
+        });
+    };
+    this._showSelections = function(){
+        this.container.css("border-color", "#00ce9b");
+        this.container.find(".stats_lis i").removeClass("icon-expand_more").addClass("icon-expand_less");
+        this.container.find(".stats_list").css("display", "block").removeClass("fadeOutDown").addClass("fadeInDown");
+        this.container.find(".stats_list").show();
+    };
+    this._hideSelections = function(){
+        this.container.css("border-color", "#DCDCDC");
+        this.container.find(".stats_s i").removeClass("icon-expand_less").addClass("icon-expand_more");
+        this.container.find(".stats_list").css("display", "none").removeClass("fadeInDown").addClass("fadeOutDown");
+        this.container.find(".stats_list").hide();
+    }
+    this.select = function(value){
+        var node = null;
+        for(var i=0; i<this.selections.length; i++){
+            if( "" + this.selections[i].value == "" + value){
+                this.selected = i;
+                node = this.selections[i];
+            }
+        }
+        if(node){
+            this.container.find("a").removeClass("select").removeClass("white");
+            this.container.find("a[param="+node.value+"]").addClass("white").addClass("select");
+
+            this.container.find(".stats_v").val(node.value);
+            this.container.find(".stats_i").val(node.text);
+        }
+    }
+    this.getTextOf = function(value) {
+        for(var i=0; i<this.selections.length; i++) {
+            if(""+value==this.selections[i].value){
+                return this.selections[i].text;
+            }
+        }
+        return "";
+    }
+});
+
+yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", [], function() {
 });

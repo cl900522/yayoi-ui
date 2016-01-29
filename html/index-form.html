@@ -12,7 +12,7 @@
 </head>
 <body>
     <h1>UI框架测试</h1>
-    <div id='formId' style='width: 1000px; height: 400px; margin:auto;'></div>
+    <div id='formId' style='width: 1200px; height: 500px; margin:auto;'></div>
     <script type="text/javascript">
     $(function(){
         var form = new yayoi.ui.form.Form({
@@ -21,35 +21,27 @@
             method: 'get',
             selector: '#formId',
             columns : 2,
-            cancel: function() {
-
-            },
-            reset: function() {
-
-            },
             onSubmit: function() {
             },
             success: function() {
-
             },
-            error: function() {
-
-            },
-            fields: [{
-                type: "text", title: "First Name", name: "Field1", value: "value1", hint: "Input Your First Name"
-            },{
-                type: "text", title: "Last Name", name: "Field2", value: "value2", hint: "Input Your Last Name"
-            },{
-                type: "text", title: "Age", name: "Field3", value: "value3", hint: "Input Your Age"
-            },{
-                type: "text", title: "IdCard", name: "Field4", value: "value4", hint: "Input Your IdCard"
-            },{
-                type: "text", title: "Email", name: "Field4", value: "value4", hint: "Input Your Email"
-            },{
-                type: "text", title: "Phone", name: "Field5", value: "value5", hint: "Input Your Phone"
-            },{
-                type: "text", title: "Remark", name: "Field5", value: "value5", hint: "Input Your Remark"
-            }]
+            fields: [
+                {
+                    type: "text", title: "First Name", name: "Field1", value: "value1", hint: "Input Your First Name"
+                },{
+                    type: "text", title: "Last Name", name: "Field2", value: "value2", hint: "Input Your Last Name"
+                },{
+                    type: "text", title: "Age", name: "Field3", value: "value3", hint: "Input Your Age"
+                },{
+                    type: "text", title: "IdCard", name: "Field4", value: "value4", hint: "Input Your IdCard"
+                },{
+                    type: "text", title: "Email", name: "Field4", value: "value4", hint: "Input Your Email"
+                },{
+                    type: "text", title: "Phone", name: "Field5", value: "value5", hint: "Input Your Phone"
+                },{
+                    type: "textarea", title: "Remark", name: "Field5", value: "value5", hint: "Input Your Remark", colspan :1
+                }
+            ]
         });
     })
     </script>
