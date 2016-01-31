@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UI框架测试</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.form.js"></script>
+
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-tab.js"></script>
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+</head>
+<body>
+    <h1>UI框架测试</h1>
+    <div id='tabId' style='width: 1200px; height: 500px; margin:auto;'></div>
+    <script type="text/javascript">
+    $(function(){
+        var tab = new yayoi.ui.tab.URLTab({
+            selector: "#tabId",
+            tabs: [
+               {code: 1, title: "百度", src: "https://www.baidu.com", closeable: true},
+               {code: 2, title: "京东", src: "http://www.jingdong.com", closeable: true}
+            ]
+        })
+    })
+    </script>
+</body>
+</html>
