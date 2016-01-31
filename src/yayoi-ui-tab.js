@@ -43,13 +43,13 @@ yayoi.util.extend("yayoi.ui.tab.URLTabNode", "yayoi.ui.common.SubComponent", [],
     }
     this.active = function(){
         this.parent.deactiveAll();
-        this.tab.removeClass("active").addClass("deactive");
-        this.frame.removeClass("visited");
+        this.tab.addClass("active").removeClass("deactive");
+        this.frame.addClass("active").removeClass("deactive");
         this.isActive = true;
     }
     this.deactive = function(){
-        this.tab.addClass("active").removeClass("deactive");
-        this.frame.addClass("visited");
+        this.tab.removeClass("active").addClass("deactive");
+        this.frame.removeClass("active").addClass("deactive");
         this.isActive = false;
     }
     this.close = function(){
@@ -77,12 +77,9 @@ yayoi.util.extend("yayoi.ui.tab.URLTab", "yayoi.ui.common.Component", [], functi
         container.append(this.tabContainer);
         container.append(this.frameContainer);
 
-        this.resize();
-
         var tabs = this.tabs;
         for(var i=0; i<tabs.length; i++) {
-            var tab = new yayoi.ui.tab.URLTabNode(tabs[i]);
-            this.addTabNode(tab);
+            this.addTab(tabs[i]);
         }
     };
     this.resize = function(){
@@ -90,25 +87,30 @@ yayoi.util.extend("yayoi.ui.tab.URLTab", "yayoi.ui.common.Component", [], functi
         var frameHeight = container.height() - 40;
         this.frameContainer.height(frameHeight + "px");
     };
-    this.getTabNode = function(code) {
+    this.getTab = function(code) {
         return this.tabNodes[code];
     };
     this.deactiveAll = function(){
         for(var p in this.tabNodes){
             this.tabNodes[p].deactive();
         }
-    }
-    this.addTabNode = function(tabNode) {
-        if(this.tabNodes[tabNode.code]){
-            this.tabNodes[tabNode.code].active();
+    };
+    this.addTab = function(tab) {
+        if(!(tab instanceof yayoi.ui.tab.URLTabNode)){
+            var tab = new yayoi.ui.tab.URLTabNode(tab);
+            this.addTab(tab);
             return;
         }
-        this.tabNodes[tabNode.code] = tabNode;
-        tabNode.parent = this;
+        if(this.tabNodes[tab.code]){
+            this.tabNodes[tab.code].active();
+            return;
+        }
+        this.tabNodes[tab.code] = tab;
+        tab.parent = this;
 
-        this.tabContainer.append(tabNode.tab);
-        this.frameContainer.append(tabNode.frame);
-        tabNode.active();
+        this.tabContainer.append(tab.tab);
+        this.frameContainer.append(tab.frame);
+        tab.active();
     };
     this.refresh = function(){
         for(var p in this.tabNodes){
