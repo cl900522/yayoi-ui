@@ -1,3 +1,4 @@
+"use strict";
 yayoi.util.initPackages("yayoi.ui.form");
 
 yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], function(){
@@ -17,7 +18,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
                 this.fields[i] = field;
             }
 
-            var i=0; totaColumns = this.columns;
+            var i=0, totaColumns = this.columns;
             for(i=0; i<this.fields.length; i++){
                 if (i % totaColumns == 0) {
                     formHtml += "<tr class='yayoi-form-row'>";

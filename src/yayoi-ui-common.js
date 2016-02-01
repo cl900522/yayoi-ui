@@ -1,3 +1,4 @@
+"use strict";
 yayoi.util.initPackages("yayoi.ui.common");
 
 yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){

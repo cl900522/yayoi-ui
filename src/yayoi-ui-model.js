@@ -1,3 +1,4 @@
+"use strict";
 yayoi.util.initPackages("yayoi.ui.model");
 
 yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
