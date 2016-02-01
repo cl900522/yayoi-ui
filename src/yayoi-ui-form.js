@@ -1,12 +1,17 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.form");
 
+/**
+ * if we define the form with out defining success & error function, the form will be submitted with our processing response data.
+ */
 yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], function(){
     this.title;
     this.action;
     this.method = "post";
     this.columns = 2;
     this.fields = [];
+    this.success;
+    this.error;
     this.onRendering = function() {
         var container = this.getContainer();
         var formHtml = "<form class='yayoi-form' action='" + this.action + "' method='" + this.method + "' >"+
@@ -80,22 +85,32 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         yayoi.log.info("", "you can add your own reset action here.")
     };
     this._submit = function() {
-        this.onSubmit();
+        if (!this.onSubmit()) {
+            return;
+        }
+
         var container = this.getContainer();
         var that = this;
-        container.find("form").ajaxSubmit({
-            success: that.success,
-            error: that.error
-        });
+        if(this["success"] != undefined || this["error"] != undefined){
+            var options = {};
+            if(this["success"] != undefined){
+                options.success = this["success"];
+            }
+            if(this["error"] != undefined){
+                options.error = this["error"];
+            }
+
+            container.find("form").ajaxSubmit(options);
+        } else {
+            container.find("form").submit();
+        }
     };
+    /**
+     * if this function return false, the submit process stoped
+     */
     this.onSubmit = function() {
-        yayoi.log.info("", "you can defind your own onSubmit action here.")
-    };
-    this.success = function(result){
-        yayoi.log.info("", "you can defind your own success action here.")
-    };
-    this.error = function(error){
-        yayoi.log.info("", "you can defind your own error action here.")
+        yayoi.log.info("", "you can defind your own onSubmit action here.");
+        return true;
     };
     this.getField = function(arg1) {
         if(arg1 instanceof Number) {
@@ -106,9 +121,9 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
                 if(this.fields[i].name == arg1) {
                     return this.fields[i];
                 }
-                return null;
             }
         }
+        return null;
     };
     this.createField = function(params) {
         var field = null, fieldType = params["type"];

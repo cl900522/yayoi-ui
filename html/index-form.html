@@ -18,14 +18,10 @@
     $(function(){
         var form = new yayoi.ui.form.Form({
             title: "表单测试",
-            action: '/html/index-model.html',
+            action: '/html/index-form.html',
             method: 'get',
             selector: '#formId',
             columns : 2,
-            onSubmit: function() {
-            },
-            success: function() {
-            },
             fields: [
                 {
                     type: "text", format: "text", title: "First Name", name: "firstName", value: "value1", hint: "Input Your First Name"
