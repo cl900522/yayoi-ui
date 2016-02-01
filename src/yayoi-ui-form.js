@@ -125,6 +125,9 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
                 break;
             case "radio":
                 break;
+            case "date":
+                field = new yayoi.ui.form.DateField(params);
+                break;
             case "textarea":
                 field = new yayoi.ui.form.TextArea(params);
                 break;
@@ -164,12 +167,13 @@ yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", ["yayoi.ui
 });
 
 yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function(){
+    this.format = "text";
     this.onRendering = function(){
         var container = this.getContainer();
         var html = "<div class='yayoi-field'>" +
             "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
             "<div class='yayoi-field-value'>" +
-            "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='text' value='' />" +
+            "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='"+this.format+"' value='' />" +
             "</div></div>";
         container.html(html);
     };
@@ -349,4 +353,21 @@ yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], functi
 });
 
 yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", [], function() {
+    this.onRendering = function(){
+        var container = this.getContainer();
+        var html = "<div class='yayoi-field'>" +
+            "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
+            "<div class='yayoi-field-value'>" +
+            "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='date' value='' />" +
+            "</div></div>";
+        container.html(html);
+    };
+    this.setValue = function(value) {
+        var container = this.getContainer();
+        container.find("input").val(value);
+    };
+    this.getValue = function() {
+        var container = this.getContainer();
+        return container.find("input").val();
+    }
 });
