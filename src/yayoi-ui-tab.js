@@ -11,7 +11,6 @@ yayoi.util.extend("yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.TabNode", [], functio
 
     this.onRendering = function() {
         var container = this.getContainer();
-        container.html();
         var frame = $('<iframe src="'+this.url+'"scrolling="auto" frameborder="0"></iframe>');
         container.append(frame);
     };

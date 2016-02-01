@@ -22,6 +22,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
      * it will call beforeRender(); onRendering(); afterRender() functions in order
      */
     this.render = function() {
+        this.getContainer().empty();
         this.beforeRender();
         this.onRendering();
         this.afterRender();
