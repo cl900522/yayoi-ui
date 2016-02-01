@@ -13,19 +13,20 @@
 </head>
 <body>
     <h1>UI框架测试</h1>
-    <div id='tabId' style='width: 1500px; height: 800px; margin:auto;'></div>
+    <div id='tabId' style='width: 1500px; height: 800px; margin: auto;'></div>
     <script type="text/javascript">
     $(function(){
-        var tab = new yayoi.ui.tab.URLTab({
+        var tab = new yayoi.ui.tab.Tab({
             selector: "#tabId",
             tabs: [
-               {code: 1, title: "表单测试", src: "./index-form.html", closeable: true},
-               {code: 2, title: "模型测试", src: "./index-model.html", closeable: true},
-               {code: 3, title: "基础模块测试", src: "./index-core.html", closeable: true},
-               {code: 4, title: "百度", src: "https://www.baidu.com", closeable: true},
-               {code: 5, title: "京东", src: "http://www.jingdong.com", closeable: true}
+               {code: 1, title: "表单测试", url: "./index-form.html", closeable: true},
+               {code: 2, title: "模型测试", url: "./index-model.html", closeable: true},
+               {code: 3, title: "基础模块测试", url: "./index-core.html", closeable: true},
+               {code: 4, title: "百度", url: "https://www.baidu.com", closeable: false},
             ]
-        })
+        });
+        tab.addTab({code: 5, title: "京东", url: "http://www.jingdong.com", closeable: false});
+        tab.addTab({code: 6, title: "HTML页签", html: "<div>HTML TAB TEST</div>", closeable: false});
     })
     </script>
 </body>
