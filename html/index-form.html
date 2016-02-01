@@ -28,19 +28,33 @@
             },
             fields: [
                 {
-                    type: "text", title: "First Name", name: "Field1", value: "value1", hint: "Input Your First Name"
-                },{
-                    type: "text", title: "Last Name", name: "Field2", value: "value2", hint: "Input Your Last Name"
-                },{
-                    type: "text", title: "Age", name: "Field3", value: "value3", hint: "Input Your Age"
-                },{
-                    type: "text", title: "IdCard", name: "Field4", value: "value4", hint: "Input Your IdCard"
-                },{
-                    type: "text", title: "Email", name: "Field4", value: "value4", hint: "Input Your Email"
-                },{
-                    type: "text", title: "Phone", name: "Field5", value: "value5", hint: "Input Your Phone"
-                },{
-                    type: "textarea", title: "Remark", name: "Field5", value: "value5", hint: "Input Your Remark", colspan :1
+                    type: "text", title: "First Name", name: "firstName", value: "value1", hint: "Input Your First Name"
+                }, {
+                    type: "text", title: "Last Name", name: "lastName", value: "value2", hint: "Input Your Last Name"
+                }, {
+                    type: "text", title: "Age", name: "Age", value: "value3", hint: "Input Your Age"
+                }, {
+                    type: "singleSelect", title: "Gender", name: "gender", value: "female", nullable: false,
+                    selections: [
+                        {value: "male", text: "Male"},
+                        {value: "female", text: "Female"}
+                    ]
+                }, {
+                    type: "text", title: "IdCard", name: "idCard", value: "value4", hint: "Input Your IdCard"
+                }, {
+                    type: "singleSelect", title: "Work", name: "work", value: "", nullable: true,
+                    selections: [
+                        {value: "it", text: "IT"},
+                        {value: "fi", text: "FI"},
+                        {value: "teacher", text: "Teacher"},
+                        {value: "driver", text: "Driver"}
+                    ]
+                }, {
+                    type: "text", title: "Email", name: "email", value: "value4", hint: "Input Your Email"
+                }, {
+                    type: "text", title: "Phone", name: "phone", value: "value5", hint: "Input Your Phone"
+                }, {
+                    type: "textarea", title: "Remark", name: "remark", value: "value5", hint: "Input Your Remark", colspan :1
                 }
             ]
         });

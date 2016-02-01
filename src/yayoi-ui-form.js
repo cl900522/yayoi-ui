@@ -120,7 +120,8 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             case "text":
                 field = new yayoi.ui.form.TextFiled(params);
                 break;
-            case "select":
+            case "singleSelect":
+                field = new yayoi.ui.form.SingleSelect(params);
                 break;
             case "radio":
                 break;
@@ -203,69 +204,33 @@ yayoi.util.extend("yayoi.ui.form.TextArea", "yayoi.ui.form.Field", [], function(
 
 yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], function() {
     this.selections = []; //每个对象包含value, text
-    this.selected = -1;
+    this.nullable = true;
 
     this.onRendering = function() {
         var container = this.getContainer();
-        var selectHtml = '<input class="stats_v" name="'+this.name+'" value="0" style="display: none;"/>'
-                +'<i class="inp_label">'+this.title+'：</i>'
-                +'<span class="stats_s">'
-        if( this.selected> 0 && this.selected < this.selections.length) {
-            selectHtml +='<input class="stats_i" type="text" value="' + this.selections[i].text + '" readonly />';
-        } else {
-            selectHtml +='<input class="stats_i" type="text" value="请选择" readonly />';
-        }
-        selectHtml +='<i class="icon-expand_more"></i></span>'
-            +'<ul class="stats_list" style="display: none;">'
-            +'<li><span class="stats_tit">选项<i class="tip"></i></span></li>'
 
+        var selectHtml = "<select class='yayoi-field-select' name='" + this.name + "'>"
+        if(this.nullable){
+            selectHtml += "<option value=''>请选择</option>";
+        }
         for(var i=0; i<this.selections.length; i++) {
-            if(i==this.selected){
-                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '" class="select">' + this.selections[i].text + '</a></li>';
+            if((""+this.selections[i].value) == (""+this.value)) {
+                selectHtml += "<option value='" + this.selections[i].value + "' selected='selected'>" + this.selections[i].text + "</option>";
             } else {
-                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '">' + this.selections[i].text + '</a></li>';
+                selectHtml += "<option value='" + this.selections[i].value + "'>" + this.selections[i].text + "</option>";
             }
         }
+        selectHtml += "</select>";
 
-        selectHtml += '</ul>';
-        container.html(selectHtml);
-    };
-    this.initEvents = function() {
-        var that = this;
-        var triggerSelect = this.container.find(".stats_s");
-        triggerSelect.bind("click", function() {
-            if ($(this).next(".stats_list").css("display") == 'block') {
-                that._hideSelections();
-            } else {
-                that._showSelections();
-            }
-        });
+        var html = "<div class='yayoi-field'>" +
+        "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
+        "<div class='yayoi-field-value'>" +
+        selectHtml +
+        "</div></div>";
 
-        var selectArea = this.container.find(".stats_list a");
-        selectArea.bind("mouseover", function(){
-            $(this).addClass("stats_hov");
-        });
-        selectArea.bind("mouseout", function(){
-            $(this).removeClass("stats_hov");
-        });
-        selectArea.bind("click", function() {
-            that._hideSelections();
-            var param = $(this).attr("param");
-            that.select(param);
-        });
+        container.html(html);
     };
-    this._showSelections = function(){
-        this.container.css("border-color", "#00ce9b");
-        this.container.find(".stats_lis i").removeClass("icon-expand_more").addClass("icon-expand_less");
-        this.container.find(".stats_list").css("display", "block").removeClass("fadeOutDown").addClass("fadeInDown");
-        this.container.find(".stats_list").show();
-    };
-    this._hideSelections = function(){
-        this.container.css("border-color", "#DCDCDC");
-        this.container.find(".stats_s i").removeClass("icon-expand_less").addClass("icon-expand_more");
-        this.container.find(".stats_list").css("display", "none").removeClass("fadeInDown").addClass("fadeOutDown");
-        this.container.find(".stats_list").hide();
-    }
+
     this.select = function(value){
         var node = null;
         for(var i=0; i<this.selections.length; i++){
