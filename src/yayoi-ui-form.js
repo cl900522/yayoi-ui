@@ -79,10 +79,10 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         });
     };
     this.cancel = function () {
-        yayoi.log.info("", "you can defind your own cancel action here.")
+        this.logger.info("you can defind your own cancel action here.")
     };
     this.reset = function (){
-        yayoi.log.info("", "you can add your own reset action here.")
+        this.logger.info("you can add your own reset action here.")
     };
     this._submit = function() {
         if (!this.onSubmit()) {
@@ -109,7 +109,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
      * if this function return false, the submit process stoped
      */
     this.onSubmit = function() {
-        yayoi.log.info("", "you can defind your own onSubmit action here.");
+        this.logger.info("you can defind your own onSubmit action here.");
         return true;
     };
     this.getField = function(arg1) {

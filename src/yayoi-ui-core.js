@@ -1,21 +1,7 @@
 "use strict";
 window.yayoi = {
     util: {},
-    log:{}
 };
-
-yayoi.log.error = function (domain){
-    console.error("error:" + domain)
-    for(var i=1; i<arguments.length; i++){
-        console.error(arguments[i]);
-    }
-}
-yayoi.log.info = function (domain){
-    console.info("info:" + domain)
-    for(var i=1; i<arguments.length; i++){
-        console.info(arguments[i]);
-    }
-}
 
 yayoi.util.initPackages = function(packagesStr, defaultInitObject){
     var packages = packagesStr.split(".");
@@ -65,9 +51,40 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
 
     newType = yayoi.util.initPackages(newTypePath, newType);
 
-    newType.prototype = newPrototype;
     newPrototype["_typeName"] = newTypePath;
+    newPrototype["logger"] = new yayoi.ui.log.Logger({typeName: newTypePath});
+
+    newType.prototype = newPrototype;
     newType.constructor = baseType;
     return newType;
 }
 
+yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function(){
+    this.typeName = "";
+    this.debug = function(log) {
+        if(!console){
+            return;
+        }
+        console.debug(this.typeName + ": " + JSON.stringify(log));
+    };
+    this.info = function(log) {
+        if(!console){
+            return;
+        }
+        console.info(this.typeName + ": " + JSON.stringify(log));
+    };
+    this.error = function(log) {
+        if(!console){
+            return;
+        }
+        console.error(this.typeName + ": " + JSON.stringify(log));
+    };
+    this.clear = function(log) {
+        clear();
+    };
+});
+
+/**
+ * global log object
+ */
+yayoi.log = new yayoi.ui.log.Logger({typeName: "Yayoi global"});
