@@ -8,7 +8,8 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
      * */
     this.selector;
     this._container;
-    this._model;
+    this._model; // model object to storing value
+    this.router; //value path in model
     this.visible = true;
     /**parent component
      */
@@ -41,11 +42,25 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.afterEvents = function() {
     };
     this.setModel = function(model) {
-        this._model = model;
-        this.render();
+        if(this._model != model) {
+            this._model = model;
+            this.invalidate();
+        }
     };
+    this.invalidate = function (){
+        this.logger.info("You can define you modelChanged function to set your value.");
+    }
     this.getModel = function() {
         return this._model;
+    };
+    this.getRouter = function() {
+        return this.router;
+    };
+    this.setRouter = function(router) {
+        if(this.router != router) {
+            this.router = router || "";
+            this.invalidate();
+        }
     };
     this.setContainer = function(container){
         this._container = container;

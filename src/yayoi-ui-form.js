@@ -12,6 +12,11 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     this.fields = [];
     this.success;
     this.error;
+    this.invalidate = function() {
+        for(var i=0; i<this.fields; i++) {
+            this.fields[i].setModel(this.getModel());
+        }
+    };
     this.onRendering = function() {
         var container = this.getContainer();
         var formHtml = "<form class='yayoi-form' action='" + this.action + "' method='" + this.method + "' >"+
@@ -61,10 +66,26 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         container.html(formHtml);
 
         for(var i=0; i<this.fields.length; i++) {
-            this.fields[i].setContainer(container.find("td[name=form-cell-" + i + "]"));
-            this.fields[i].render();
+            var field = this.fields[i];
+            field.setContainer(container.find("td[name=form-cell-" + i + "]"));
+            field.render();
         }
     };
+    this.afterRender = function () {
+        for(var i=0; i<this.fields.length; i++) {
+            var field = this.fields[i];
+            var fieldRouter = field.router || "";
+            if(fieldRouter.indexOf(".") == 0){
+                fieldRouter = this.router + fieldRouter;
+            } else if(fieldRouter.indexOf("/") == 0){
+                fieldRouter = fieldRouter;
+            } else {
+                fieldRouter = this.router + fieldRouter;
+            }
+            field.router = fieldRouter;
+            field.setModel(this.getModel());
+        }
+    }
     this.initEvents = function () {
         var container = this.getContainer();
         var that =this;
@@ -180,6 +201,9 @@ yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", ["yayoi.ui
     this.getFormatter = function() {
         return this.formmater;
     };
+    this.invalidate = function() {
+        this.setValue(this.getModel().getValue(this.getRouter()))
+    };
 });
 
 yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function(){
@@ -254,7 +278,7 @@ yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], funct
     this.select = function(value){
         var node = null;
         for(var i=0; i<this.selections.length; i++){
-            if( "" + this.selections[i].value == "" + value){
+            if( "" + this.selections[i].value == "" + value) {
                 this.selected = i;
                 node = this.selections[i];
             }
@@ -267,6 +291,7 @@ yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], funct
             this.container.find(".stats_i").val(node.text);
         }
     }
+
     this.getTextOf = function(value) {
         for(var i=0; i<this.selections.length; i++) {
             if(""+value==this.selections[i].value){

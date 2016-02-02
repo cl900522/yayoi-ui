@@ -1,0 +1,16 @@
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "user": {
+            "firstName": "Mingxuan",
+            "lastName": "Chen",
+            "birthDate": "1990-02-11",
+            "address": "Huayang Street",
+            "email": "545435711@qq.com",
+            "mobile": "15129387123",
+            "idCard": "512315123123",
+            "gender": "female"
+        }
+    }
+}

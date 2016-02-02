@@ -93,7 +93,7 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
                 that._parseData(result);
             },
             error: function(e){
-                this.logger.info(e);
+                that.logger.error(e);
             }
         });
     };

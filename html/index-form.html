@@ -5,7 +5,7 @@
     <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.form.js"></script>
 
-    <script type="text/javascript" src="../js/less.min.js"></script>
+<!--     <script type="text/javascript" src="../js/less.min.js"></script> -->
 
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
@@ -23,24 +23,25 @@
             action: '/html/index-form.html',
             method: 'get',
             selector: '#formId',
+            router: '/user/',
             columns : 2,
             fields: [
                 {
-                    type: "text", format: "text", title: "First Name", name: "firstName", value: "value1", hint: "Input Your First Name"
+                    type: "text", format: "text", title: "First Name", name: "firstName", path: "firstName", hint: "Input Your First Name"
                 }, {
-                    type: "text", format: "text",  title: "Last Name", name: "lastName", value: "value2", hint: "Input Your Last Name"
+                    type: "text", format: "text",  title: "Last Name", name: "lastName", path: "lastName", hint: "Input Your Last Name"
                 }, {
-                    type: "text", format: "date",  title: "BirthDate", name: "Date", value: "", hint: "Input Your Age"
+                    type: "text", format: "date",  title: "BirthDate", name: "Date", path: "birthDate", hint: "Input Your Age"
                 }, {
-                    type: "singleSelect", title: "Gender", name: "gender", value: "female", nullable: false,
+                    type: "singleSelect", title: "Gender", name: "gender", path: "gender", nullable: false,
                     selections: [
                         {value: "male", text: "Male"},
                         {value: "female", text: "Female"}
                     ]
                 }, {
-                    type: "text", format: "text",  title: "IdCard", name: "idCard", value: "value4", hint: "Input Your IdCard"
+                    type: "text", format: "text",  title: "IdCard", name: "idCard", path: "idCard", hint: "Input Your IdCard"
                 }, {
-                    type: "singleSelect", title: "Work", name: "work", value: "", nullable: true,
+                    type: "singleSelect", title: "Work", name: "work", path: "job", nullable: true,
                     selections: [
                         {value: "it", text: "IT"},
                         {value: "fi", text: "FI"},
@@ -48,14 +49,27 @@
                         {value: "driver", text: "Driver"}
                     ]
                 }, {
-                    type: "text", format: "text",  title: "Email", name: "email", value: "value4", hint: "Input Your Email"
+                    type: "text", format: "text",  title: "Email", name: "email", path: "email", hint: "Input Your Email"
                 }, {
-                    type: "text", format: "text",  title: "Phone", name: "phone", value: "value5", hint: "Input Your Phone"
+                    type: "text", format: "text",  title: "Phone", name: "phone", path: "mobile", hint: "Input Your Phone"
                 }, {
-                    type: "textarea", title: "Remark", name: "remark", value: "value5", hint: "Input Your Remark", colspan :1
+                    type: "textarea", title: "Remark", name: "remark", path: "remark", hint: "Input Your Remark", colspan :1
                 }
             ]
         });
+
+        var userModel = new yayoi.ui.model.JsonModel({
+            url: "/json/account-data.json",
+            method: "GET",
+            async: false,
+            parseData: function(result) {
+                return (result.code == 1)? result.data : null;
+            },
+            loadSuccess: function() {
+                form.setModel(userModel);
+            }
+        });
+        userModel.load();
     })
     </script>
 </body>
