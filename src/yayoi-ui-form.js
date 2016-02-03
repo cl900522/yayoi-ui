@@ -13,8 +13,11 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     this.success;
     this.error;
     this.invalidate = function() {
-        for(var i=0; i<this.fields; i++) {
-            this.fields[i].setModel(this.getModel());
+        for(var i=0; i<this.fields.length; i++) {
+            var field = this.fields[i];
+            if(!field.setModel(this.getModel())){
+                field.invalidate();
+            }
         }
     };
     this.onRendering = function() {
@@ -59,7 +62,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             formHtml += "</table></div>" +
             "<div class='yayoi-form-foot'><div class='yayoi-form-foot-buttons'>" +
             "<input type='button' class='yayoi-button yayoi-button-cancel' value='取消' />" +
-            "<input type='reset' class='yayoi-button yayoi-button-reset' value='重置' />" +
+            "<input type='button' class='yayoi-button yayoi-button-reset' value='重置' />" +
             "<input type='button' class='yayoi-button yayoi-button-submit' value='确定' />" +
             "</div></div>" +
             "</form>";
@@ -74,6 +77,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     this.afterRender = function () {
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
+
             var fieldRouter = field.router || "";
             if(fieldRouter.indexOf(".") == 0){
                 fieldRouter = this.router + fieldRouter;
@@ -82,6 +86,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             } else {
                 fieldRouter = this.router + fieldRouter;
             }
+
             field.router = fieldRouter;
             field.setModel(this.getModel());
         }
@@ -93,6 +98,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             that.cancel();
         });
         container.find(".yayoi-button-reset").bind("click", function() {
+            that.invalidate();
             that.reset();
         });
         container.find(".yayoi-button-submit").bind("click", function() {
@@ -300,77 +306,50 @@ yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], funct
         }
         return "";
     }
+
+    this.setValue = function(value) {
+        var container = this.getContainer();
+        container.find("select").val(value);
+    };
+    this.getValue = function() {
+        var container = this.getContainer();
+        return container.find("select").val();
+    }
 });
 
 yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], function() {
     this.selections = []; //每个对象包含value, text
-    this.selected = [];
+    this.nullable = true;
 
     this.onRendering = function() {
         var container = this.getContainer();
-        var selectHtml = '<input class="stats_v" name="'+this.name+'" value="0" style="display: none;"/>'
-                +'<i class="inp_label">'+this.title+'：</i>'
-                +'<span class="stats_s">'
-        if( this.selected> 0 && this.selected < this.selections.length) {
-            selectHtml +='<input class="stats_i" type="text" value="' + this.selections[i].text + '" readonly />';
-        } else {
-            selectHtml +='<input class="stats_i" type="text" value="请选择" readonly />';
-        }
-        selectHtml +='<i class="icon-expand_more"></i></span>'
-            +'<ul class="stats_list" style="display: none;">'
-            +'<li><span class="stats_tit">选项<i class="tip"></i></span></li>'
 
+        var selectHtml = "<select class='yayoi-field-select' name='" + this.name + "'>"
+        if(this.nullable){
+            selectHtml += "<option value=''>请选择</option>";
+        }
         for(var i=0; i<this.selections.length; i++) {
-            if(i==this.selected){
-                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '" class="select">' + this.selections[i].text + '</a></li>';
+            if((""+this.selections[i].value) == (""+this.value)) {
+                selectHtml += "<option value='" + this.selections[i].value + "' selected='selected'>" + this.selections[i].text + "</option>";
             } else {
-                selectHtml += '<li><a href="javascript:void(0)" param="' + this.selections[i].value + '">' + this.selections[i].text + '</a></li>';
+                selectHtml += "<option value='" + this.selections[i].value + "'>" + this.selections[i].text + "</option>";
             }
         }
+        selectHtml += "</select>";
 
-        selectHtml += '</ul>';
-        container.html(selectHtml);
-    };
-    this.initEvents = function() {
-        var that = this;
-        var triggerSelect = this.container.find(".stats_s");
-        triggerSelect.bind("click", function() {
-            if ($(this).next(".stats_list").css("display") == 'block') {
-                that._hideSelections();
-            } else {
-                that._showSelections();
-            }
-        });
+        var html = "<div class='yayoi-field'>" +
+        "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
+        "<div class='yayoi-field-value'>" +
+        selectHtml +
+        "</div></div>";
 
-        var selectArea = this.container.find(".stats_list a");
-        selectArea.bind("mouseover", function(){
-            $(this).addClass("stats_hov");
-        });
-        selectArea.bind("mouseout", function(){
-            $(this).removeClass("stats_hov");
-        });
-        selectArea.bind("click", function() {
-            that._hideSelections();
-            var param = $(this).attr("param");
-            that.select(param);
-        });
+        container.html(html);
     };
-    this._showSelections = function(){
-        this.container.css("border-color", "#00ce9b");
-        this.container.find(".stats_lis i").removeClass("icon-expand_more").addClass("icon-expand_less");
-        this.container.find(".stats_list").css("display", "block").removeClass("fadeOutDown").addClass("fadeInDown");
-        this.container.find(".stats_list").show();
-    };
-    this._hideSelections = function(){
-        this.container.css("border-color", "#DCDCDC");
-        this.container.find(".stats_s i").removeClass("icon-expand_less").addClass("icon-expand_more");
-        this.container.find(".stats_list").css("display", "none").removeClass("fadeInDown").addClass("fadeOutDown");
-        this.container.find(".stats_list").hide();
-    }
+
     this.select = function(value){
         var node = null;
         for(var i=0; i<this.selections.length; i++){
-            if( "" + this.selections[i].value == "" + value){
+            if( "" + this.selections[i].value == "" + value) {
                 this.selected = i;
                 node = this.selections[i];
             }
@@ -383,6 +362,7 @@ yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], functi
             this.container.find(".stats_i").val(node.text);
         }
     }
+
     this.getTextOf = function(value) {
         for(var i=0; i<this.selections.length; i++) {
             if(""+value==this.selections[i].value){
@@ -390,6 +370,15 @@ yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], functi
             }
         }
         return "";
+    }
+
+    this.setValue = function(value) {
+        var container = this.getContainer();
+        container.find("select").val(value);
+    };
+    this.getValue = function() {
+        var container = this.getContainer();
+        return container.find("select").val();
     }
 });
 

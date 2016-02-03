@@ -27,21 +27,21 @@
             columns : 2,
             fields: [
                 {
-                    type: "text", format: "text", title: "First Name", name: "firstName", path: "firstName", hint: "Input Your First Name"
+                    type: "text", format: "text", title: "First Name", name: "firstName", router: "firstName", hint: "Input Your First Name"
                 }, {
-                    type: "text", format: "text",  title: "Last Name", name: "lastName", path: "lastName", hint: "Input Your Last Name"
+                    type: "text", format: "text",  title: "Last Name", name: "lastName", router: "lastName", hint: "Input Your Last Name"
                 }, {
-                    type: "text", format: "date",  title: "BirthDate", name: "Date", path: "birthDate", hint: "Input Your Age"
+                    type: "text", format: "date",  title: "BirthDate", name: "Date", router: "birthDate", hint: "Input Your Age"
                 }, {
-                    type: "singleSelect", title: "Gender", name: "gender", path: "gender", nullable: false,
+                    type: "singleSelect", title: "Gender", name: "gender", router: "gender", nullable: false,
                     selections: [
                         {value: "male", text: "Male"},
                         {value: "female", text: "Female"}
                     ]
                 }, {
-                    type: "text", format: "text",  title: "IdCard", name: "idCard", path: "idCard", hint: "Input Your IdCard"
+                    type: "text", format: "text",  title: "IdCard", name: "idCard", router: "idCard", hint: "Input Your IdCard"
                 }, {
-                    type: "singleSelect", title: "Work", name: "work", path: "job", nullable: true,
+                    type: "singleSelect", title: "Work", name: "work", router: "job", nullable: true,
                     selections: [
                         {value: "it", text: "IT"},
                         {value: "fi", text: "FI"},
@@ -49,11 +49,11 @@
                         {value: "driver", text: "Driver"}
                     ]
                 }, {
-                    type: "text", format: "text",  title: "Email", name: "email", path: "email", hint: "Input Your Email"
+                    type: "text", format: "text",  title: "Email", name: "email", router: "email", hint: "Input Your Email"
                 }, {
-                    type: "text", format: "text",  title: "Phone", name: "phone", path: "mobile", hint: "Input Your Phone"
+                    type: "text", format: "text",  title: "Phone", name: "phone", router: "mobile", hint: "Input Your Phone"
                 }, {
-                    type: "textarea", title: "Remark", name: "remark", path: "remark", hint: "Input Your Remark", colspan :1
+                    type: "textarea", title: "Remark", name: "remark", router: "remark", hint: "Input Your Remark", colspan :1
                 }
             ]
         });

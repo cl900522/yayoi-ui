@@ -2,13 +2,13 @@
 yayoi.util.initPackages("yayoi.ui.common");
 
 yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
+    this._container;
+    this._model; // model object to storing value
     /**
      * jquery selector to get container,
      * please reference to placeAt() function.
      * */
     this.selector;
-    this._container;
-    this._model; // model object to storing value
     this.router; //value path in model
     this.visible = true;
     /**parent component
@@ -33,10 +33,12 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     }
     this.beforeRender = function() {
     };
+    /*always rewrite this function of component to render the html content in container*/
     this.onRendering = function() {
     };
     this.afterRender = function() {
     };
+    /*always rewrite this function to add events */
     this.initEvents = function() {
     };
     this.afterEvents = function() {
@@ -45,6 +47,9 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         if(this._model != model) {
             this._model = model;
             this.invalidate();
+            return true;
+        }else {
+            return false;
         }
     };
     this.invalidate = function (){
