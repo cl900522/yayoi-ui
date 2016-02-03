@@ -16,19 +16,29 @@
                 return (result.code == 1)? result : null;
             },
             loadSuccess: function() {
-                yayoi.log.info("/", this.getValue("/"));
-                yayoi.log.info("/data/setting", this.getValue("/data/setting"));
-                yayoi.log.info("/data/setting/unknown", this.getValue("/data/setting/unknown"));
-                yayoi.log.info("/data/users", this.getValue("/data/users"));
+                yayoi.log.info("/");
+                yayoi.log.info(this.getValue("/"));
+
+                yayoi.log.info("/data/setting value:");
+                yayoi.log.info(this.getValue("/data/setting"));
+
+                yayoi.log.info("/data/setting/unknown value:");
+                yayoi.log.info(this.getValue("/data/setting/unknown"));
+
+                yayoi.log.info("/data/users value:");
+                yayoi.log.info(this.getValue("/data/users"));
             }
         });
         model.load();
         model.setValue("/data/users/1/name/", "changed")
-        yayoi.log.info("/data/users/1/name/", model.getValue("/data/users/1/name/"));
+        yayoi.log.info("/data/users/1/name/ value:");
+        yayoi.log.info(model.getValue("/data/users/1/name/"));
 
         model.setValue("/data/setting/opacity/","12");
-        yayoi.log.info("/data/setting/opacity/", model.getValue("/data/setting/opacity/"));
-        yayoi.log.info("/");
+        yayoi.log.info("/data/setting/opacity/ value:");
+        yayoi.log.info(model.getValue("/data/setting/opacity/"));
+
+        yayoi.log.info("/ value:");
         yayoi.log.info(model.getValue("/"));
     </script>
 </body>
