@@ -23,15 +23,15 @@
             action: '/html/index-form.html',
             method: 'get',
             selector: '#formId',
-            router: '/user/',
+            router: './../user/',
             columns : 2,
             fields: [
                 {
-                    type: "text", format: "text", title: "First Name", name: "firstName", router: "firstName", hint: "Input Your First Name"
+                    type: "text", format: "text", title: "First Name", name: "firstName", router: "././firstName", hint: "Input Your First Name"
                 }, {
-                    type: "text", format: "text",  title: "Last Name", name: "lastName", router: "lastName", hint: "Input Your Last Name"
+                    type: "text", format: "text",  title: "Last Name", name: "lastName", router: "./lastName", hint: "Input Your Last Name"
                 }, {
-                    type: "text", format: "date",  title: "BirthDate", name: "Date", router: "birthDate", hint: "Input Your Age"
+                    type: "text", format: "date",  title: "BirthDate", name: "Date", router: "./birthDate", hint: "Input Your Age"
                 }, {
                     type: "singleSelect", title: "Gender", name: "gender", router: "gender", nullable: false,
                     selections: [
@@ -39,7 +39,7 @@
                         {value: "female", text: "Female"}
                     ]
                 }, {
-                    type: "text", format: "text",  title: "IdCard", name: "idCard", router: "idCard", hint: "Input Your IdCard"
+                    type: "text", format: "text",  title: "IdCard", name: "idCard", router: "./idCard", hint: "Input Your IdCard"
                 }, {
                     type: "singleSelect", title: "Work", name: "work", router: "job", nullable: true,
                     selections: [
@@ -49,9 +49,9 @@
                         {value: "driver", text: "Driver"}
                     ]
                 }, {
-                    type: "text", format: "text",  title: "Email", name: "email", router: "email", hint: "Input Your Email"
+                    type: "text", format: "text",  title: "Email", name: "email", router: "./email", hint: "Input Your Email"
                 }, {
-                    type: "text", format: "text",  title: "Phone", name: "phone", router: "mobile", hint: "Input Your Phone"
+                    type: "text", format: "text",  title: "Phone", name: "phone", router: "./mobile", hint: "Input Your Phone"
                 }, {
                     type: "textarea", title: "Remark", name: "remark", router: "remark", hint: "Input Your Remark", colspan :1
                 }
