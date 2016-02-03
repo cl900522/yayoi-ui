@@ -12,7 +12,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.visible = true;
     /**parent component
      */
-    this._parent,
+    this._rendered = false;
 
     this.init = function(params) {
         if(params instanceof Object){
@@ -39,6 +39,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         this.onRendering();
         this.afterRender();
         this.initEvents();
+        this._rendered = true;
     }
     this.beforeRender = function() {
     };

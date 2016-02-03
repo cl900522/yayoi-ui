@@ -16,8 +16,16 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
             if(!field.setModel(this.getModel())){
-                field.invalidate();
+                if(field._rendered){
+                    field.invalidate();
+                }
             }
+        }
+    };
+    this.beforeRender = function(){
+        for(var i=0; i<this.fields.length; i++) {
+            var field = this.createField(this.fields[i]);
+            this.fields[i] = field;
         }
     };
     this.onRendering = function() {
@@ -25,11 +33,6 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         var formHtml = "<form class='yayoi-form' action='" + this.action + "' method='" + this.method + "' >"+
             "<div class='yayoi-form-head'><span class='yayoi-form-head-title'>" + this.title + "</span></div>" +
             "<div class='yayoi-form-body'><table>";
-
-            for(var i=0; i<this.fields.length; i++) {
-                var field = this.createField(this.fields[i]);
-                this.fields[i] = field;
-            }
 
             var i=0, totaColumns = this.columns;
             for(i=0; i<this.fields.length; i++){
@@ -67,21 +70,19 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             "</div></div>" +
             "</form>";
         container.html(formHtml);
-
-        for(var i=0; i<this.fields.length; i++) {
-            var field = this.fields[i];
-            field.setContainer(container.find("td[name=form-cell-" + i + "]"));
-            field.render();
-        }
     };
     this.afterRender = function () {
+        var container = this.getContainer();
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
+
             var router = new yayoi.ui.path.Router(this.router);
             router.cd(field.router)
-
             field.router = router.pwd();
             field.setModel(this.getModel());
+
+            field.setContainer(container.find("td[name=form-cell-" + i + "]"));
+            field.render();
         }
     }
     this.initEvents = function () {
@@ -158,8 +159,6 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
                 break;
             case "singleSelect":
                 field = new yayoi.ui.form.SingleSelect(params);
-                break;
-            case "radio":
                 break;
             case "date":
                 field = new yayoi.ui.form.DateField(params);
