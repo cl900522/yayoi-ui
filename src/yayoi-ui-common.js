@@ -8,7 +8,6 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
      * jquery selector to get container,
      * please reference to placeAt() function.
      * */
-    this.selector;
     this.router; //value path in model
     this.visible = true;
     /**parent component
@@ -22,6 +21,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
             }
             if(this["selector"] != null){
                 this.placeAt(this["selector"]);
+                delete this["selector"];
             }
         }
     };
@@ -39,7 +39,6 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         this.onRendering();
         this.afterRender();
         this.initEvents();
-        this.afterEvents();
     }
     this.beforeRender = function() {
     };
@@ -50,8 +49,6 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     };
     /*always rewrite this function to add events */
     this.initEvents = function() {
-    };
-    this.afterEvents = function() {
     };
     this.setModel = function(model) {
         if(this._model != model) {
@@ -82,5 +79,16 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     };
     this.getContainer = function() {
         return this._container;
+    };
+    this.setVisible = function(visible){
+        this.visible = visible;
+        if (this.getVisible()) {
+            this.getContainer().show();
+        } else {
+            this.getContainer().hide();
+        }
+    };
+    this.getVisible = function() {
+        return this.visible;
     };
 });
