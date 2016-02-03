@@ -44,7 +44,7 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
                 }
             };
         }
-        this["init"].call(this, params);
+        this["init"](params);
     }
 
     newType = yayoi.util.initPackages(newTypePath, newType);
@@ -84,6 +84,7 @@ yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function(){
 
 yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
     this._pwd = "/";
+    this._paths = [];
     this.init = function(params) {
         if(typeof params == "string"){
             this.cd(params);
@@ -93,46 +94,67 @@ yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
         if(!path){
             return;
         }
-        while(this._pwd.endsWith("/")){
-            this._pwd = this._pwd.substring(0, this._pwd.lastIndexOf("/"));
+        while(path.indexOf("//") != -1){
+            path = path.replace("//" , "/");
         }
-        while(path.indexOf("../") == 0){
-            this._pwd = this._pwd.substring(0, this._pwd.lastIndexOf("/") + 1);
-            path = path.substring(3, path.length);
+        if(path.startsWith("/")){
+            this._paths = [];
+        }
+        path = path.split("/");
+        for(var i=0; i<path.length; i++){
+            if(!path[i]){
+                continue;
+            }
+            if(path[i] == '..'){
+                this._paths.pop()
+            } else if(path[i] == '.'){
 
-            this.cd(path)
-            return;
+            } else {
+                this._paths.push(path[i]);
+            }
         }
-        while(path.indexOf("./") == 0) {
-            path = path.substring(2, path.length);
+//        while(this._pwd.endsWith("/")){
+//            this._pwd = this._pwd.substring(0, this._pwd.lastIndexOf("/"));
+//        }
+//        while(path.indexOf("../") == 0){
+//            this._pwd = this._pwd.substring(0, this._pwd.lastIndexOf("/") + 1);
+//            path = path.substring(3, path.length);
+//
+//            this.cd(path)
+//            return;
+//        }
+//        while(path.indexOf("./") == 0) {
+//            path = path.substring(2, path.length);
+//
+//            this.cd(path)
+//            return;
+//        }
+//        while(path.indexOf("/") == 0) {
+//            this._pwd = path;
+//            return;
+//        }
+//        if(!this._pwd.endsWith("/")) {
+//            this._pwd += "/";
+//        }
+//        this._pwd += path;
 
-            this.cd(path)
-            return;
-        }
-        while(path.indexOf("/") == 0) {
-            this._pwd = path;
-            return;
-        }
-        if(!this._pwd.endsWith("/")) {
-            this._pwd += "/";
-        }
-        this._pwd += path;
-        this.logger.debug("pwd:" + this._pwd);
+        this.logger.debug("pwd:" + this.pwd());
     };
     this.pwd = function() {
-        return this._pwd;
+        return "/" + this._paths.join("/");
     };
     /*解析路径为数组
      */
     this.parse = function(){
-        var paths = this._pwd.split("/");
-        for(var i=0; i<paths.length; i++){
-            if(!paths[i]){
-                paths.splice(i, 1);
-                i--;
-            }
-        }
-        return paths;
+        return this._paths;
+//        var paths = this._pwd.split("/");
+//        for(var i=0; i<paths.length; i++){
+//            if(!paths[i]){
+//                paths.splice(i, 1);
+//                i--;
+//            }
+//        }
+//        return paths;
     };
 });
 

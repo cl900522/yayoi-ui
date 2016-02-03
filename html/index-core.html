@@ -29,10 +29,12 @@
         yayoi.log.info(path.pwd());
         path.cd("../google");
         yayoi.log.info(path.pwd());
-        path.cd("/usr/local/bin");
-        yayoi.log.info(path.pwd());
-        path.cd("./../lib");
-        yayoi.log.info(path.pwd());
+
+        var newPath = new yayoi.ui.path.Router("./../var/tmp/google");
+        newPath.cd("./usr/local/bin");
+        yayoi.log.info(newPath.pwd());
+        newPath.cd("./../lib");
+        yayoi.log.info(newPath.pwd());
     </script>
 </body>
 </html>
