@@ -22,6 +22,17 @@
         yayoi.log.info(mx);
         nj.age = 11;
         yayoi.log.info(nj);
+
+        var path = new yayoi.ui.path.Router("/var/tmp/google");
+        yayoi.log.info(path.pwd());
+        path.cd("../httpd");
+        yayoi.log.info(path.pwd());
+        path.cd("../google");
+        yayoi.log.info(path.pwd());
+        path.cd("/usr/local/bin");
+        yayoi.log.info(path.pwd());
+        path.cd("./../lib");
+        yayoi.log.info(path.pwd());
     </script>
 </body>
 </html>

@@ -15,6 +15,16 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
      */
     this._parent,
 
+    this.init = function(params) {
+        if(params instanceof Object){
+            for(var p in params) {
+                this[p] = params[p];
+            }
+            if(this["selector"] != null){
+                this.placeAt(this["selector"]);
+            }
+        }
+    };
     this.placeAt = function(selector) {
         this.setContainer($(selector));
         this.render();
@@ -73,35 +83,4 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.getContainer = function() {
         return this._container;
     };
-    this._genExtend = function (){
-        return function(params) {
-            this.init = function(params) {
-                for(var p in params){
-                    this[p] = params[p];
-                }
-                if(this["selector"] != null){
-                    this.placeAt(this["selector"]);
-                }
-            };
-            this.init(params);
-        }
-    }
-});
-
-yayoi.util.extend("yayoi.ui.common.SubComponent", "Object", [], function(){
-    this._parent,
-    this.afterInit = function(){
-        
-    };
-    this._genExtend = function (){
-        return function(params) {
-            this.init = function(params) {
-                for(var p in params){
-                    this[p] = params[p];
-                }
-                this.afterInit();
-            };
-            this.init(params);
-        }
-    }
 });

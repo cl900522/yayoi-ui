@@ -77,17 +77,12 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     this.afterRender = function () {
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
+            var router = new yayoi.ui.path.Router();
 
-            var fieldRouter = field.router || "";
-            if(fieldRouter.indexOf(".") == 0){
-                fieldRouter = this.router + fieldRouter;
-            } else if(fieldRouter.indexOf("/") == 0){
-                fieldRouter = fieldRouter;
-            } else {
-                fieldRouter = this.router + fieldRouter;
-            }
+            router.cd(this.router);
+            router.cd(field.router)
 
-            field.router = fieldRouter;
+            field.router = router.pwd();
             field.setModel(this.getModel());
         }
     }
