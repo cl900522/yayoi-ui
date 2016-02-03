@@ -86,7 +86,7 @@ yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
     this._pwd = "/";
     this.init = function(params) {
         if(typeof params == "string"){
-            this._pwd = params;
+            this.cd(params);
         }
     }
     this.cd = function(path) {
@@ -121,6 +121,18 @@ yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
     };
     this.pwd = function() {
         return this._pwd;
+    };
+    /*解析路径为数组
+     */
+    this.parse = function(){
+        var paths = this._pwd.split("/");
+        for(var i=0; i<paths.length; i++){
+            if(!paths[i]){
+                paths.splice(i, 1);
+                i--;
+            }
+        }
+        return paths;
     };
 });
 

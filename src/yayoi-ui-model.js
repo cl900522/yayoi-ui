@@ -40,18 +40,6 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
             this.init(params);
         };
     };
-    /*解析路径为数组
-     */
-    this._parsePath = function(pathsStr){
-        var paths = pathsStr.split("/");
-        for(var i=0; i<paths.length; i++){
-            if(!paths[i]){
-                paths.splice(i, 1);
-                i--;
-            }
-        }
-        return paths;
-    };
     /*设置根节点值
      */
     this.setRootValue = function (value) {
@@ -100,7 +88,9 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
     this.getValue = function(pathsStr) {
         var value = this.getRootValue();
 
-        var paths = this._parsePath(pathsStr);
+        var router = new yayoi.ui.path.Router(pathsStr);
+        var paths = router.parse();
+
         if(paths.length == 0){
             return value;
         }
@@ -116,7 +106,9 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
     };
     this.setValue = function(pathsStr, value) {
         var parentPath = this.getRootValue();
-        var paths = this._parsePath(pathsStr);
+        var router = new yayoi.ui.path.Router(pathsStr);
+
+        var paths = router.parse();
         if(paths.length == 0){
             this.setRootValue(value);
             return;
