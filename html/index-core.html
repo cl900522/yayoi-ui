@@ -6,32 +6,32 @@
     <script type="text/javascript">
         var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
             this.name = null;
-            this.age = null;
+            this._age = null;
             this.getAge = function() {
                 return this.age;
             }
         });
         var mx = new People({
-            address : "Jiagnsu.Yizheng"
+            address : "Jiagnsu.Yizheng",
+            "_age": 11
         });
         var nj = new People({
             address : "Hubei,Yichang"
         });
         yayoi.log.info(yayoi.common.People);
-        mx.age = 12;
-        yayoi.log.info(mx);
-        nj.age = 11;
+        nj["_age"] = 12;
         yayoi.log.info(nj);
+        yayoi.log.info(mx);
 
-        var path = new yayoi.ui.path.Router("./../var/tmp/google");
+        var path = new yayoi.ui.path.Router("./../tmp/tmp/google");
         yayoi.log.info(path.pwd());
         path.cd("../httpd");
         yayoi.log.info(path.pwd());
         path.cd("../google");
         yayoi.log.info(path.pwd());
 
-        var newPath = new yayoi.ui.path.Router("./../var/tmp/google");
-        newPath.cd("./usr/local/bin");
+        var newPath = new yayoi.ui.path.Router("./var/tmp/google");
+        newPath.cd("/usr/local/bin");
         yayoi.log.info(newPath.pwd());
         newPath.cd("./../lib");
         yayoi.log.info(newPath.pwd());

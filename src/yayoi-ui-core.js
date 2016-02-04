@@ -43,8 +43,8 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
                     }
                 }
             };
-        }
-        this["init"](params);
+        };
+        this["init"].call(this, params);
     }
 
     newType = yayoi.util.initPackages(newTypePath, newType);
@@ -83,10 +83,11 @@ yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function(){
 });
 
 yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
-    this._pwd = "/";
-    this._paths = [];
+    this._paths = null;
     this.init = function(params) {
-        if(typeof params == "string"){
+        //调用初始化_paths，as it is an object.
+        this._paths = [];
+        if(typeof params == "string") {
             this.cd(params);
         }
     }
@@ -113,48 +114,16 @@ yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
                 this._paths.push(path[i]);
             }
         }
-//        while(this._pwd.endsWith("/")){
-//            this._pwd = this._pwd.substring(0, this._pwd.lastIndexOf("/"));
-//        }
-//        while(path.indexOf("../") == 0){
-//            this._pwd = this._pwd.substring(0, this._pwd.lastIndexOf("/") + 1);
-//            path = path.substring(3, path.length);
-//
-//            this.cd(path)
-//            return;
-//        }
-//        while(path.indexOf("./") == 0) {
-//            path = path.substring(2, path.length);
-//
-//            this.cd(path)
-//            return;
-//        }
-//        while(path.indexOf("/") == 0) {
-//            this._pwd = path;
-//            return;
-//        }
-//        if(!this._pwd.endsWith("/")) {
-//            this._pwd += "/";
-//        }
-//        this._pwd += path;
-
-        this.logger.debug("pwd:" + this.pwd());
     };
     this.pwd = function() {
-        return "/" + this._paths.join("/");
+        var pwd = "/" + this._paths.join("/");
+        this.logger.debug("pwd:" + pwd);
+        return pwd;
     };
     /*解析路径为数组
      */
     this.parse = function(){
         return this._paths;
-//        var paths = this._pwd.split("/");
-//        for(var i=0; i<paths.length; i++){
-//            if(!paths[i]){
-//                paths.splice(i, 1);
-//                i--;
-//            }
-//        }
-//        return paths;
     };
 });
 

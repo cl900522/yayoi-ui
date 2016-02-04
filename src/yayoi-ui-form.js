@@ -79,9 +79,6 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             var router = new yayoi.ui.path.Router(this.router);
             router.cd(field.router);
 
-            this.logger.debug("field " + i);
-            this.logger.debug(router._paths);
-
             field.router = router.pwd();
             field.setModel(this.getModel());
 
