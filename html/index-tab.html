@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>UI框架测试</title>
+    <title>UI页签测试</title>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.form.js"></script>
 
@@ -12,7 +12,25 @@
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
 </head>
 <body>
-    <h1>UI框架测试</h1>
+    <h1>UI页签测试</h1>
+    <p>可以创建页签，以及增加删除页签</p>
+    <pre>
+        <code>
+    $(function(){
+        var tab = new yayoi.ui.tab.Tab({
+            selector: "#tabId",
+            tabs: [
+               {code: 1, title: "表单测试", url: "./index-form.html", closeable: true},
+               {code: 2, title: "模型测试", url: "./index-model.html", closeable: true},
+               {code: 3, title: "基础模块测试", url: "./index-core.html", closeable: true},
+               {code: 4, title: "百度", url: "https://www.baidu.com", closeable: false},
+            ]
+        });
+        tab.addTab({code: 5, title: "京东", url: "http://www.jingdong.com", closeable: false});
+        tab.addTab({code: 6, title: "HTML页签", html: "HTML TAB TEST", closeable: false});
+    })
+        </code>
+    </pre>
     <div id='tabId' style='width: 1500px; height: 800px; margin: auto;'></div>
     <script type="text/javascript">
     $(function(){

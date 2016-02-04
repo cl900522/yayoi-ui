@@ -93,7 +93,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
 
         this.createNavBar(tab);
 
-        var tabContainer = $("<div tab-code='" + tab.code + "' class='active'></div>")
+        var tabContainer = $("<div data-tabcode='" + tab.code + "' class='active'></div>")
         this.deactiveAll();
         this.contentContainer.append(tabContainer);
         tab.setContainer(tabContainer);
@@ -104,7 +104,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
     this.createNavBar = function(tabNode){
         var that = this;
 
-        var tabNav = $("<li tab-code=" + tabNode.code + " class='active'><span>" + tabNode.title + "</span><a class='closeTab'></a></li>");
+        var tabNav = $("<li data-tabcode=" + tabNode.code + " class='active'><span>" + tabNode.title + "</span><a class='closeTab'></a></li>");
         var closeButton = tabNav.find(".closeTab");
         if(tabNode.closeable){
             closeButton.bind("click", function(event){
@@ -116,7 +116,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
         }
 
         tabNav.bind("click", function(event){
-            var tabCode = $(this).attr("tab-code");
+            var tabCode = $(this).attr("data-tabcode");
 
             if(tabCode){
                 that.activeTab(tabCode);
@@ -130,7 +130,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
     };
     this.deactiveAll = function() {
         for(var p in this.tabNodes){
-            var selector = "[tab-code='" + this.tabNodes[p].code + "']"
+            var selector = "[data-tabcode='" + this.tabNodes[p].code + "']"
             this.navBar.find(selector).removeClass("active").addClass("deactive");
             this.contentContainer.find(selector).removeClass("active").addClass("deactive");
         }
@@ -142,7 +142,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
             return;
         }
 
-        var selector = "[tab-code='" + tabNode.code + "']";
+        var selector = "[data-tabcode='" + tabNode.code + "']";
         this.deactiveAll();
         this.navBar.find(selector).removeClass("deactive").addClass("active");
         this.contentContainer.find(selector).removeClass("deactive").addClass("active");
@@ -154,13 +154,13 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
             return;
         }
 
-        var selector = "[tab-code='" + tabNode.code + "']";
+        var selector = "[data-tabcode='" + tabNode.code + "']";
         this.deactiveAll();
         this.navBar.find(selector).remove();
         this.contentContainer.find(selector).remove();
         delete this.tabNodes[tabNode.code];
 
-        var lastTabCode = this.navBar.find(">li:last").attr("tab-code");
+        var lastTabCode = this.navBar.find(">li:last").attr("data-tabcode");
         if(lastTabCode) {
             this.activeTab(lastTabCode);
         }

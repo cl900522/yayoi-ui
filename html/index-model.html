@@ -1,9 +1,24 @@
 ﻿<html>
 <head>
-    <title>UI模型类的测试</title>
+    <title>UI模型测试</title>
 </head>
 <body>
-<h1>UI模型测试</h1>
+    <h1>UI模型测试</h1>
+    <p>JsonMode可以通过http协议加载json数据，并提供数据获取和修改的函数</p>
+    <pre>
+        <code>
+    var model = new yayoi.ui.model.JsonModel({
+        url: "/json/user-data.json",
+        method: "GET",
+        async: false,
+        parseData: function(result) {
+            return (result.code == 1)? result : {};
+        },
+        loadSuccess: function() {
+        }
+    });
+        </code>
+    </pre>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
@@ -13,7 +28,7 @@
             method: "GET",
             async: false,
             parseData: function(result) {
-                return (result.code == 1)? result : null;
+                return (result.code == 1)? result : {};
             },
             loadSuccess: function() {
                 yayoi.log.info("/");

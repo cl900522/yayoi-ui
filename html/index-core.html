@@ -2,24 +2,49 @@
 <head>
 </head>
 <body>
+    <h1>YayoiUI核心测试</h1>
+    <p>extend函数，用于辅助继承类</p>
+    <pre>
+        <code>
+    var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
+        this.name = null;
+        this.age = null;
+        this.getAge = function() {
+            return this.age;
+        }
+    });
+        </code>
+    </pre>
+    <p>path.Router路径帮助函数</p>
+    <p>log.Logger用于帮助输出日志</p>
+    <pre>
+        <code>
+    var path = new yayoi.ui.path.Router("./../tmp/tmp/google");
+    yayoi.log.info(path.pwd());
+    path.cd("../httpd");
+    yayoi.log.info(path.pwd());
+    path.cd("../google");
+    yayoi.log.info(path.pwd());
+        </code>
+    </pre>
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
     <script type="text/javascript">
         var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
             this.name = null;
-            this._age = null;
+            this.age = null;
             this.getAge = function() {
                 return this.age;
             }
         });
         var mx = new People({
             address : "Jiagnsu.Yizheng",
-            "_age": 11
+            "age": 11
         });
         var nj = new People({
             address : "Hubei,Yichang"
         });
         yayoi.log.info(yayoi.common.People);
-        nj["_age"] = 12;
+        nj["age"] = 12;
         yayoi.log.info(nj);
         yayoi.log.info(mx);
 
