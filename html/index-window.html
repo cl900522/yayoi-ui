@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>UI对话框测试</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-window.js"></script>
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+</head>
+<body>
+    <h1>UI对话框测试</h1>
+    <p>可以创建对话框，并绑定函数</p>
+    <button class="yayoi-button" onclick="showDialog()">显示</button><button class="yayoi-button" onclick="hideDialog()">隐藏</button>
+    <pre>
+        <code>
+        </code>
+    </pre>
+    <script type="text/javascript">
+    var dialog = new yayoi.ui.window.Dialog();
+    function showDialog() {
+        dialog.show("成功", "数据提交成功", function(){
+            yayoi.log.info("Function callback success.")
+        });
+    }
+    function hideDialog() {
+        dialog.close();
+    }
+    </script>
+</body>
+</html>
