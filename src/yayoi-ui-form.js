@@ -31,7 +31,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     this.onRendering = function() {
         var container = this.getContainer();
         var formHtml = "<form class='yayoi-form' action='" + this.action + "' method='" + this.method + "' >"+
-            "<div class='yayoi-form-head'><span class='yayoi-form-head-title'>" + this.title + "</span></div>" +
+            "<div class='yayoi-form-head'><div class='title'>" + this.title + "</div></div>" +
             "<div class='yayoi-form-body'><table>";
 
             var i=0, totaColumns = this.columns;
@@ -63,7 +63,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             }
 
             formHtml += "</table></div>" +
-            "<div class='yayoi-form-foot'><div class='yayoi-form-foot-buttons'>" +
+            "<div class='yayoi-form-foot'><div class='buttons'>" +
             "<input type='button' class='yayoi-button yayoi-button-cancel' value='取消' />" +
             "<input type='button' class='yayoi-button yayoi-button-reset' value='重置' />" +
             "<input type='button' class='yayoi-button yayoi-button-submit' value='确定' />" +
