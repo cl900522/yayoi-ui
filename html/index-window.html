@@ -15,6 +15,15 @@
     <button class="yayoi-button" onclick="showDialog()">显示</button><button class="yayoi-button" onclick="hideDialog()">隐藏</button>
     <pre>
         <code>
+    var dialog = new yayoi.ui.window.Dialog();
+    function showDialog() {
+        dialog.show("成功", "数据提交成功", function(){
+            yayoi.log.info("Function callback success.")
+        });
+    }
+    function hideDialog() {
+        dialog.close();
+    }
         </code>
     </pre>
     <script type="text/javascript">
