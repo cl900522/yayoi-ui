@@ -19,23 +19,25 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
         var formHtml = "<div class='yayoi-grid-head'><div class='buttons'></div></div>" +
             "<div class='yayoi-grid-body'>";
 
-            var totalColumns = this.columns.length;
+        var totalColumns = this.columns.length;
 
-            formHtml += "<div class='yayoi-grid-title'>";
-            for(var i=0; i<totalColumns; i++) {
-                formHtml += "<div class='yayoi-grid-column'><span>" + this.columns[i].title + "</span></div>";
+        formHtml += "<div class='title'>";
+        for(var i=0; i<totalColumns; i++) {
+            formHtml += "<div class='column' data-grid-column='" + i + "' ><span>" + this.columns[i].title + "</span></div>";
+        }
+        formHtml += "</div>";
+
+        for(var i=0; i<this.pageSize; i++){
+            formHtml += "<div class='row' data-grid-row='" + i + "'>";
+
+            for(var j=0; j<totalColumns; j++) {
+                formHtml += "<div class='column' data-grid-column='" + j + "' ></div>";
             }
+
             formHtml += "</div>";
+        }
 
-            for(var i=0; i<this.pageSize; i++){
-                formHtml += "<div class='yayoi-grid-row' data-grid-row='" + i + "'>";
-
-                for(var j=0; j<totalColumns; j++) {
-                    formHtml += "<div class='yayoi-grid-column' data-grid-column='" + j + "' ></div>";
-                }
-
-                formHtml += "</div>";
-            }
+        formHtml += "</div><div class='yayoi-grid-foot'><div class='pager'></div></div>";
 
         container.html(formHtml);
     };
@@ -48,6 +50,10 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
                 column.setContainer(container.find("div[data-grid-row=" + i + "]>div[data-grid-column="+j+"]"));
                 column.render();
             }
+        }
+        for(var i=0; i<this.columns.length; i++) {
+            var column = this.columns[i];
+            container.find("div[data-grid-column="+i+"]").css("width", column.width);
         }
     };
     this.invalidate = function() {
@@ -93,7 +99,8 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
 });
 
 yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.Component", [], function(){
-    this.title = "";
+    this.title = "Column Name";
+    this.width = "auto";
     this.formatter;
 
     this.setTitle = function(title) {
