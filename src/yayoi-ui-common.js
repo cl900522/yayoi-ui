@@ -42,6 +42,9 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         this.afterRender();
         this.initEvents();
         this._rendered = true;
+        if(this.getModel() != null) {
+            this.invalidate()
+        }
     }
     this.beforeRender = function() {
     };
@@ -54,11 +57,11 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.initEvents = function() {
     };
     this.setModel = function(model) {
-        if(this._model != model) {
+        if(model) {
             this._model = model;
             this.invalidate();
             return true;
-        }else {
+        } else {
             return false;
         }
     };

@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>UI表格测试</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-grid.js"></script>
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+</head>
+<body>
+    <h1>UI表格测试</h1>
+    <div id='gridId' style='width: 1200px; height: auto; margin:auto;'></div>
+    <script type="text/javascript">
+    $(function(){
+        grid = new yayoi.ui.grid.Grid({
+            title: "表格测试",
+            showIndex: true,
+            selector: '#gridId',
+            router: 'users',
+            tools: [
+                {
+                    icon: "refresh", click: function() {
+                        
+                    }
+                }, {
+                    icon: "add", click: function() {
+                        
+                    }
+                }, {
+                    icon: "update", click: function() {
+                        
+                    }
+                }
+            ],
+            columns: [
+                {
+                    type: "text", format: "text", title: "First Name", router: "firstName"
+                }, {
+                    type: "text", format: "text",  title: "Last Name", router: "lastName"
+                }, {
+                    type: "text", format: "date",  title: "Address.City", router: "address/city"
+                }, {
+                    type: "text", format: "text", title: "Gender", router: "gender"
+                }
+            ]
+        });
+
+        var userModel = new yayoi.ui.model.JsonModel({
+            url: "/json/grid-data.json",
+            method: "GET",
+            async: false,
+            parseData: function(result) {
+                return (result.code == 1)? result.data : null;
+            },
+            loadSuccess: function() {
+                grid.setModel(userModel);
+            }
+        });
+        userModel.load();
+    })
+    </script>
+</body>
+</html>

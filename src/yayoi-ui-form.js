@@ -46,7 +46,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
                     this.fields[i].colspan = colspan;
                 }
 
-                formHtml += "<td class='yayoi-form-cell' name='form-cell-" + i + "' colspan='" + colspan + "'>";
+                formHtml += "<td class='yayoi-form-cell' data-form-cell='" + i + "' colspan='" + colspan + "'>";
                 if (i % totaColumns == totaColumns - 1) {
                     formHtml += "</tr>";
                 }
@@ -82,7 +82,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             field.router = router.pwd();
             field.setModel(this.getModel());
 
-            field.setContainer(container.find("td[name=form-cell-" + i + "]"));
+            field.setContainer(container.find("td[data-form-cell=" + i + "]"));
             field.render();
         }
     }
@@ -174,7 +174,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
     }
 });
 
-yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", ["yayoi.ui.form.TextField"], function(){
+yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", [], function(){
     this.title = "";
     this.value = "";
     this.name;
