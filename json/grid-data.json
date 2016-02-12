@@ -10,7 +10,7 @@
                 "email": "545435711@qq.com",
                 "mobile": "15129387123",
                 "idCard": "512315123123",
-                "gender": "female",
+                "gender": "male",
                 "address": {"city": "Chengdu"}
             },{
                 "firstName": "Ningjiang",
@@ -30,7 +30,7 @@
                 "email": "545435711@qq.com",
                 "mobile": "15129387123",
                 "idCard": "512315123123",
-                "gender": "female",
+                "gender": "male",
                 "address": {"city": "Anhui"}
             }
         ]

@@ -17,27 +17,23 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
     this.onRendering = function() {
         var container = this.getContainer();
         var formHtml = "<div class='yayoi-grid-head'><div class='buttons'></div></div>" +
-            "<div class='yayoi-grid-body'>";
+            "<div class='yayoi-grid-body'><table><tr>";
 
         var totalColumns = this.columns.length;
 
-        formHtml += "<div class='title'>";
-        for(var i=0; i<totalColumns; i++) {
-            formHtml += "<div class='column' data-grid-column='" + i + "' ><span>" + this.columns[i].title + "</span></div>";
-        }
-        formHtml += "</div>";
+        for(var j=0; j<totalColumns; j++) {
+            formHtml += "<td><div class='column' data-grid-column='" + j + "' >";
 
-        for(var i=0; i<this.pageSize; i++){
-            formHtml += "<div class='row' data-grid-row='" + i + "'>";
-
-            for(var j=0; j<totalColumns; j++) {
-                formHtml += "<div class='column' data-grid-column='" + j + "' ></div>";
+            formHtml += "<div class='title'><span>" + this.columns[j].title + "</span></div>";
+            for(var i=0; i<this.pageSize; i++){
+                formHtml += "<div class='row' data-grid-row='" + i + "'>";
+                formHtml += "</div>";
             }
 
-            formHtml += "</div>";
+            formHtml += "</div></td>";
         }
 
-        formHtml += "</div><div class='yayoi-grid-foot'><div class='pager'></div></div>";
+        formHtml += "</tr></table></div><div class='yayoi-grid-foot'><div class='pager'></div></div>";
 
         container.html(formHtml);
     };
@@ -47,7 +43,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
         for(var i=0; i<this.pageSize; i++) {
             for(var j=0; j<this.columns.length; j++) {
                 var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-row=" + i + "]>div[data-grid-column="+j+"]"));
+                column.setContainer(container.find("div[data-grid-column="+j+"]>div[data-grid-row=" + i + "]"));
                 column.render();
             }
         }
@@ -70,7 +66,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
 
             for(var j=0; j<this.columns.length; j++) {
                 var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-row=" + i + "]>div[data-grid-column="+j+"]"));
+                column.setContainer(container.find("div[data-grid-column="+j+"]>div[data-grid-row=" + i + "]"));
                 column.setModel(model);
             }
         }

@@ -421,34 +421,29 @@
     border-top: 0;
     border-bottom: 0;
     padding: 5px 0px 5px;
+    overflow-x: scroll;
 }
-.yayoi-grid-body .title {
+.yayoi-grid-body .column{
+    display: inline-block;
+    height: auto;
+    line-height: 35px;
+    text-align: center;
+}
+.yayoi-grid-body .column .title {
     width: 100%;
     height: 35px;
     border: 0px;
     padding: 2px 0px 2px;
     border-bottom: 1px solid #d8d8d8;
-}
-.yayoi-grid-body .title .column{
-    display: inline-block;
-    width: 25%;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
     font-weight: bold;
 }
 .yayoi-grid-body .row {
+    height: 35px;
+    line-height: 35px;
     border-bottom: 1px solid #d8d8d8;
 }
 .yayoi-grid-body .row:last-child {
     border-bottom: 0;
-}
-.yayoi-grid-body .row .column{
-    display: inline-block;
-    width: 25%;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
 }
 .yayoi-grid-foot {
     display: block;
