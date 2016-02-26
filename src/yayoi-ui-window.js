@@ -1,15 +1,6 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.window");
 
-yayoi.util.checkEmail =function(email){
-    var emailExp = /^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/;
-    return emailExp.test(email)
-}
-yayoi.util.checkMobile = function(mobile){
-    var mobileExp = /^13[0-9]{1}[0-9]{8}$|15[012356789]{1}[0-9]{8}$|17[678]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$/;
-    return mobileExp.test(mobile);
-}
-
 yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.Component", [], function() {
     this.isModel = true;
     this._mask = null;

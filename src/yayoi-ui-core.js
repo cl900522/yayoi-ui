@@ -3,6 +3,16 @@ window.yayoi = {
     util: {},
 };
 
+yayoi.util.checkEmail = function(email) {
+    var emailExp = /^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/;
+    return emailExp.test(email)
+}
+
+yayoi.util.checkMobile = function(mobile) {
+    var mobileExp = /^13[0-9]{1}[0-9]{8}$|15[012356789]{1}[0-9]{8}$|17[678]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$/;
+    return mobileExp.test(mobile);
+}
+
 yayoi.util.initPackages = function(packagesStr, defaultInitObject){
     var packages = packagesStr.split(".");
     var currentPackage = window;
@@ -20,7 +30,7 @@ yayoi.util.initPackages = function(packagesStr, defaultInitObject){
 }
 
 yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
-    baseType = yayoi.util.initPackages(baseType)
+    baseType = yayoi.util.initPackages(baseType);
     if(! baseType instanceof Function){
         console.error("BaseType is not a function, so it can not be extended.");
     }

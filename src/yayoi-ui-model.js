@@ -1,13 +1,13 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.model");
 
-yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
+yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
     /*根元素的值
      * */
     this._rootValue;
     /*绑定的UI组件
      */
-    this._component;
+    this._listeners;
     /*获取路径下的值
      * */
     this.getValue = function(path) {
@@ -20,25 +20,22 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
     };
     /*获取绑定的组件
      */
-    this.getComponent = function (){
-        return this._component;
+    this.getListenders = function (){
+        return this._listeners;
     };
     /*设置绑定的组件
      */
-    this.setComponent = function (component){
-        this._component = component;
+    this.addListener = function (component){
+        this._listeners.push(component);
     };
-    /* 被继承的函数原型
+    /*取消绑定的组件
      */
-    this._genExtend = function (){
-        return function(params) {
-            this.init = function(params) {
-                for(var p in params){
-                    this[p] = params[p];
-                }
-            };
-            this.init(params);
-        };
+    this.removeListener = function (component){
+        for(var i=0; i<this._listeners.length; i++) {
+            if(this._listeners[i] == component) {
+                this._listeners.splice(i, 1);
+            }
+        }
     };
     /*设置根节点值
      */
@@ -49,6 +46,14 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function(Object){
      */
     this.getRootValue = function () {
         return this._rootValue;
+    };
+    this.init = function(params) {
+        if(params && params instanceof Object){
+            for(var p in params) {
+                this[p] = params[p];
+            }
+        }
+        this._listeners = [];
     };
 });
 
