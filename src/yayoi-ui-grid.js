@@ -3,10 +3,15 @@ yayoi.util.initPackages("yayoi.ui.grid");
 
 yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], function() {
     this.title;
-    this.showIndex = false;
     this.columns = [];
+    this.page = {
+        pageSize : 10,
+        pageNo : 1
+    };
     this.pageSize = 10;
     this.pageNo = 1;
+    this.showCheckbox = true;
+    this.showIndex = false;
 
     this.beforeRender = function(){
         for(var i=0; i<this.columns.length; i++) {
@@ -16,26 +21,69 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
     };
     this.onRendering = function() {
         var container = this.getContainer();
-        var formHtml = "<div class='yayoi-grid-head'><div class='buttons'></div></div>" +
-            "<div class='yayoi-grid-body'><table><tr>";
-
         var totalColumns = this.columns.length;
+        var columnWidth = 0;
 
-        for(var j=0; j<totalColumns; j++) {
-            formHtml += "<td><div class='column' data-grid-column='" + j + "' >";
-
-            formHtml += "<div class='title'><span>" + this.columns[j].title + "</span></div>";
-            for(var i=0; i<this.pageSize; i++){
-                formHtml += "<div class='row' data-grid-row='" + i + "'>";
-                formHtml += "</div>";
+        var formHtml = "<div class='yayoi-grid-head'><div class='buttons'></div></div>";
+        /*body start*/
+        formHtml += "<div class='yayoi-grid-body'>";
+        /*frozen grid start*/ /*frozen grid titles start*/
+        formHtml += "<div class='yayoi-frozen-grid'><div class='yayoi-grid-titles'><table class='yayoi-grid-table'>";
+        var tr = "<tr>";
+        if(this.showIndex){
+            tr += "<td class='row-column check-all'></td>"
+        }
+        if(this.showCheckbox) {
+            tr += "<td class='check-column'><input type='checkbox'/></td>"
+        }
+        tr += "</tr>";
+        formHtml += tr;
+        /*frozen grid content start*/
+        formHtml += "</table></div><div class='yayoi-grid-content'><table class='yayoi-grid-table'>";
+        for(var i=0; i<this.page.pageSize; i++) {
+            var tr = "<tr>";
+            if(this.showIndex){
+                tr += "<td class='row-column'><span>" + (i+1) + "</span></td>"
             }
+            if(this.showCheckbox) {
+                tr += "<td class='check-column'><input type='checkbox'/></td>"
+            }
+            tr += "</tr>";
+            formHtml += tr;
+        }
+        formHtml += "</table></div></div>";
 
-            formHtml += "</div></td>";
+        /*flex grid start*/ /*flex grid titles start*/
+        formHtml += "<div class='yayoi-flex-grid'><div class='yayoi-grid-titles'><table class='yayoi-grid-table'>";
+        formHtml += "<tr>";
+        for(var i=0; i<totalColumns; i++) {
+            formHtml += "<td style='width:" + this.columns[i].width + "'><span>" + this.columns[i].title + "</span></td>";
+
+            columnWidth += parseInt(this.columns[i].width.replace("px", ""));
+        }
+        formHtml += "</tr></table></div>";
+
+        /*flex grid content start*/
+        formHtml += "<div class='yayoi-grid-content'><table class='yayoi-grid-table'>";
+
+        for(var i=0; i<this.pageSize; i++){
+            formHtml += "<tr>";
+            for(var j=0; j<totalColumns; j++) {
+                formHtml += "<td style='width:" + this.columns[j].width + "'><div class='column' data-grid-row='" + i + "' data-grid-column='" + j + "' ></div></td>";
+            }
+            formHtml += "</tr>";
         }
 
-        formHtml += "</tr></table></div><div class='yayoi-grid-foot'><div class='pager'></div></div>";
-
+        formHtml += "</table></div></div></div>";
+        /*body end*/
+        formHtml += "<div class='yayoi-grid-foot'><div class='pager'></div></div>";
         container.html(formHtml);
+
+        /*css setting*/
+        var frozenWidth = container.find(".yayoi-frozen-grid").width();
+        var flexWidth = container.width() - frozenWidth;
+        container.find(".yayoi-flex-grid").width(flexWidth);
+        container.find(".yayoi-flex-grid table").width(columnWidth + totalColumns*2);
     };
     this.afterRender = function () {
         var container = this.getContainer();
@@ -43,14 +91,14 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
         for(var i=0; i<this.pageSize; i++) {
             for(var j=0; j<this.columns.length; j++) {
                 var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-column="+j+"]>div[data-grid-row=" + i + "]"));
+                column.setContainer(container.find("div[data-grid-column="+j+"][data-grid-row=" + i + "]"));
                 column.render();
             }
         }
-        for(var i=0; i<this.columns.length; i++) {
-            var column = this.columns[i];
-            container.find("div[data-grid-column="+i+"]").css("width", column.width);
-        }
+
+        container.find(".check-all").click(function(){
+            alert(1);
+        });
     };
     this.invalidate = function() {
         var container = this.getContainer();
@@ -66,7 +114,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
 
             for(var j=0; j<this.columns.length; j++) {
                 var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-column="+j+"]>div[data-grid-row=" + i + "]"));
+                column.setContainer(container.find("div[data-grid-column="+j+"][data-grid-row=" + i + "]"));
                 column.setModel(model);
             }
         }

@@ -421,30 +421,50 @@
     border-top: 0;
     border-bottom: 0;
     padding: 5px 0px 5px;
+    overflow: hidden;
+}
+.yayoi-grid-body>div {
+    display: block;
+    height: 100%;
+    float: left;
+    width: auto;
+}
+.yayoi-grid-body .yayoi-flex-grid {
     overflow-x: scroll;
 }
-.yayoi-grid-body .column{
-    display: inline-block;
-    height: auto;
-    line-height: 35px;
+.yayoi-grid-table {
+    width: auto;
+    display: block;
+    font-size: 1px;
+}
+.yayoi-grid-table tr {
+    width: auto;
+    border-bottom: 1px solid #d8d8d8;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+}
+.yayoi-grid-table tr:last-child {
+}
+.yayoi-grid-table td {
+    border-right: 1px solid #d8d8d8;
+    line-height: 30px;
+    height: 30px;
     text-align: center;
 }
-.yayoi-grid-body .column .title {
-    width: 100%;
-    height: 35px;
-    border: 0px;
-    padding: 2px 0px 2px;
-    border-bottom: 1px solid #d8d8d8;
+.yayoi-grid-table td.row-column {
+    width: 30px;
+}
+.yayoi-grid-table td.check-column {
+    width: 40px;
+}
+.yayoi-grid-table td.check-column input[type=checkbox] {
+    cursor: pointer;
+}
+.yayoi-grid-titles .yayoi-grid-table {
     font-weight: bold;
 }
-.yayoi-grid-body .row {
-    height: 35px;
-    line-height: 35px;
-    border-bottom: 1px solid #d8d8d8;
-}
-.yayoi-grid-body .row:last-child {
-    border-bottom: 0;
-}
+
 .yayoi-grid-foot {
     display: block;
     padding: 5px 0px;

@@ -18,6 +18,7 @@
         grid = new yayoi.ui.grid.Grid({
             title: "表格测试",
             showIndex: true,
+            showCheckbox: true,
             selector: '#gridId',
             router: 'users',
             tools: [
@@ -47,7 +48,7 @@
                 }, {
                     type: "text", format: "text", title: "IdCard", router: "idCard", width: "200px",
                 }, {
-                    type: "text", format: "text",  title: "City", router: "address/city", width: "300px",
+                    type: "text", format: "text",  title: "City", router: "address/city", width: "200px",
                 }
             ]
         });
