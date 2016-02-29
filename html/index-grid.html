@@ -24,15 +24,15 @@
             tools: [
                 {
                     icon: "refresh", click: function() {
-                        
+
                     }
                 }, {
                     icon: "add", click: function() {
-                        
+
                     }
                 }, {
                     icon: "update", click: function() {
-                        
+
                     }
                 }
             ],
@@ -42,7 +42,13 @@
                 }, {
                     type: "text", format: "text",  title: "Last Name", router: "lastName", width: "160px",
                 }, {
-                    type: "text", format: "text", title: "Gender", router: "gender", width: "200px",
+                    type: "text", format: "text", title: "Gender", router: "gender", width: "200px", decorate: function(rowData) {
+                        if (rowData.gender=="male") {
+                            return "男";
+                        } else {
+                            return "女";
+                        }
+                    }
                 }, {
                     type: "text", format: "text", title: "Email", router: "email", width: "200px",
                 }, {

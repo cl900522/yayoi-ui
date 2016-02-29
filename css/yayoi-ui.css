@@ -452,13 +452,20 @@
     height: 30px;
     text-align: center;
 }
-.yayoi-grid-table td.row-column {
+.yayoi-grid-table td>div{
+    width: 100%;
+    height: 100%;
+}
+.yayoi-grid-table td>div.selected{
+    background-color: #efefef;
+}
+.yayoi-grid-table div.row-column {
     width: 30px;
 }
-.yayoi-grid-table td.check-column {
+.yayoi-grid-table div.check-column {
     width: 40px;
 }
-.yayoi-grid-table td.check-column input[type=checkbox] {
+.yayoi-grid-table div.check-column input[type=checkbox] {
     cursor: pointer;
 }
 .yayoi-grid-titles .yayoi-grid-table {

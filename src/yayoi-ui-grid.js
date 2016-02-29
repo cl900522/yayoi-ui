@@ -31,10 +31,10 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
         formHtml += "<div class='yayoi-frozen-grid'><div class='yayoi-grid-titles'><table class='yayoi-grid-table'>";
         var tr = "<tr>";
         if(this.showIndex){
-            tr += "<td class='row-column check-all'></td>"
+            tr += "<td><div class='row-column'></div></td>"
         }
         if(this.showCheckbox) {
-            tr += "<td class='check-column'><input type='checkbox'/></td>"
+            tr += "<td><div class='check-column'><input type='checkbox' class='check-all'/></div></td>"
         }
         tr += "</tr>";
         formHtml += tr;
@@ -43,10 +43,10 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
         for(var i=0; i<this.page.pageSize; i++) {
             var tr = "<tr>";
             if(this.showIndex){
-                tr += "<td class='row-column'><span>" + (i+1) + "</span></td>"
+                tr += "<td><div class='row-column' data-grid-row=" + i + "><span>" + (i+1) + "</span></div></td>"
             }
             if(this.showCheckbox) {
-                tr += "<td class='check-column'><input type='checkbox'/></td>"
+                tr += "<td><div class='check-column' data-grid-row=" + i + "><input type='checkbox'/></div></td>"
             }
             tr += "</tr>";
             formHtml += tr;
@@ -95,11 +95,17 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
                 column.render();
             }
         }
-
-        container.find(".check-all").click(function(){
-            alert(1);
-        });
     };
+    this.selectRow = function(i) {
+        var container = this.getContainer();
+        container.find("div[data-grid-row="+i+"]").addClass("selected");
+        container.find(".yayoi-frozen-grid div[data-grid-row="+i+"] input[type=checkbox]").attr("checked", "");
+    };
+    this.unselectRow = function(i) {
+        var container = this.getContainer();
+        container.find("div[data-grid-row="+i+"]").removeClass("selected");
+        container.find(".yayoi-frozen-grid div[data-grid-row="+i+"] input[type=checkbox]").removeAttr("checked");
+    }
     this.invalidate = function() {
         var container = this.getContainer();
         var rootValue = this.getModel().getValue(this.getRouter());
@@ -121,9 +127,26 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
     };
     this.initEvents = function () {
         var container = this.getContainer();
-        var that =this;
-//        container.find(".buttons").bind("click", function(){
-//        });
+        var that = this;
+        container.find(".check-all").click(function(){
+            if($(this).attr("checked")){
+                for(var i=0; i<that.pageSize; i++) {
+                    that.selectRow(i);
+                }
+            } else {
+                for(var i=0; i<that.pageSize; i++) {
+                    that.unselectRow(i);
+                }
+            }
+        });
+        container.find(".yayoi-frozen-grid input[type=checkbox]").click(function(){
+            var row = $(this).parent().attr("data-grid-row");
+            if($(this).attr("checked")){
+                that.selectRow(row);
+            } else {
+                that.unselectRow(row);
+            }
+        });
     };
     this.getColumn = function(arg1) {
     };
@@ -168,10 +191,7 @@ yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.Component", [], funct
 });
 
 yayoi.util.extend("yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Column", [], function(){
-    this.onRendering = function(){
-        var container = this.getContainer();
-        var html = "<span>" + this.getValue() + "</span>";
-        container.html(html);
+    this.onRendering = function() {
     };
     this.setValue = function(value) {
         var model = this.getModel();
@@ -189,6 +209,11 @@ yayoi.util.extend("yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Column", [], functi
     };
     this.invalidate = function () {
         var container = this.getContainer();
-        container.find("span").html(this.getValue());
-    }
+
+        var rowData = this.getModel() == null ? {} : this.getModel().getValue("/");
+        container.html(this.decorate(rowData || {}));
+    };
+    this.decorate = function(rowData) {
+        return "<span>" + this.getValue() + "</span>";
+    };
 });
