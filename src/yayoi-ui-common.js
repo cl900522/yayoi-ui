@@ -65,7 +65,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
             return false;
         }
     };
-    this.invalidate = function (){
+    this.invalidate = function () {
         this.logger.info("You can define you modelChanged function to set your value.");
     }
     this.getModel = function() {
@@ -80,13 +80,13 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
             this.invalidate();
         }
     };
-    this.setContainer = function(container){
+    this.setContainer = function(container) {
         this._container = container;
     };
     this.getContainer = function() {
         return this._container;
     };
-    this.setVisible = function(visible){
+    this.setVisible = function(visible) {
         this.visible = visible;
         if (this.getVisible()) {
             this.getContainer().show();
@@ -96,5 +96,49 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     };
     this.getVisible = function() {
         return this.visible;
+    };
+});
+
+yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], function() {
+    this.icon = "";
+    this.text = "";
+    this.click = function(){
+        this.logger.info("Add your own click for button.");
+    };
+
+    this.render = function() {
+        var container = this.getContainer();
+        var html = "<button class='yayoi-button yayoi-button-submit'/>" + this.text + "</button>";
+        container.html(html);
+    };
+
+    this.initEvents = function() {
+        var container = this.getContainer();
+        var that = this;
+        container.find("button").click(function(){
+            that.click();
+        });
+    };
+});
+
+yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], function() {
+    this.icon = "";
+    this.text = "";
+    this.click = function(){
+        this.logger.info("Add your own click for button.");
+    };
+
+    this.render = function() {
+        var container = this.getContainer();
+        var html = "<button class='yayoi-button yayoi-button-submit'/>" + this.text + "</button>";
+        container.html(html);
+    };
+
+    this.initEvents = function() {
+        var container = this.getContainer();
+        var that = this;
+        container.find("button").click(function(){
+            that.click();
+        });
     };
 });
