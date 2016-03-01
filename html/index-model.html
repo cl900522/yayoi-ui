@@ -1,6 +1,7 @@
 ﻿<html>
 <head>
     <title>UI模型测试</title>
+    <link rel="stylesheet" href="../css/qunit.css" />
 </head>
 <body>
     <h1>UI模型测试</h1>
@@ -19,42 +20,75 @@
     });
         </code>
     </pre>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
-        var model = new yayoi.ui.model.JsonModel({
-            url: "/json/user-data.json",
-            method: "GET",
-            async: false,
-            parseData: function(result) {
-                return (result.code == 1)? result : {};
-            },
-            loadSuccess: function() {
-                yayoi.log.info("/");
-                yayoi.log.info(this.getValue("/"));
 
-                yayoi.log.info("/data/setting value:");
-                yayoi.log.info(this.getValue("/data/setting"));
+        QUnit.test("Json model sync function test", 6, function(assert) {
+            var model = new yayoi.ui.model.JsonModel({
+                url: "/json/user-data.json",
+                method: "GET",
+                async: false,
+                parseData: function(result) {
+                    return (result.code == 1)? result : {};
+                },
+                loadSuccess: function() {
+                    assert.deepEqual(model.getValue("/data/setting"), {
+                        span: "5min",
+                        size: 30
+                    }, "/data/setting value is right");
 
-                yayoi.log.info("/data/setting/unknown value:");
-                yayoi.log.info(this.getValue("/data/setting/unknown"));
+                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
+                    assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
+                }
+            });
+            model.load();
 
-                yayoi.log.info("/data/users value:");
-                yayoi.log.info(this.getValue("/data/users"));
-            }
+            assert.equal(model.getValue("/data/users/1/name/"), "caijun", "/data/users/1/name/ value is caijun");
+
+            model.setValue("/data/users/1/name/", "changed");
+            assert.equal(model.getValue("/data/users/1/name/"), "changed", "/data/users/1/name/ value is changed");
+
+            model.setValue("/data/setting/opacity/","12");
+            assert.equal(model.getValue("/data/setting/opacity/"), "12", "/data/setting/opacity/ value is 12");
         });
-        model.load();
-        model.setValue("/data/users/1/name/", "changed")
-        yayoi.log.info("/data/users/1/name/ value:");
-        yayoi.log.info(model.getValue("/data/users/1/name/"));
 
-        model.setValue("/data/setting/opacity/","12");
-        yayoi.log.info("/data/setting/opacity/ value:");
-        yayoi.log.info(model.getValue("/data/setting/opacity/"));
+        QUnit.test("Json model async function test", 6, function(assert) {
+            var done = assert.async();
+            var model = new yayoi.ui.model.JsonModel({
+                url: "/json/user-data.json",
+                method: "GET",
+                async: true,
+                parseData: function(result) {
+                    return (result.code == 1)? result : {};
+                },
+                loadSuccess: function() {
+                    assert.deepEqual(model.getValue("/data/setting"), {
+                        span: "5min",
+                        size: 30
+                    }, "/data/setting value is right");
 
-        yayoi.log.info("/ value:");
-        yayoi.log.info(model.getValue("/"));
+                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
+                    assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
+
+                    done();
+                }
+            });
+            model.load();
+
+            assert.equal(model.getValue("/data/users/1/name/"), null, "/data/users/1/name/ value is null");
+
+            model.setValue("/data/users/1/name/", "changed");
+            assert.equal(model.getValue("/data/users/1/name/"), "changed", "/data/users/1/name/ value is changed");
+
+            model.setValue("/data/setting/opacity/", null);
+            assert.equal(model.getValue("/data/setting/opacity/"), null, "/data/setting/opacity/ value is null");
+        });
+
     </script>
 </body>
 </html>

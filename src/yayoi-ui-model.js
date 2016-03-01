@@ -54,6 +54,7 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
             }
         }
         this._listeners = [];
+        this._rootValue = {};
     };
 });
 
@@ -119,11 +120,10 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
             return;
         }
         for(var i=0; i<paths.length - 1; i++) {
-            if(parentPath != null && parentPath[paths[i]] != null){
-                parentPath = parentPath["" + paths[i]];
-            } else {
-                parentPath = {};
+            if(parentPath[paths[i]] == null){
+                parentPath["" + paths[i]] = {};
             }
+            parentPath = parentPath["" + paths[i]];
         }
         parentPath[paths[paths.length-1]] = value;
     };
