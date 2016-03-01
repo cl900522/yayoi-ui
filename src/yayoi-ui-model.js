@@ -64,6 +64,8 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
     this.method = "post";
     this.params = [];
     this.async = true;
+    this.loadSuccess = function() {};
+
     this._parseData = function(result) {
         this.setRootValue(this.parseData(result));
         if(!this.loaded){

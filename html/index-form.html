@@ -11,65 +11,71 @@
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-form.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
 </head>
 <body>
     <h1>UI表单测试</h1>
     <div id='formId' style='width: 1200px; height: auto; margin:auto;'></div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
     <script type="text/javascript">
-    $(function(){
-        form = new yayoi.ui.form.Form({
-            title: "表单测试",
-            action: '/html/index-form.html',
-            method: 'get',
-            selector: '#formId',
-            router: './../user/',
-            columns : 2,
-            fields: [
-                {
-                    type: "text", format: "text", title: "First Name", name: "firstName", router: "././firstName", hint: "Input Your First Name"
-                }, {
-                    type: "text", format: "text",  title: "Last Name", name: "lastName", router: "./lastName", hint: "Input Your Last Name"
-                }, {
-                    type: "text", format: "date",  title: "BirthDate", name: "Date", router: "./birthDate", hint: "Input Your Age"
-                }, {
-                    type: "singleSelect", title: "Gender", name: "gender", router: "gender", nullable: false,
-                    selections: [
-                        {value: "male", text: "Male"},
-                        {value: "female", text: "Female"}
-                    ]
-                }, {
-                    type: "text", format: "text",  title: "IdCard", name: "idCard", router: "./idCard", hint: "Input Your IdCard"
-                }, {
-                    type: "singleSelect", title: "Work", name: "work", router: "job", nullable: true,
-                    selections: [
-                        {value: "it", text: "IT"},
-                        {value: "fi", text: "FI"},
-                        {value: "teacher", text: "Teacher"},
-                        {value: "driver", text: "Driver"}
-                    ]
-                }, {
-                    type: "text", format: "text",  title: "Email", name: "email", router: "./email", hint: "Input Your Email"
-                }, {
-                    type: "text", format: "text",  title: "Phone", name: "phone", router: "./mobile", hint: "Input Your Phone"
-                }, {
-                    type: "textarea", title: "Remark", name: "remark", router: "remark", hint: "Input Your Remark", colspan :1
-                }
-            ]
-        });
+    $(function() {
+        QUnit.test("Form function test.", 0, function(assert) {
+            var form = new yayoi.ui.form.Form({
+                title: "表单测试",
+                action: '/html/index-form.html',
+                method: 'get',
+                selector: '#formId',
+                router: './../user/',
+                columns : 2,
+                fields: [
+                    {
+                        type: "text", format: "text", title: "First Name", name: "firstName", router: "././firstName", hint: "Input Your First Name"
+                    }, {
+                        type: "text", format: "text",  title: "Last Name", name: "lastName", router: "./lastName", hint: "Input Your Last Name"
+                    }, {
+                        type: "text", format: "date",  title: "BirthDate", name: "Date", router: "./birthDate", hint: "Input Your Age"
+                    }, {
+                        type: "singleSelect", title: "Gender", name: "gender", router: "gender", nullable: false,
+                        selections: [
+                            {value: "male", text: "Male"},
+                            {value: "female", text: "Female"}
+                        ]
+                    }, {
+                        type: "text", format: "text",  title: "IdCard", name: "idCard", router: "./idCard", hint: "Input Your IdCard"
+                    }, {
+                        type: "singleSelect", title: "Work", name: "work", router: "job", nullable: true,
+                        selections: [
+                            {value: "it", text: "IT"},
+                            {value: "fi", text: "FI"},
+                            {value: "teacher", text: "Teacher"},
+                            {value: "driver", text: "Driver"}
+                        ]
+                    }, {
+                        type: "text", format: "text",  title: "Email", name: "email", router: "./email", hint: "Input Your Email"
+                    }, {
+                        type: "text", format: "text",  title: "Phone", name: "phone", router: "./mobile", hint: "Input Your Phone"
+                    }, {
+                        type: "textarea", title: "Remark", name: "remark", router: "remark", hint: "Input Your Remark", colspan :1
+                    }
+                ]
+            });
 
-        var userModel = new yayoi.ui.model.JsonModel({
-            url: "/json/account-data.json",
-            method: "GET",
-            async: false,
-            parseData: function(result) {
-                return (result.code == 1)? result.data : null;
-            },
-            loadSuccess: function() {
-                form.setModel(userModel);
-            }
+            var userModel = new yayoi.ui.model.JsonModel({
+                url: "/json/account-data.json",
+                method: "GET",
+                async: false,
+                parseData: function(result) {
+                    return (result.code == 1)? result.data : null;
+                },
+                loadSuccess: function() {
+                    form.setModel(userModel);
+                }
+            });
+            userModel.load();
         });
-        userModel.load();
     })
     </script>
 </body>
