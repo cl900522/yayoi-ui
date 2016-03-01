@@ -8,11 +8,15 @@
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-grid.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
 </head>
 <body>
     <h1>UI表格测试</h1>
     <div id='gridId' style='width: 1200px; height: auto; margin:auto;'></div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
     <script type="text/javascript">
     $(function(){
         grid = new yayoi.ui.grid.Grid({
