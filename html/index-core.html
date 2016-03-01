@@ -1,6 +1,7 @@
 ﻿<html>
 <head>
 </head>
+    <link rel="stylesheet" href="../css/qunit.css" />
 <body>
     <h1>YayoiUI核心测试</h1>
     <p>extend函数，用于辅助继承类</p>
@@ -27,39 +28,57 @@
     yayoi.log.info(path.pwd());
         </code>
     </pre>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
-        var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
-            this.name = null;
-            this.age = null;
-            this.getAge = function() {
-                return this.age;
-            }
-        });
-        var mx = new People({
-            address : "Jiagnsu.Yizheng",
-            "age": 11
-        });
-        var nj = new People({
-            address : "Hubei,Yichang"
-        });
-        yayoi.log.info(yayoi.common.People);
-        nj["age"] = 12;
-        yayoi.log.info(nj);
-        yayoi.log.info(mx);
+        QUnit.test("Class extend test.", 5, function(assert) {
+            var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
+                this.name = null;
+                this.age = null;
+                this.getAge = function() {
+                    return this.age;
+                }
+            });
+            assert.ok(yayoi.common.People instanceof Function, "Create yayoi.common.People class ok.");
 
-        var path = new yayoi.ui.path.Router("./../tmp/tmp/google");
-        yayoi.log.info(path.pwd());
-        path.cd("../httpd");
-        yayoi.log.info(path.pwd());
-        path.cd("../google");
-        yayoi.log.info(path.pwd());
+            var mx = new People({
+                address : "Jiagnsu.Yizheng",
+                "age": 11
+            });
+            var nj = new People({
+                address : "Hubei,Yichang"
+            });
+            nj["age"] = 12;
 
-        var newPath = new yayoi.ui.path.Router("./var/tmp/google");
-        newPath.cd("/usr/local/bin");
-        yayoi.log.info(newPath.pwd());
-        newPath.cd("./../lib");
-        yayoi.log.info(newPath.pwd());
+            assert.ok(mx.age == 11, "Mingxuan age is 11.");
+            assert.ok(nj.age == 12, "Ningjiang age is 12.");
+            assert.ok(mx.address == "Jiagnsu.Yizheng", "Mingxuan address is Jiagnsu.Yizheng.");
+            assert.ok(nj.address == "Hubei,Yichang", "Ningjiang address is Hubei,Yichang.");
+        });
+
+        QUnit.test("Path navigation test.", 3, function(assert) {
+            var path = new yayoi.ui.path.Router("./../tmp/tmp/google");
+            assert.ok(path.pwd() == "/tmp/tmp/google", "Go ./../tmp/tmp/google  get /tmp/tmp/google");
+
+            path.cd("../httpd");
+            assert.ok(path.pwd() == "/tmp/tmp/httpd", "Go ../httpd get /tmp/tmp/httpd");
+
+            path.cd("../google");
+            assert.ok(path.pwd() == "/tmp/tmp/google", "Go ../google get /tmp/tmp/google");
+        });
+
+        QUnit.test("Path navigation test 2.", 3, function(assert) {
+            var newPath = new yayoi.ui.path.Router("./var/tmp/google");
+            assert.ok(newPath.pwd() == "/var/tmp/google", "Go ./var/tmp/google get /var/tmp/google");
+
+            newPath.cd("/usr/local/bin");
+            assert.ok(newPath.pwd() == "/usr/local/bin", "Go /usr/local/bin get /usr/local/bin");
+
+            newPath.cd("./../lib");
+            assert.ok(newPath.pwd() == "/usr/local/lib", "Go ./../lib get /usr/local/lib" );
+        });
     </script>
 </body>
 </html>
