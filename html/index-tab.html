@@ -9,6 +9,8 @@
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-tab.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
 </head>
 <body>
@@ -32,6 +34,8 @@
         </code>
     </pre>
     <div id='tabId' style='width: 1500px; height: 800px; margin: auto;'></div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
     <script type="text/javascript">
     $(function(){
         var tab = new yayoi.ui.tab.Tab({

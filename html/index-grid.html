@@ -8,11 +8,15 @@
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-grid.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
 </head>
 <body>
     <h1>UI表格测试</h1>
     <div id='gridId' style='width: 1200px; height: auto; margin:auto;'></div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
     <script type="text/javascript">
     $(function(){
         grid = new yayoi.ui.grid.Grid({
@@ -28,19 +32,17 @@
                     }
                 }, {
                     icon: "add", click: function() {
-
                     }
                 }, {
                     icon: "update", click: function() {
-
                     }
                 }
             ],
             columns: [
                 {
-                    type: "text", format: "text", title: "First Name", router: "firstName", width: "160px",
-                }, {
-                    type: "text", format: "text",  title: "Last Name", router: "lastName", width: "160px",
+                    type: "text", format: "text", title: "Whole Name", router: "firstName", width: "160px", decorate: function(rowData) {
+                        return rowData.lastName +" "+ rowData.firstName
+                    }
                 }, {
                     type: "text", format: "text", title: "Gender", router: "gender", width: "200px", decorate: function(rowData) {
                         if (rowData.gender=="male") {
@@ -50,11 +52,15 @@
                         }
                     }
                 }, {
+                    type: "text", format: "text", title: "BirthDate", router: "birthDate", width: "200px",
+                }, {
                     type: "text", format: "text", title: "Email", router: "email", width: "200px",
                 }, {
                     type: "text", format: "text", title: "IdCard", router: "idCard", width: "200px",
                 }, {
-                    type: "text", format: "text",  title: "City", router: "address/city", width: "200px",
+                    type: "text", format: "text",  title: "Address", width: "200px", decorate: function(rowData) {
+                        return rowData.address.city + "." + rowData.address.street
+                    }
                 }
             ]
         });
