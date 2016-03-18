@@ -1,0 +1,58 @@
+﻿<html>
+<head>
+</head>
+    <link rel="stylesheet" href="../css/qunit.css" />
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+<body>
+    <h1>YayoiUI图标测试</h1>
+    <p>extend函数，用于辅助继承类</p>
+    <div style="width: 600px">
+    	<table>
+    		<tr>
+    			<td id="cell1"></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    		</tr>
+    		<tr>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    			<td></td>
+    		</tr>
+    	</table>
+    </div>
+    <pre>
+        <code>
+
+        </code>
+    </pre>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        QUnit.test("Class extend test.", function(assert) {
+            var icon = new yayoi.ui.common.Icon({icon: "edit"});
+            icon.placeAt("#cell1");
+        });
+    })
+    </script>
+</body>
+</html>

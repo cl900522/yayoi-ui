@@ -9,8 +9,14 @@
 }
 /*yayoi icon*/
 .yayoi-icon {
-    
+    display: inline-block;
+    line-height: 100%;
+    text-align: center;
+    text-decoration: inherit;
+    display: inline-block;
+    speak: none;
 }
+/*yayoi form*/
 .yayoi-form {
     display: block;
     width: 100%;

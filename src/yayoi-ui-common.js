@@ -100,25 +100,19 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
 });
 
 yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], function() {
+    this.group = "FontAwesome";
     this.icon = "";
-    this.text = "";
-    this.font = "";
+    this.src = "";
+    this.size = "32px";
+
     this.click = function(){
         this.logger.info("Add your own click for button.");
     };
 
     this.render = function() {
         var container = this.getContainer();
-        var html = "<li class='yayoi-icon'/></li>";
+        var html = "<span class='yayoi-icon icon-" + this.icon + "' style='width:" + this.size + ";height:auto;font-size:"+this.size+"'/></span>";
         container.html(html);
-    };
-
-    this.initEvents = function() {
-        var container = this.getContainer();
-        var that = this;
-        container.find("button").click(function(){
-            that.click();
-        });
     };
 });
 
