@@ -102,13 +102,14 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
 yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], function() {
     this.icon = "";
     this.text = "";
+    this.font = "";
     this.click = function(){
         this.logger.info("Add your own click for button.");
     };
 
     this.render = function() {
         var container = this.getContainer();
-        var html = "<button class='yayoi-button yayoi-button-submit'/>" + this.text + "</button>";
+        var html = "<li class='yayoi-icon'/></li>";
         container.html(html);
     };
 

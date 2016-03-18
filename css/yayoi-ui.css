@@ -5,8 +5,12 @@
     font-family: "微软雅黑";
     border-spacing: 0px;
     text-overflow: ellipsis ;
+    text-decoration: none;
 }
-
+/*yayoi icon*/
+.yayoi-icon {
+    
+}
 .yayoi-form {
     display: block;
     width: 100%;
