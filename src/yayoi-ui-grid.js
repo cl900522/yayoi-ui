@@ -87,7 +87,12 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.Component", [], functio
     };
     this.afterRender = function () {
         var container = this.getContainer();
-
+        container.find("[data-grid-row]").each(function(){
+            var row = $(this).attr("data-grid-row");
+            if (parseInt(row) % 2 == 0) {
+                $(this).addClass("single-row");
+            }
+        })
         for(var i=0; i<this.pageSize; i++) {
             for(var j=0; j<this.columns.length; j++) {
                 var column = this.columns[j];

@@ -457,6 +457,9 @@
     height: 100%;
 }
 .yayoi-grid-table td>div.selected{
+    background-color: #eeeeee;
+}
+.yayoi-grid-table td>div.single-row{
     background-color: #efefef;
 }
 .yayoi-grid-table div.row-column {
