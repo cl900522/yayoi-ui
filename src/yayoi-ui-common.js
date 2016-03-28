@@ -104,16 +104,34 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
     this.icon = "";
     this.src = "";
     this.size = "32px";
+    this.rotate = 0;
 
     this.click = function(){
         this.logger.info("Add your own click for button.");
     };
 
-    this.render = function() {
+    this.onRendering = function() {
         var container = this.getContainer();
-        var html = "<span class='yayoi-icon icon-" + this.icon + "' style='width:" + this.size + ";height:auto;font-size:"+this.size+"'/></span>";
+        var html = "<span class='yayoi-icon'/></span>";
         container.html(html);
     };
+
+    this.afterRender = function(){
+        var container = this.getContainer();
+        var iconElement = container.find(".yayoi-icon");
+        iconElement.attr("icon-group", this.group)
+        iconElement.css("width", "auto");
+        iconElement.css("font-size", this.size);
+        iconElement.css("height", this.size);
+        iconElement.addClass("icon-" + this.icon);
+
+        var rotateDeg = "rotate("+this.rotate+"deg)";
+        iconElement.css("-webkit-transform", rotateDeg);
+        iconElement.css("-moz-transform", rotateDeg);
+        iconElement.css("-ms-transform", rotateDeg);
+        iconElement.css("-o-transform", rotateDeg);
+        iconElement.css("transform", rotateDeg);
+    }
 });
 
 yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], function() {
@@ -123,7 +141,7 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
         this.logger.info("Add your own click for button.");
     };
 
-    this.render = function() {
+    this.onRendering = function() {
         var container = this.getContainer();
         var html = "<button class='yayoi-button yayoi-button-submit'/>" + this.text + "</button>";
         container.html(html);

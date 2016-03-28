@@ -6,40 +6,11 @@
     <link rel="stylesheet" href="../css/font/font-awesome.min.css">
 <body>
     <h1>YayoiUI图标测试</h1>
-    <p>extend函数，用于辅助继承类</p>
-    <div style="width: 600px">
-    	<table>
-    		<tr>
-    			<td id="cell1"></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    		</tr>
-    		<tr>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    			<td></td>
-    		</tr>
-    	</table>
+    <p>展示所有支持的图标</p>
+    <div style="width: 600px;margin:auto; margin-bottom: 50px;">
+        <table id="listTable" style="width:100%;">
+        </table>
     </div>
-    <pre>
-        <code>
-
-        </code>
-    </pre>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
@@ -47,10 +18,126 @@
     <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
+    var iconList = [];
+    iconList.push({name:"杯子", icon:{icon:"glass"}});
+    iconList.push({name:"音乐", icon:{icon:"music"}});
+    iconList.push({name:"搜索", icon:{icon:"search"}});
+    iconList.push({name:"邮箱", icon:{icon:"envelope-alt"}});
+    iconList.push({name:"爱心", icon:{icon:"heart"}});
+    iconList.push({name:"星星", icon:{icon:"star"}});
+    iconList.push({name:"空星", icon:{icon:"star-empty"}});
+    iconList.push({name:"用户", icon:{icon:"user"}});
+    iconList.push({name:"电影", icon:{icon:"film"}});
+
+    iconList.push({name:"表格", icon:{icon:"th"}});
+    iconList.push({name:"表格", icon:{icon:"th-large"}});
+    iconList.push({name:"表格", icon:{icon:"th-list"}});
+    iconList.push({name:"同意", icon:{icon:"ok"}});
+    iconList.push({name:"删除", icon:{icon:"remove"}});
+    iconList.push({name:"放大", icon:{icon:"zoom-in"}});
+    iconList.push({name:"缩小", icon:{icon:"zoom-out"}});
+    iconList.push({name:"关机", icon:{icon:"power-off"}});
+    iconList.push({name:"信号", icon:{icon:"signal"}});
+    iconList.push({name:"齿轮", icon:{icon:"gear"}});
+    iconList.push({name:"垃圾", icon:{icon:"trash"}});
+    iconList.push({name:"主页", icon:{icon:"home"}});
+    iconList.push({name:"文件", icon:{icon:"file-alt"}});
+    iconList.push({name:"时间", icon:{icon:"time"}});
+    iconList.push({name:"马路", icon:{icon:"road"}});
+    iconList.push({name:"下载", icon:{icon:"download-alt"}});
+    iconList.push({name:"下载", icon:{icon:"download"}});
+    iconList.push({name:"上传", icon:{icon:"upload"}});
+    iconList.push({name:"收件箱", icon:{icon:"inbox"}});
+    iconList.push({name:"循环", icon:{icon:"play-circle"}});
+    iconList.push({name:"右转", icon:{icon:"rotate-right"}});
+    iconList.push({name:"刷新", icon:{icon:"refresh"}});
+    iconList.push({name:"列表", icon:{icon:"list-alt"}});
+    iconList.push({name:"锁定", icon:{icon:"lock"}});
+    iconList.push({name:"标记", icon:{icon:"flag"}});
+    iconList.push({name:"耳机", icon:{icon:"headphones"}});
+    iconList.push({name:"静音", icon:{icon:"volume-off"}});
+    iconList.push({name:"增音", icon:{icon:"volume-up"}});
+    iconList.push({name:"降音", icon:{icon:"volume-down"}});
+    iconList.push({name:"二维码", icon:{icon:"qrcode"}});
+    iconList.push({name:"一维码", icon:{icon:"barcode"}});
+    iconList.push({name:"标签", icon:{icon:"tag"}});
+    iconList.push({name:"标签", icon:{icon:"tags"}});
+    iconList.push({name:"书本", icon:{icon:"book"}});
+    iconList.push({name:"书签", icon:{icon:"bookmark"}});
+    iconList.push({name:"打印", icon:{icon:"print"}});
+    iconList.push({name:"相机", icon:{icon:"camera"}});
+    iconList.push({name:"字体", icon:{icon:"font"}});
+    iconList.push({name:"加粗", icon:{icon:"bold"}});
+    iconList.push({name:"斜体", icon:{icon:"italic"}});
+    iconList.push({name:"字高", icon:{icon:"text-height"}});
+    iconList.push({name:"字宽", icon:{icon:"text-width"}});
+    iconList.push({name:"居左", icon:{icon:"align-left"}});
+    iconList.push({name:"居中", icon:{icon:"align-center"}});
+    iconList.push({name:"居右", icon:{icon:"align-right"}});
+
+    iconList.push({name:"自动", icon:{icon:"align-right"}});
+    iconList.push({name:"列表", icon:{icon:"align-right"}});
+    iconList.push({name:"左间距", icon:{icon:"align-right"}});
+    iconList.push({name:"右间距", icon:{icon:"align-right"}});
+    iconList.push({name:"视频聊天", icon:{icon:"align-right"}});
+    iconList.push({name:"图片", icon:{icon:"align-right"}});
+    iconList.push({name:"铅笔", icon:{icon:"align-right"}});
+    iconList.push({name:"地图标记", icon:{icon:"align-right"}});
+    iconList.push({name:"调整", icon:{icon:"align-right"}});
+    iconList.push({name:"tint", icon:{icon:"align-right"}});
+    iconList.push({name:"编辑", icon:{icon:"align-right"}});
+    iconList.push({name:"分享", icon:{icon:"align-right"}});
+    iconList.push({name:"勾选", icon:{icon:"align-right"}});
+    iconList.push({name:"移动", icon:{icon:"align-right"}});
+    iconList.push({name:"回退", icon:{icon:"align-right"}});
+    iconList.push({name:"快速回退", icon:{icon:"align-right"}});
+    iconList.push({name:"后退", icon:{icon:"align-right"}});
+    iconList.push({name:"播放", icon:{icon:"align-right"}});
+    iconList.push({name:"暂停", icon:{icon:"align-right"}});
+    iconList.push({name:"停止", icon:{icon:"align-right"}});
+    iconList.push({name:"前进", icon:{icon:"align-right"}});
+    iconList.push({name:"快进", icon:{icon:"align-right"}});
+    iconList.push({name:"快进", icon:{icon:"align-right"}});
+    iconList.push({name:"弹出", icon:{icon:"align-right"}});
+    iconList.push({name:"chevron-left", icon:{icon:"align-right"}});
+    iconList.push({name:"chevron-right", icon:{icon:"align-right"}});
+    iconList.push({name:"加号", icon:{icon:"align-right"}});
+    iconList.push({name:"减号", icon:{icon:"align-right"}});
+    iconList.push({name:"移除", icon:{icon:"align-right"}});
+    iconList.push({name:"同意", icon:{icon:"align-right"}});
+    iconList.push({name:"疑问", icon:{icon:"align-right"}});
+    iconList.push({name:"消息", icon:{icon:"align-right"}});
+    iconList.push({name:"截图", icon:{icon:"align-right"}});
+    iconList.push({name:"删除循环", icon:{icon:"align-right"}});
+    iconList.push({name:"ban-circle", icon:{icon:"align-right"}});
+    iconList.push({name:"左箭头", icon:{icon:"align-right"}});
+    iconList.push({name:"右箭头", icon:{icon:"align-right"}});
+    iconList.push({name:"上箭头", icon:{icon:"align-right"}});
+    iconList.push({name:"下箭头", icon:{icon:"align-right"}});
+    iconList.push({name:"发邮件", icon:{icon:"align-right"}});
+    iconList.push({name:"", icon:{icon:"align-right"}});
+    iconList.push({name:"弹出", icon:{icon:"align-right"}});
+    iconList.push({name:"弹出", icon:{icon:"align-right"}});
+
     $(function(){
         QUnit.test("Class extend test.", function(assert) {
-            var icon = new yayoi.ui.common.Icon({icon: "edit"});
-            icon.placeAt("#cell1");
+            var size = 10, html="<tr>";
+            for(var i=0; i<iconList.length; i++) {
+                if(i%size == 0 && i!=0 ) {
+                    html += "</tr><tr>"
+                }
+                html += "<td><div id='icon-"+i+"'></div><span id='icon-name-"+i+"'></span>"
+            }
+            html += "</tr>"
+
+            console.log(html);
+            $("#listTable").html(html);
+
+            for(var i=0; i<iconList.length; i++) {
+                var icon = new yayoi.ui.common.Icon(iconList[i].icon);
+                icon.placeAt("#icon-"+i);
+                $("#icon-name-"+i).html(iconList[i].name);
+            }
         });
     })
     </script>
