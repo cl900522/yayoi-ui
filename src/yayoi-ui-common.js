@@ -28,9 +28,10 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this.placeAt = function(selector) {
         if(typeof(selector) == "string"){
             this.setContainer($(selector));
-        }
-        if(typeof(selector) == "object") {
+        }else if(typeof(selector) == "object" && selector instanceof jQuery) {
             this.setContainer(selector);
+        } else {
+            throw "selector param is not supported";
         }
         this.render();
     };
