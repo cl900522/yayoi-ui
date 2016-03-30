@@ -59,40 +59,6 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
 });
 
 yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], function(){
-    this.loaded = false;
-    this.url = "";
-    this.method = "post";
-    this.params = [];
-    this.async = true;
-    this.loadSuccess = function() {};
-
-    this._parseData = function(result) {
-        this.setRootValue(this.parseData(result));
-        if(!this.loaded){
-            this.loadSuccess();
-            this.loaded = true;
-        }
-    };
-    this.parseData = function(data) {
-        return data;
-    };
-    this.load = function() {
-        var that = this;
-        $.ajax({
-            url : that.url,
-            async : that.async,
-            method : that.method,
-            dataType: "json",
-            params : that.params,
-            success : function(result){
-                result = eval(result);
-                that._parseData(result);
-            },
-            error: function(e){
-                that.logger.error(e);
-            }
-        });
-    };
     this.getValue = function(pathsStr) {
         var value = this.getRootValue();
 

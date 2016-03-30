@@ -1,4 +1,5 @@
 ﻿<html>
+<html>
 <head>
     <title>UI模型测试</title>
     <link rel="stylesheet" href="../css/qunit.css" />
@@ -8,16 +9,9 @@
     <p>JsonMode可以通过http协议加载json数据，并提供数据获取和修改的函数</p>
     <pre>
         <code>
-    var model = new yayoi.ui.model.JsonModel({
-        url: "/json/user-data.json",
-        method: "GET",
-        async: false,
-        parseData: function(result) {
-            return (result.code == 1)? result : {};
-        },
-        loadSuccess: function() {
-        }
-    });
+        var model = new yayoi.ui.model.JsonModel();
+        model.setRootValue({});
+        model.setValue("/data/users/1/name/", "changed");
         </code>
     </pre>
     <div id="qunit"></div>
@@ -28,25 +22,19 @@
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
 
-        QUnit.test("Json model sync function test", 6, function(assert) {
-            var model = new yayoi.ui.model.JsonModel({
-                url: "/json/user-data.json",
-                method: "GET",
-                async: false,
-                parseData: function(result) {
-                    return (result.code == 1)? result : {};
-                },
-                loadSuccess: function() {
-                    assert.deepEqual(model.getValue("/data/setting"), {
-                        span: "5min",
-                        size: 30
-                    }, "/data/setting value is right");
-
-                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
-                    assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
+        QUnit.test("Json model sync function test", 3, function(assert) {
+            var model = new yayoi.ui.model.JsonModel();
+            model.setRootValue({
+                data: {
+                    users: [
+                        {name: "mingxuan"},
+                        {name: "caijun"}
+                    ],
+                    setting: {
+                        opacity: 12
+                    }
                 }
             });
-            model.load();
 
             assert.equal(model.getValue("/data/users/1/name/"), "caijun", "/data/users/1/name/ value is caijun");
 
@@ -55,38 +43,6 @@
 
             model.setValue("/data/setting/opacity/","12");
             assert.equal(model.getValue("/data/setting/opacity/"), "12", "/data/setting/opacity/ value is 12");
-        });
-
-        QUnit.test("Json model async function test", 6, function(assert) {
-            var done = assert.async();
-            var model = new yayoi.ui.model.JsonModel({
-                url: "/json/user-data.json",
-                method: "GET",
-                async: true,
-                parseData: function(result) {
-                    return (result.code == 1)? result : {};
-                },
-                loadSuccess: function() {
-                    assert.deepEqual(model.getValue("/data/setting"), {
-                        span: "5min",
-                        size: 30
-                    }, "/data/setting value is right");
-
-                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
-                    assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
-
-                    done();
-                }
-            });
-            model.load();
-
-            assert.equal(model.getValue("/data/users/1/name/"), null, "/data/users/1/name/ value is null");
-
-            model.setValue("/data/users/1/name/", "changed");
-            assert.equal(model.getValue("/data/users/1/name/"), "changed", "/data/users/1/name/ value is changed");
-
-            model.setValue("/data/setting/opacity/", null);
-            assert.equal(model.getValue("/data/setting/opacity/"), null, "/data/setting/opacity/ value is null");
         });
 
     </script>

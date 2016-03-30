@@ -1,0 +1,98 @@
+<html>
+<html>
+<head>
+    <title>UIStore测试</title>
+    <link rel="stylesheet" href="../css/qunit.css" />
+</head>
+<body>
+    <h1>UI模型测试</h1>
+    <p>Http数据存储器</p>
+    <pre>
+        <code>
+        var store = new yayoi.ui.store.HttpStore({
+            url: "/json/user-data.json",
+            method: "get",
+            dataType: "json",
+            async: false,
+            parseData: function(result) {
+                return (result.code == 1)? result : {};
+            },
+            success: function() {
+                var model = store.getModel();
+                console.log(model);
+            }
+        });
+        </code>
+    </pre>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-store.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <script type="text/javascript">
+        QUnit.test("Json model sync function test", 6, function(assert) {
+            var model;
+            var store = new yayoi.ui.store.HttpStore({
+                url: "/json/user-data.json",
+                method: "get",
+                async: false,
+                parseData: function(result) {
+                    return (result.code == 1)? result : {};
+                },
+                success: function() {
+                    model = store.getModel();
+
+                    assert.deepEqual(model.getValue("/data/setting"), {
+                        span: "5min",
+                        size: 30
+                    }, "/data/setting value is right");
+
+                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
+                    assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
+                }
+            });
+            store.load();
+            model = store.getModel();
+
+            assert.equal(model.getValue("/data/users/1/name/"), "caijun", "/data/users/1/name/ value is caijun");
+
+            model.setValue("/data/users/1/name/", "changed");
+            assert.equal(model.getValue("/data/users/1/name/"), "changed", "/data/users/1/name/ value is changed");
+
+            model.setValue("/data/setting/opacity/","12");
+            assert.equal(model.getValue("/data/setting/opacity/"), "12", "/data/setting/opacity/ value is 12");
+        });
+
+        QUnit.test("Json model async function test", 4, function(assert) {
+            var model;
+            var done = assert.async();
+            var store = new yayoi.ui.store.HttpStore({
+                url: "/json/user-data.json",
+                method: "get",
+                async: true,
+                parseData: function(result) {
+                    return (result.code == 1)? result : {};
+                },
+                success: function() {
+                    model = store.getModel();
+
+                    assert.deepEqual(model.getValue("/data/setting"), {
+                        span: "5min",
+                        size: 30
+                    }, "/data/setting value is right");
+
+                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
+                    assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
+
+                    done();
+                }
+            });
+            store.load();
+
+            assert.equal(model, null);
+        });
+    </script>
+</body>
+</html>

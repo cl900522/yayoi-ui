@@ -8,6 +8,7 @@
 <!--     <script type="text/javascript" src="../js/less.min.js"></script> -->
 
     <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-store.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
     <script type="text/javascript" src="../src/yayoi-ui-form.js"></script>
@@ -63,18 +64,18 @@
                 ]
             });
 
-            var userModel = new yayoi.ui.model.JsonModel({
+            var store = new yayoi.ui.store.HttpStore({
                 url: "/json/account-data.json",
-                method: "GET",
+                method: "get",
                 async: false,
                 parseData: function(result) {
                     return (result.code == 1)? result.data : null;
                 },
-                loadSuccess: function() {
-                    form.setModel(userModel);
+                success: function() {
+                    form.setModel(store.getModel());
                 }
             });
-            userModel.load();
+            store.load();
         });
     })
     </script>
