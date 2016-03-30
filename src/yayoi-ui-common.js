@@ -26,7 +26,12 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         }
     };
     this.placeAt = function(selector) {
-        this.setContainer($(selector));
+        if(typeof(selector) == "string"){
+            this.setContainer($(selector));
+        }
+        if(typeof(selector) == "object") {
+            this.setContainer(selector);
+        }
         this.render();
     };
     /**
@@ -135,23 +140,79 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
 });
 
 yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], function() {
-    this.icon = "";
+    /* To do decide icon shown on  leftor right*/
+    this.iconPlace = "left";
+    /*Icon value it can be set as string or Object like {icon: "remove"}*/
+    this.icon = null;
+    /*Text to be shown in button*/
     this.text = "";
+    /*Action performed when clicked*/
     this.click = function(){
         this.logger.info("Add your own click for button.");
     };
 
     this.onRendering = function() {
         var container = this.getContainer();
-        var html = "<button class='yayoi-button yayoi-button-submit'/>" + this.text + "</button>";
+        var html = "";
+        html += "<div class='yayoi-button'>"
+        html += "<div class='yayoi-button-icon yayoi-button-icon-left'></div>"
+        html += "<div class='yayoi-button-text'></div>"
+        html += "<div class='yayoi-button-icon yayoi-button-icon-right'></div>"
+        html += "</div>";
         container.html(html);
+    };
+
+    this.afterRender = function(){
+        this.setIcon(this.icon);
+        this.setText(this.text);
     };
 
     this.initEvents = function() {
         var container = this.getContainer();
         var that = this;
-        container.find("button").click(function(){
+        container.find(".yayoi-button").click(function(){
             that.click();
         });
+    };
+
+    this._initIcon = function(icon) {
+        var iconObject = null;
+        var iconSize = "20px";
+        if(icon) {
+            if(typeof(icon) == "string") {
+                iconObject = new yayoi.ui.common.Icon({icon: icon});
+            }
+            if(typeof(icon) == "object") {
+                if(icon instanceof yayoi.ui.commono.Icon) {
+                    iconObject = icon;
+                } else {
+                    iconObject = new yayoi.ui.common.Icon(icon);
+                }
+            }
+            iconObject.size = iconSize;
+        }
+        return iconObject;
+    };
+
+    this.setIcon = function(icon) {
+        this.icon = this._initIcon(icon);
+        var container = this.getContainer();
+        var iconContaner = container.find(".yayoi-button-icon");
+        iconContaner.hide();
+        if(this.icon) {
+            iconContaner = container.find(".yayoi-button-icon-" +this.iconPlace);
+            this.icon.placeAt(iconContaner);
+            iconContaner.show();
+        }
+    };
+
+    this.setText = function(text) {
+        this.text = text;
+        var container = this.getContainer();
+        container.find(".yayoi-button-text").html(this.text);
+    };
+
+    this.getText = function() {
+        return this.text;
     };
 });
