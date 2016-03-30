@@ -1,0 +1,102 @@
+<html>
+<head>
+</head>
+    <link rel="stylesheet" href="../css/qunit.css" />
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+<body>
+    <h1>YayoiUI按钮</h1>
+    <div style="width: 600px;margin:auto; margin-bottom: 50px;">
+        <table id="listTable" style="width:100%;">
+            <tr>
+                <td id="button-1"></td>
+                <td id="button-2"></td>
+            </tr>
+            <tr>
+                <td id="button-3"></td>
+                <td id="button-4"></td>
+            </tr>
+            <tr>
+                <td id="button-5"></td>
+                <td id="button-6"></td>
+            </tr>
+            <tr>
+                <td id="button-7"></td>
+                <td id="button-8"></td>
+            </tr>
+            <tr>
+                <td id="button-9"></td>
+                <td id="button-10"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <script type="text/javascript">
+
+    $(function(){
+        var button1 = new yayoi.ui.common.Button({
+            text: "删除",
+            selector: "#button-1"
+        });
+        var button2 = new yayoi.ui.common.Button({
+            icon: "remove-sign",
+            text: "删除",
+            selector: "#button-2"
+        });
+        var button3 = new yayoi.ui.common.Button({
+            text: "一个很多字的按钮",
+            selector: "#button-3"
+        });
+        var button4 = new yayoi.ui.common.Button({
+            icon: "remove-sign",
+            text: "一个很多字和图标的按钮",
+            selector: "#button-4"
+        });
+        var button5 = new yayoi.ui.common.Button({
+            text: "变换按钮",
+            selector: "#button-5",
+            click: function(){
+                if(button5.icon == null) {
+                    button5.setIcon("resize-full");
+                    button5.setText("隐藏图标");
+                } else {
+                    button5.setIcon();
+                    button5.setText("显示图标");
+                }
+            }
+        });
+        var button6 = new yayoi.ui.common.Button({
+            icon: "resize-full",
+            text: "全屏按钮",
+            selector: "#button-6"
+        });
+        var button7 = new yayoi.ui.common.Button({
+            icon: "chevron-left",
+            text: "左边",
+            selector: "#button-7"
+        });
+        var button8 = new yayoi.ui.common.Button({
+            iconPlace: "right",
+            icon: "chevron-right",
+            text: "右边",
+            selector: "#button-8"
+        });
+        var button9 = new yayoi.ui.common.Button({
+            iconPlace: "right",
+            icon: "chevron-right",
+            selector: "#button-9"
+        });
+        var button10 = new yayoi.ui.common.Button({
+            iconPlace: "right",
+            icon: "chevron-right",
+            selector: "#button-10"
+        });
+    })
+    </script>
+</body>
+</html>
