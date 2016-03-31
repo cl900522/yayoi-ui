@@ -10,36 +10,39 @@
     <script type="text/javascript" src="../js/qunit.js"></script>
     <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
 </head>
 <body>
     <h1>UI对话框测试</h1>
     <p>可以创建对话框，并绑定函数</p>
-    <button class="yayoi-button" onclick="showDialog()">显示</button><button class="yayoi-button" onclick="hideDialog()">隐藏</button>
+    <div id="button1"></div>
     <pre>
         <code>
-    var dialog = new yayoi.ui.window.Dialog();
-    function showDialog() {
-        dialog.show("成功", "数据提交成功", function(){
-            yayoi.log.info("Function callback success.")
-        });
-    }
-    function hideDialog() {
-        dialog.close();
-    }
+            var dialog = new yayoi.ui.window.Dialog();
+            function showDialog() {
+                dialog.show("成功", "数据提交成功", function(){
+                    yayoi.log.info("Function callback success.")
+                });
+            }
+            function hideDialog() {
+                dialog.close();
+            }
         </code>
     </pre>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
-    var dialog = new yayoi.ui.window.Dialog();
-    function showDialog() {
-        dialog.show("成功", "数据提交成功", function(){
-            yayoi.log.info("Function callback success.")
-        });
-    }
-    function hideDialog() {
-        dialog.close();
-    }
+        var dialog = new yayoi.ui.window.Dialog();
+        var dialogControlButton = new yayoi.ui.common.Button({
+            icon: "remove",
+            text: "显示对话框",
+            selector: "#button1",
+            click: function() {
+                dialog.show("成功", "数据提交成功", function(){
+                    yayoi.log.info("Function callback success.")
+                });
+            }
+        })
     </script>
 </body>
 </html>
