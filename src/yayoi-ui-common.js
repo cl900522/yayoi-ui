@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
+yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
     this._container;
     this._model; // model object to storing value
     /**
@@ -15,20 +15,20 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
     this._rendered = false;
 
     this.init = function(params) {
-        if(params instanceof Object){
-            for(var p in params) {
+        if (params instanceof Object) {
+            for (var p in params) {
                 this[p] = params[p];
             }
-            if(this["selector"] != null){
+            if (this["selector"] != null) {
                 this.placeAt(this["selector"]);
                 delete this["selector"];
             }
         }
     };
     this.placeAt = function(selector) {
-        if(typeof(selector) == "string"){
+        if (typeof(selector) == "string") {
             this.setContainer($(selector));
-        }else if(typeof(selector) == "object" && selector instanceof jQuery) {
+        } else if (typeof(selector) == "object" && selector instanceof jQuery) {
             this.setContainer(selector);
         } else {
             throw "selector param is not supported";
@@ -40,7 +40,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
      * it will call beforeRender(); onRendering(); afterRender() functions in order
      */
     this.render = function() {
-        if(this.getContainer()){
+        if (this.getContainer()) {
             this.getContainer().empty();
         }
         this.beforeRender();
@@ -48,22 +48,18 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         this.afterRender();
         this.initEvents();
         this._rendered = true;
-        if(this.getModel() != null) {
+        if (this.getModel() != null) {
             this.invalidate()
         }
     }
-    this.beforeRender = function() {
-    };
+    this.beforeRender = function() {};
     /*always rewrite this function of component to render the html content in container*/
-    this.onRendering = function() {
-    };
-    this.afterRender = function() {
-    };
+    this.onRendering = function() {};
+    this.afterRender = function() {};
     /*always rewrite this function to add events */
-    this.initEvents = function() {
-    };
+    this.initEvents = function() {};
     this.setModel = function(model) {
-        if(model) {
+        if (model) {
             this._model = model;
             this.invalidate();
             return true;
@@ -71,7 +67,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
             return false;
         }
     };
-    this.invalidate = function () {
+    this.invalidate = function() {
         this.logger.info("You can define you modelChanged function to set your value.");
     }
     this.getModel = function() {
@@ -81,7 +77,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function(){
         return this.router;
     };
     this.setRouter = function(router) {
-        if(this.router != router) {
+        if (this.router != router) {
             this.router = router || "";
             this.invalidate();
         }
@@ -111,9 +107,10 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
     this.src = "";
     this.size = "32px";
     this.rotate = 0;
+    this.click = null;
 
-    this.click = function(){
-        this.logger.info("Add your own click for button.");
+    this.setClick = function(click) {
+        this.click = click;
     };
 
     this.onRendering = function() {
@@ -122,7 +119,7 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
         container.html(html);
     };
 
-    this.afterRender = function(){
+    this.afterRender = function() {
         var container = this.getContainer();
         var iconElement = container.find(".yayoi-icon");
         iconElement.attr("icon-group", this.group)
@@ -131,12 +128,22 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
         iconElement.css("height", this.size);
         iconElement.addClass("icon-" + this.icon);
 
-        var rotateDeg = "rotate("+this.rotate+"deg)";
+        var rotateDeg = "rotate(" + this.rotate + "deg)";
         iconElement.css("-webkit-transform", rotateDeg);
         iconElement.css("-moz-transform", rotateDeg);
         iconElement.css("-ms-transform", rotateDeg);
         iconElement.css("-o-transform", rotateDeg);
         iconElement.css("transform", rotateDeg);
+    };
+
+    this.initEvents = function() {
+        var container = this.getContainer();
+        var that = this;
+        container.find(".yayoi-icon").click(function() {
+            if(that.click) {
+                that.click();
+            }
+        });
     }
 });
 
@@ -148,22 +155,21 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
     /*Text to be shown in button*/
     this.text = "";
     /*Action performed when clicked*/
-    this.click = function(){
+    this.click = function() {
         this.logger.info("Add your own click for button.");
     };
 
     this.onRendering = function() {
         var container = this.getContainer();
-        var html = "";
-        html += "<div class='yayoi-button'>"
-        html += "<div class='yayoi-button-icon yayoi-button-icon-left'></div>"
-        html += "<div class='yayoi-button-text'></div>"
-        html += "<div class='yayoi-button-icon yayoi-button-icon-right'></div>"
-        html += "</div>";
+        var html = "<div class='yayoi-button'>"
+        + "<div class='yayoi-button-icon yayoi-button-icon-left'></div>"
+        + "<div class='yayoi-button-text'></div>"
+        + "<div class='yayoi-button-icon yayoi-button-icon-right'></div>"
+        + "</div>";
         container.html(html);
     };
 
-    this.afterRender = function(){
+    this.afterRender = function() {
         this.setIcon(this.icon);
         this.setText(this.text);
     };
@@ -171,7 +177,7 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
     this.initEvents = function() {
         var container = this.getContainer();
         var that = this;
-        container.find(".yayoi-button").click(function(){
+        container.find(".yayoi-button").click(function() {
             that.click();
         });
     };
@@ -179,12 +185,14 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
     this._initIcon = function(icon) {
         var iconObject = null;
         var iconSize = "20px";
-        if(icon) {
-            if(typeof(icon) == "string") {
-                iconObject = new yayoi.ui.common.Icon({icon: icon});
+        if (icon) {
+            if (typeof(icon) == "string") {
+                iconObject = new yayoi.ui.common.Icon({
+                    icon: icon
+                });
             }
-            if(typeof(icon) == "object") {
-                if(icon instanceof yayoi.ui.commono.Icon) {
+            if (typeof(icon) == "object") {
+                if (icon instanceof yayoi.ui.commono.Icon) {
                     iconObject = icon;
                 } else {
                     iconObject = new yayoi.ui.common.Icon(icon);
@@ -200,8 +208,8 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
         var container = this.getContainer();
         var iconContaner = container.find(".yayoi-button-icon");
         iconContaner.hide();
-        if(this.icon) {
-            iconContaner = container.find(".yayoi-button-icon-" +this.iconPlace);
+        if (this.icon) {
+            iconContaner = container.find(".yayoi-button-icon-" + this.iconPlace);
             this.icon.placeAt(iconContaner);
             iconContaner.show();
         }
@@ -215,5 +223,37 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
 
     this.getText = function() {
         return this.text;
+    };
+
+    this.setClick = function(click) {
+        this.click = click;
+    };
+});
+
+yayoi.util.extend("yayoi.ui.common.ComponentsContainer", "yayoi.ui.common.Component", [], function() {
+    /* Components list*/
+    this.components;
+    /*How components were placed, ltr[left to right](defalut) or rtl[right to left]*/
+    this.align = "ltr";
+
+    this.onRendering = function() {
+        var container = this.getContainer();
+        var html = "<table class='yayoi-container'><tr>";
+        for (var i = 0; i < this.components.length; i++) {
+            html += ("<td class='yayoi-container-cell' column='" + i + "'></td>");
+        }
+        html += "</tr></table>";
+        container.html(html);
+    };
+
+    this.afterRender = function() {
+        var container = this.getContainer();
+        container.find(".yayoi-container-cell").css("float", this.align == "rtl" ? "right" : "left");
+
+        for (var i = 0; i < this.components.length; i++) {
+            var oComponentPlace = container.find(".yayoi-container-cell[column=" + i + "]");
+            this.logger.info(oComponentPlace);
+            this.components[i].placeAt(oComponentPlace);
+        }
     };
 });

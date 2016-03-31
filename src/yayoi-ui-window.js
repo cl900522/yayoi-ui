@@ -4,8 +4,10 @@ yayoi.util.initPackages("yayoi.ui.window");
 yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.Component", [], function() {
     this.isModel = true;
     this._mask = null;
+    this._cancelButton = null;
+    this._confirmButton = null;
 
-    this.beforeRender = function (){
+    this.beforeRender = function() {
         var container = $("<div class='yayoi-dialog'></div>");
         $(document.body).append(container);
         this.setContainer(container);
@@ -14,78 +16,97 @@ yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.Component", [], fun
         var container = this.getContainer();
 
         var dialogHtml = "<div class='yayoi-dialog-head'>"
-          +"<div class='title'>DialogTitle</div><div class='button'><a href='javascript:void(0)' class='yayoi-icon-close'><i></i></a></div>"
-          +"</div>"
-          +"<div class='yayoi-dialog-body'>"
-          +"<p class='content'>DialogContent</p>"
-          +"</div>"
-          +"<div class='yayoi-dialog-foot'><div class='buttons'>"
-          +"<input type='button' class='yayoi-button yayoi-button-cancel' value='取消' />"
-          +"<input type='button' class='yayoi-button yayoi-button-submit' value='确定' />"
-          +"</div></div>";
+        + "<div class='title'>DialogTitle</div><div class='close-icon'></div>"
+        + "</div>"
+        + "<div class='yayoi-dialog-body'>"
+        + "<p class='content'>DialogContent</p>"
+        + "</div>"
+        + "<div class='yayoi-dialog-foot'></div>";
 
-        if(this.isModel){
+        if (this.isModel) {
             var maskHtml = "<div class='yayoi-mask' style='display: none;'></div>";
             this._mask = $(maskHtml);
             container.before(this._mask);
         }
         container.html(dialogHtml);
     };
-    this.initEvents = function() {
-        var container=this.getContainer();
+    this.afterRender = function() {
+        var that = this;
+        /*footer buttons*/
+        this._cancelButton = new yayoi.ui.common.Button({
+            text: "取消",
+            icon: "remove",
+            click: function() {
+                that._close();
+            }
+        });
+        this._confirmButton = new yayoi.ui.common.Button({
+            text: "确定",
+            icon: "ok-sign"
+        });
+        var buttons = new yayoi.ui.common.ComponentsContainer({
+            align: "rtl",
+            components: [
+                this._cancelButton,
+                this._confirmButton
+            ]
+        });
+        var container = this.getContainer();
+        buttons.placeAt(container.find(".yayoi-dialog-foot"));
 
-        //添加默认绑定
-        var that =this, closeFun = function(){
+        /*top-right close icon*/
+        var closeIcon = new yayoi.ui.common.Icon({icon:"remove-sign", size: "20px", click: function() {
             that._close();
-        }
-        container.find(".yayoi-button-cancel").bind("click", closeFun);
-        container.find(".yayoi-button-submit").bind("click", closeFun);
-        container.find(".button").bind("click", closeFun);
+        }});
+        closeIcon.placeAt(container.find(".close-icon"));
     };
     this.show = function(title, content, confirmFun) {
-        if(!this._rendered) {
+        if (!this._rendered) {
             this.render();
         }
-        var container=this.getContainer();
-        container.find(".title").html(title||"");
-        container.find(".content").html(content||"");
+        var container = this.getContainer();
+        var that = this;
+        container.find(".title").html(title || "");
+        container.find(".content").html(content || "");
 
-        container.find(".yayoi-button-submit").unbind("click");
-        var that =this, closeFun = function(){
-            that._close();
-        }
-        container.find(".yayoi-button-submit").bind("click", closeFun);
         if (confirmFun && confirm instanceof Function) {
-            container.find(".yayoi-button-submit").bind("click", confirmFun);
+            this._confirmButton.setClick(function() {
+                that._close();
+                confirmFun();
+            });
+        } else {
+            this._confirmButton.setClick(function() {
+                that._close();
+            });
         }
 
         this._show();
     };
-    this.close = function(){
+    this.close = function() {
         this._close();
     };
-    this._show = function(){
-        var container=this.getContainer();
+    this._show = function() {
+        var container = this.getContainer();
         container.show();
         var width = document.body.offsetWidth;
         var height = screen.height;
 
         var dialg_w = container.width();
         var dialg_h = container.height();
-        if(this.isModel){
+        if (this.isModel) {
             this._mask.show();
 
             //设置背景大小
             this._mask.css("width", width);
             this._mask.css("height", height);
         }
-        container.css("left", Math.ceil((width - dialg_w)/2));
-        container.css("top", Math.ceil(height/4));
+        container.css("left", Math.ceil((width - dialg_w) / 2));
+        container.css("top", Math.ceil(height / 4));
     };
-    this._close = function(){
+    this._close = function() {
         this.getContainer().hide();
 
-        if(this.isModel){
+        if (this.isModel) {
             this._mask.hide();
         }
     };
