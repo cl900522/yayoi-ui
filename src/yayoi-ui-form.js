@@ -63,11 +63,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             }
 
             formHtml += "</table></div>" +
-            "<div class='yayoi-form-foot'><div class='buttons'>" +
-            "<input type='button' class='yayoi-button yayoi-button-cancel' value='取消' />" +
-            "<input type='button' class='yayoi-button yayoi-button-reset' value='重置' />" +
-            "<input type='button' class='yayoi-button yayoi-button-submit' value='确定' />" +
-            "</div></div>" +
+            "<div class='yayoi-form-foot'></div>" +
             "</form>";
         container.html(formHtml);
     };
@@ -85,20 +81,40 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
             field.setContainer(container.find("td[data-form-cell=" + i + "]"));
             field.render();
         }
-    }
-    this.initEvents = function () {
-        var container = this.getContainer();
+
+        /*footer buttons*/
         var that =this;
-        container.find(".yayoi-button-cancel").bind("click", function(){
-            that.cancel();
+        this._cancelButton = new yayoi.ui.common.Button({
+            text: "取消",
+            icon: "remove",
+            click: function() {
+                that.cancel();
+            }
         });
-        container.find(".yayoi-button-reset").bind("click", function() {
-            that.invalidate();
-            that.reset();
+        this._resetButton = new yayoi.ui.common.Button({
+            text: "重置",
+            icon: "rotate-right",
+            click: function() {
+                that.invalidate();
+                that.reset();
+            }
         });
-        container.find(".yayoi-button-submit").bind("click", function() {
-            that._submit();
+        this._confirmButton = new yayoi.ui.common.Button({
+            text: "确定",
+            icon: "ok-sign",
+            click: function() {
+                that._submit();
+            }
         });
+        var buttons = new yayoi.ui.common.ComponentsContainer({
+            align: "rtl",
+            components: [
+                this._cancelButton,
+                this._resetButton,
+                this._confirmButton
+            ]
+        });
+        buttons.placeAt(container.find(".yayoi-form-foot"));
     };
     this.cancel = function () {
         this.logger.info("you can defind your own cancel action here.")
