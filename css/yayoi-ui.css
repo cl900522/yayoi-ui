@@ -292,26 +292,27 @@
     margin-top: 2px;
     border: 0px;
 }
-.yayoi-ui-tabs .yayoi-ui-tabs-nav li span {
+.yayoi-ui-tabs .yayoi-ui-tabs-nav li>span {
     line-height: 32px;
     font-weight: bold;
 }
-.yayoi-ui-tabs .yayoi-ui-tabs-nav li.deactive span{
-    color:#FCFDFF;
+.yayoi-ui-tabs .yayoi-ui-tabs-nav li.deactive>span{
+    color: #FCFDFF;
     font-weight: normal;
 }
-.yayoi-ui-tabs .yayoi-ui-tabs-nav li a.closeTab {
-    position:absolute;
-    left:120px;
-    top:11px;
+.yayoi-ui-tabs .yayoi-ui-tabs-nav li .closeTab {
+    text-indent: 0px;
+    display: block;
+    position: absolute;
+    left: 120px;
+    top: 11px;
     width: 10px;
     height: 10px;
+    line-height: 10px;
     overflow: hidden;
-    background-repeat: no-repeat;
-    background-image: url("../images/close_blue.png");
 }
-.yayoi-ui-tabs .yayoi-ui-tabs-nav li.deactive a.closeTab {
-    background-image: url("../images/close_white.png");
+.yayoi-ui-tabs .yayoi-ui-tabs-nav li.deactive .closeTab {
+    color: #FCFDFF;
 }
 .yayoi-ui-tabs .yayoi-ui-tabs-main {
     width: 99.4%;

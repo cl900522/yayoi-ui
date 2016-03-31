@@ -1,25 +1,25 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.tab");
 
-yayoi.util.extend("yayoi.ui.tab.TabNode", "yayoi.ui.common.Component", [], function(){
+yayoi.util.extend("yayoi.ui.tab.TabNode", "yayoi.ui.common.Component", [], function() {
     this.code;
     this.title;
     this.closeable = true;
 });
 
-yayoi.util.extend("yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.TabNode", [], function(){
+yayoi.util.extend("yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.TabNode", [], function() {
     this.url;
 
     this.onRendering = function() {
         var container = this.getContainer();
-        var frame = $('<iframe src="'+this.url+'"scrolling="auto" frameborder="0"></iframe>');
+        var frame = $('<iframe src="' + this.url + '"scrolling="auto" frameborder="0"></iframe>');
         container.append(frame);
     };
     this.refresh = function() {
         this.render();
     };
 });
-yayoi.util.extend("yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.TabNode", [], function(){
+yayoi.util.extend("yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.TabNode", [], function() {
     this.html;
 
     this.onRendering = function() {
@@ -30,7 +30,7 @@ yayoi.util.extend("yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.TabNode", [], functi
         this.render();
     };
 });
-yayoi.util.extend("yayoi.ui.tab.ComponentTabNode", "yayoi.ui.tab.TabNode", [], function(){
+yayoi.util.extend("yayoi.ui.tab.ComponentTabNode", "yayoi.ui.tab.TabNode", [], function() {
     this.component;
 
     this.onRendering = function() {
@@ -43,7 +43,7 @@ yayoi.util.extend("yayoi.ui.tab.ComponentTabNode", "yayoi.ui.tab.TabNode", [], f
     };
 });
 
-yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(){
+yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function() {
     this.navBar;
     this.contentContainer;
     this.tabNodes = {};
@@ -61,7 +61,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
         container.append(this.contentContainer);
 
         var tabs = this.tabs;
-        for(var i=0; i<tabs.length; i++) {
+        for (var i = 0; i < tabs.length; i++) {
             this.addTab(tabs[i]);
         }
     };
@@ -71,22 +71,22 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
         this.contentContainer.height(frameHeight + "px");
     };
     this.addTab = function(tab) {
-        if(!(tab instanceof yayoi.ui.tab.TabNode)){
+        if (!(tab instanceof yayoi.ui.tab.TabNode)) {
             var tab;
-            if(tab.hasOwnProperty("url")){
+            if (tab.hasOwnProperty("url")) {
                 tab = new yayoi.ui.tab.URLTabNode(tab);
             }
-            if(tab.hasOwnProperty("html")){
+            if (tab.hasOwnProperty("html")) {
                 tab = new yayoi.ui.tab.HTMLTabNode(tab);
             }
-            if(tab.hasOwnProperty("component")){
+            if (tab.hasOwnProperty("component")) {
                 tab = new yayoi.ui.tab.HTMLTabNode(tab);
             }
             this.addTab(tab);
             return;
         }
 
-        if(this.tabNodes[tab.code]){
+        if (this.tabNodes[tab.code]) {
             this.tabNodes[tab.code].active();
             return;
         }
@@ -101,24 +101,33 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
 
         this.tabNodes[tab.code] = tab;
     };
-    this.createNavBar = function(tabNode){
+    this.createNavBar = function(tabNode) {
         var that = this;
 
-        var tabNav = $("<li data-tabcode=" + tabNode.code + " class='active'><span>" + tabNode.title + "</span><a class='closeTab'></a></li>");
-        var closeButton = tabNav.find(".closeTab");
-        if(tabNode.closeable){
-            closeButton.bind("click", function(event){
+        var tabNav = $("<li data-tabcode=" + tabNode.code + " class='active'><span>" + tabNode.title + "</span><div class='closeTab'></div></li>");
+        var closeIcon = new yayoi.ui.common.Icon({
+            icon: "remove",
+            size: "10px",
+            click: function() {
                 that.closeTab(tabNode);
+            }
+        });
+        closeIcon.placeAt(tabNav.find(".closeTab"));
+        closeIcon.setVisible(tabNode.closeable);
+
+/*        var closeButton = tabNav.find(".closeTab");
+        if (tabNode.closeable) {
+            closeButton.bind("click", function(event) {
             });
             closeButton.show();
         } else {
             closeButton.hide();
-        }
+        }*/
 
-        tabNav.bind("click", function(event){
+        tabNav.bind("click", function(event) {
             var tabCode = $(this).attr("data-tabcode");
 
-            if(tabCode){
+            if (tabCode) {
                 that.activeTab(tabCode);
             }
         });
@@ -129,14 +138,14 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
         return this.tabNodes[code];
     };
     this.deactiveAll = function() {
-        for(var p in this.tabNodes){
+        for (var p in this.tabNodes) {
             var selector = "[data-tabcode='" + this.tabNodes[p].code + "']"
             this.navBar.find(selector).removeClass("active").addClass("deactive");
             this.contentContainer.find(selector).removeClass("active").addClass("deactive");
         }
     };
     this.activeTab = function(tabNode) {
-        if(!(tabNode instanceof yayoi.ui.tab.TabNode)){
+        if (!(tabNode instanceof yayoi.ui.tab.TabNode)) {
             var tab = this.getTab(tabNode);
             this.activeTab(tab);
             return;
@@ -148,7 +157,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
         this.contentContainer.find(selector).removeClass("deactive").addClass("active");
     };
     this.closeTab = function(tabNode) {
-        if(!(tabNode instanceof yayoi.ui.tab.TabNode)){
+        if (!(tabNode instanceof yayoi.ui.tab.TabNode)) {
             var tab = this.getTab(tabNode);
             this.closeTab(tab);
             return;
@@ -161,7 +170,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.Component", [], function(
         delete this.tabNodes[tabNode.code];
 
         var lastTabCode = this.navBar.find(">li:last").attr("data-tabcode");
-        if(lastTabCode) {
+        if (lastTabCode) {
             this.activeTab(lastTabCode);
         }
     };
