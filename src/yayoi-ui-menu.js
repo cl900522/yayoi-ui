@@ -13,12 +13,13 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
      */
     this.place = "bottom";
     /**
-     * åŒ…å«çš„menuç‚¹
+     * °üº¬µÄmenuµã
      * @type {yayoi.ui.menu.MenuNode}
      */
     this.nodes = null;
+    this.autoHide = false;
 
-    this.beforeRender = function() {
+/*    this.beforeRender = function() {
         var nodes = [];
         if(this.nodes) {
             for(var i=0; i<this.nodes.length; i++) {
@@ -26,12 +27,37 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
             }
         }
         this.nodes = nodes;
-    };
+    };*/
 
     this.onRendering = function() {
         var html = "<ul class='yayoi-menu'></ul>";
-        this.container = $(html);
-        $(document).append(this.container);
+        this.setContainer($(html));
+        $(document.body).append(this.getContainer());
+    };
+
+    this.afterRender = function() {
+        var nodes = this.nodes;
+        this.nodes = [];
+        for(var i=0; i<nodes.length; i++) {
+            this.addNode(nodes[i]);
+        }
+    };
+
+    this.initEvents = function() {
+        var container = this.getContainer();
+        var that = this;
+
+        container.click(function(event) {
+            that.hide();
+        });
+
+        container.hover(function() {
+            that.show();
+        }, function() {
+            if(that.autoHide) {
+                that.hide();
+            }
+        });
     };
 
     this.addNode = function(menuNode, index) {
@@ -43,29 +69,34 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
                     index = 0;
                     container.append(nodeContainer);
                 } else {
-                    index = index? index: this.nodes.length;
-                    var nextNode = container.find(".yayoi-menu").eq(index);
-                    nextNode.before(nodeContainer);
+                    if(index && index<this.nodes.length) {
+                        var nextNode = container.find("li").eq(index);
+                        nextNode.before(nodeContainer);
+                    } else {
+                        container.append(nodeContainer);
+                    }
+
                 }
                 menuNode.placeAt(nodeContainer);
-                this.nodes.splice(index, 0, node);
+                this.nodes.splice(index, 0, menuNode);
             } else {
                 var node = new yayoi.ui.menu.MenuNode(menuNode);
-                addNode(node);
+                this.addNode(node);
             }
-         } else {
+        } else {
+            this.logger.info(menuNode);
             throw "param should be Object";
         }
     };
 
     this.removeNode = function(menuNode) {
-        if(typeof(menuNode) == "object" ){
-            if(menuNode instanceof yayoi.ui.menu.MenuNode) {
+        if (typeof(menuNode) == "object") {
+            if (menuNode instanceof yayoi.ui.menu.MenuNode) {
                 var container = menuNode.getContainer();
                 container.remove();
+            } else {
+                throw "This is not a menuNode";
             }
-         } else {
-            throw "param should be Object";
         }
     };
 
@@ -75,6 +106,45 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
 
     this.getTarget = function() {
         return this.target;
+    };
+
+    this.show = function() {
+        if (!this._rendered) {
+            this.render();
+        }
+        var target = this.getTarget();
+        if(target && typeof(target) == "object") {
+            if(target instanceof yayoi.ui.common.Component) {
+                target = target.getContainer();
+            }
+        }
+
+        var position = {top:0, left:0}
+        if(target) {
+            position = target.position();
+            position.left = position.left + target.width();
+            position.left = position.left - 3;
+            position.top = position.top - 3;
+        }
+
+        var container = this.getContainer();
+        container.css("top", position.top+"px");
+        container.css("left", position.left+"px");
+
+        this.setVisible(true);
+    };
+
+    this.hide = function() {
+        if (!this._rendered) {
+            this.render();
+        }
+        for(var i=0; i<this.nodes.length; i++) {
+            var node = this.nodes[i];
+            if(node.getSubMenu()) {
+                node.getSubMenu().hide();
+            }
+        }
+        this.setVisible(false);
     };
 });
 
@@ -102,24 +172,30 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
     this.afterRender = function() {
         var container = this.getContainer();
         var that = this;
-        this.seIcon(this.icon);
+
+        var subMenuIcon = new yayoi.ui.common.Icon({icon: "play", size: "10px"});
+        subMenuIcon.placeAt(container.find(".yayoi-menunode-sub"));
+
+        this.setIcon(this.icon);
         this.setText(this.text);
         this.setClick(this.click);
         this.setSubMenu(this.subMenu);
+        this.setDisabled(this.disabled);
+
         container.find(".yayoi-menunode").click(function(event) {
-            if(!that.disabled) {
+            if(!that.disabled && that.click) {
                 that.click();
             }
         });
         container.find(".yayoi-menunode").hover(
             function() {
                 if (!that.disabled && that.subMenu) {
-                    that.subMenu.setVisible(true);
+                    that.subMenu.show();
                 }
             },
             function() {
                 if(that.subMenu) {
-                    that.subMenu.setVisible(false);
+                    that.subMenu.hide();
                 }
             }
         );
@@ -173,16 +249,33 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
     };
 
     this.setSubMenu = function(menu) {
+        if(!menu) {
+            this.subMenu = null;
+            var container = this.getContainer();
+            container.find(".yayoi-menunode-sub").hide();
+            return;
+        }
         if(typeof(menu) == "object") {
             if(menu instanceof yayoi.ui.menu.Menu) {
                 this.subMenu = menu;
-            } else {
-                this.subMenu = new yayoi.ui.menu.Menu(menu);
                 this.subMenu.setTarget(this);
+            } else {
+                var newMenu = new yayoi.ui.menu.Menu(menu);
+                this.setSubMenu(newMenu);
             }
-        } else {
-            throw "param is not legal";
         }
     };
 
+    this.getSubMenu = function(menu) {
+        return this.subMenu;
+    };
+
+    this.setDisabled = function(disabled) {
+        var container = this.getContainer();
+        if(disabled) {
+            container.find(".yayoi-menunode").addClass("disabled");
+        } else {
+            container.find(".yayoi-menunode").removeClass("disabled");
+        }
+    }
 });

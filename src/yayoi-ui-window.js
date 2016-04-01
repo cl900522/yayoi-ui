@@ -86,8 +86,6 @@ yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.Component", [], fun
         this._close();
     };
     this._show = function() {
-        var container = this.getContainer();
-        container.show();
         var width = document.body.offsetWidth;
         var height = screen.height;
 
@@ -102,9 +100,11 @@ yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.Component", [], fun
         }
         container.css("left", Math.ceil((width - dialg_w) / 2));
         container.css("top", Math.ceil(height / 4));
+
+        this.setVisible(true);
     };
     this._close = function() {
-        this.getContainer().hide();
+        this.setVisible(false);
 
         if (this.isModel) {
             this._mask.hide();
