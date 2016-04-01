@@ -1,0 +1,157 @@
+"use strict";
+yayoi.util.initPackages("yayoi.ui.menu");
+
+yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], function() {
+    /**
+     * the target that menu should be anchor to
+     * @type {yayoi.ui.common.Component || jQuery}
+     */
+    this.target = null;
+    /**
+     * the place of target that menu will show
+     * @type {String}
+     */
+    this.place = "bottom";
+    /**
+     * 包含的menu点
+     * @type {yayoi.ui.menu.MenuNode}
+     */
+    this.nodes = null;
+
+    this.beforeRender = function() {
+        var nodes = [];
+        if(this.nodes) {
+            for(var i=0; i<this.nodes.length; i++) {
+                nodes.push(new yayoi.ui.menu.MenuNode(this.nodes[i]));
+            }
+        }
+        this.nodes = nodes;
+    };
+
+    this.onRendering = function() {
+        var html = "<ul class='yayoi-menu'>";
+        for(var i=0; i<this.nodes.length; i++) {
+            html += "<li><li>"
+        }
+        html += "</ul>";
+
+        this.container = $(html);
+        $(document).append($(this.container);
+    };
+
+    this.addNode = function(menuNode, index) {
+        var node = null;
+        if(typeof(menuNode) == "object" ){
+            if(menuNode instanceof yayoi.ui.menu.MenuNode) {
+                node = menuNode;
+            } else {
+                node = new yayoi.ui.menu.MenuNode(menuNode);
+            }
+         } else {
+            throw "param should be Object";
+        }
+        if(!index) {
+            this.nodes.push(node);
+        } else {
+            this.nodes.splice(index, 0, node);
+        }
+    };
+
+    this.setTarget = function(target) {
+        this.target = target;
+    };
+
+    this.getTarget = function() {
+        return this.target;
+    };
+});
+
+yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], function() {
+    /**
+     * sub menu
+     * @type {yayoi.ui.menu.Menu}
+     */
+    this.subMenu = null;
+    this.icon = null;
+    this.text = null;
+    this.click = null;
+    this.disabled = false;
+
+    this.onRendering = function() {
+        var container = this.getContainer();
+        var html = "<div class='yayoi-menunode'>";
+        html += "<div class='yayoi-menunode-icon'></div>"
+        html += "<span class='yayoi-menunode-text'></span>";
+        html += "<span class='yayoi-menunode-sub'></span>";
+        html += "</div >";
+        container.html(html);
+    };
+
+    this.afterRender = function() {
+        this.seIcon(this.icon);
+        this.setText(this.text);
+        this.setClick(this.click);
+        this.setSubMenu(this.subMenu);
+    };
+
+    this._initIcon = function(icon) {
+        var iconObject = null;
+        var iconSize = "20px";
+        if (icon) {
+            if (typeof(icon) == "string") {
+                iconObject = new yayoi.ui.common.Icon({
+                    icon: icon
+                });
+            }
+            if (typeof(icon) == "object") {
+                if (icon instanceof yayoi.ui.commono.Icon) {
+                    iconObject = icon;
+                } else {
+                    iconObject = new yayoi.ui.common.Icon(icon);
+                }
+            }
+            iconObject.size = iconSize;
+        }
+        return iconObject;
+    };
+
+    this.setIcon = function(icon) {
+        this.icon = this._initIcon(icon);
+        var container = this.getContainer();
+        var iconContaner = container.find(".yayoi-menunode-icon");
+        iconContaner.hide();
+        if (this.icon) {
+            iconContaner = container.find(".yayoi-menunode-icon");
+            this.icon.placeAt(iconContaner);
+            iconContaner.show();
+        }
+    };
+
+    this.setText = function(text) {
+        this.text = text;
+        var container = this.getContainer();
+        container.find(".yayoi-menunode-text").html(this.text);
+    };
+
+    this.getText = function() {
+        return this.text;
+    };
+
+    this.setClick = function(click) {
+        this.click = click;
+    };
+
+    this.setSubMenu = function(menu) {
+        if(typeof(menu) == "object") {
+            if(menu instanceof yayoi.ui.menu.Menu) {
+                this.subMenu = menu;
+            } else {
+                this.subMenu = new yayoi.ui.menu.Menu(menu);
+                this.subMenu.setTarget(this);
+            }
+        } else {
+            throw "param is not legal";
+        }
+    };
+
+});
