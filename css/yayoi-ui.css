@@ -540,3 +540,42 @@
     line-height: 100%;
     padding-right: 10px;
 }
+
+/*yayoi menu*/
+.yayoi-menu {
+    position: absolute;
+    display: block;
+    width: 150px;
+    height: auto;
+}
+
+.yayoi-menu>li {
+    display: block;
+    height: 40px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.yayoi-menunode {
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
+}
+.yayoi-menunode.disabled {
+
+}
+.yayoi-menunode-icon {
+
+}
+
+.yayoi-menunode-text {
+
+}
+
+.yayoi-menunode-sub {
+
+}
+
+.yayoi-menunode:hover {
+
+}

@@ -29,31 +29,43 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
     };
 
     this.onRendering = function() {
-        var html = "<ul class='yayoi-menu'>";
-        for(var i=0; i<this.nodes.length; i++) {
-            html += "<li><li>"
-        }
-        html += "</ul>";
-
+        var html = "<ul class='yayoi-menu'></ul>";
         this.container = $(html);
-        $(document).append($(this.container);
+        $(document).append(this.container);
     };
 
     this.addNode = function(menuNode, index) {
-        var node = null;
         if(typeof(menuNode) == "object" ){
             if(menuNode instanceof yayoi.ui.menu.MenuNode) {
-                node = menuNode;
+                var container = this.getContainer();
+                var nodeContainer = $("<li></li>");
+                if(this.nodes.length == 0) {
+                    index = 0;
+                    container.append(nodeContainer);
+                } else {
+                    index = index? index: this.nodes.length;
+                    var nextNode = container.find(".yayoi-menu").eq(index);
+                    nextNode.before(nodeContainer);
+                }
+                menuNode.placeAt(nodeContainer);
+                this.nodes.splice(index, 0, node);
             } else {
-                node = new yayoi.ui.menu.MenuNode(menuNode);
+                var node = new yayoi.ui.menu.MenuNode(menuNode);
+                addNode(node);
             }
          } else {
             throw "param should be Object";
         }
-        if(!index) {
-            this.nodes.push(node);
-        } else {
-            this.nodes.splice(index, 0, node);
+    };
+
+    this.removeNode = function(menuNode) {
+        if(typeof(menuNode) == "object" ){
+            if(menuNode instanceof yayoi.ui.menu.MenuNode) {
+                var container = menuNode.getContainer();
+                container.remove();
+            }
+         } else {
+            throw "param should be Object";
         }
     };
 
@@ -88,10 +100,29 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
     };
 
     this.afterRender = function() {
+        var container = this.getContainer();
+        var that = this;
         this.seIcon(this.icon);
         this.setText(this.text);
         this.setClick(this.click);
         this.setSubMenu(this.subMenu);
+        container.find(".yayoi-menunode").click(function(event) {
+            if(!that.disabled) {
+                that.click();
+            }
+        });
+        container.find(".yayoi-menunode").hover(
+            function() {
+                if (!that.disabled && that.subMenu) {
+                    that.subMenu.setVisible(true);
+                }
+            },
+            function() {
+                if(that.subMenu) {
+                    that.subMenu.setVisible(false);
+                }
+            }
+        );
     };
 
     this._initIcon = function(icon) {
