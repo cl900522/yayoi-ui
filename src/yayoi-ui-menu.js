@@ -78,6 +78,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
 
                 }
                 menuNode.placeAt(nodeContainer);
+                menuNode.setMenu(this);
                 this.nodes.splice(index, 0, menuNode);
             } else {
                 var node = new yayoi.ui.menu.MenuNode(menuNode);
@@ -92,6 +93,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
     this.removeNode = function(menuNode) {
         if (typeof(menuNode) == "object") {
             if (menuNode instanceof yayoi.ui.menu.MenuNode) {
+                menuNode.setMenu(null);
                 var container = menuNode.getContainer();
                 container.remove();
             } else {
@@ -113,15 +115,16 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
             this.render();
         }
         var target = this.getTarget();
+        console.log(target);
         if(target && typeof(target) == "object") {
             if(target instanceof yayoi.ui.common.Component) {
                 target = target.getContainer();
             }
         }
 
-        var position = {top:0, left:0}
+        var position = {top:0, left:500}
         if(target) {
-            position = target.position();
+            position = target.offset();
             position.left = position.left + target.width();
             position.left = position.left - 3;
             position.top = position.top - 3;
@@ -149,6 +152,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
 });
 
 yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], function() {
+    this.menu = null;
     /**
      * sub menu
      * @type {yayoi.ui.menu.Menu}
@@ -266,8 +270,16 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
         }
     };
 
-    this.getSubMenu = function(menu) {
+    this.getSubMenu = function() {
         return this.subMenu;
+    };
+
+    this.setMenu = function(menu) {
+        this.menu = menu;
+    };
+
+    this.getMenu = function() {
+        return this.menu
     };
 
     this.setDisabled = function(disabled) {
