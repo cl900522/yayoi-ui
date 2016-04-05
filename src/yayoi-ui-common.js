@@ -228,6 +228,10 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
     this.setClick = function(click) {
         this.click = click;
     };
+
+    this.getClick = function() {
+        return this.click;
+    };
 });
 
 yayoi.util.extend("yayoi.ui.common.ComponentsContainer", "yayoi.ui.common.Component", [], function() {

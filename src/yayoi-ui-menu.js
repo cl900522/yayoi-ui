@@ -18,16 +18,11 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
      */
     this.nodes = null;
     this.autoHide = false;
-
-/*    this.beforeRender = function() {
-        var nodes = [];
-        if(this.nodes) {
-            for(var i=0; i<this.nodes.length; i++) {
-                nodes.push(new yayoi.ui.menu.MenuNode(this.nodes[i]));
-            }
-        }
-        this.nodes = nodes;
-    };*/
+    /**
+     * add function execute when menu hide
+     * @type {Function}
+     */
+    this.whenHide = null;
 
     this.onRendering = function() {
         var html = "<ul class='yayoi-menu'></ul>";
@@ -47,15 +42,11 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
         var container = this.getContainer();
         var that = this;
 
-        container.click(function(event) {
-            that.hide();
-        });
-
         container.hover(function() {
             that.show();
         }, function() {
             if(that.autoHide) {
-                that.hide();
+                that.hide(true);
             }
         });
     };
@@ -102,6 +93,22 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
         }
     };
 
+    this.setWhenHide = function(whenHide) {
+        this.whenHide = whenHide;
+    };
+
+    this.getWhenHide = function() {
+        return this.whenHide;
+    };
+
+    this.setAutoHide = function(autoHide) {
+        this.autoHide = autoHide;
+    };
+
+    this.getAutoHide = function() {
+        return this.autoHide;
+    };
+
     this.setTarget = function(target) {
         this.target = target;
     };
@@ -115,7 +122,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
             this.render();
         }
         var target = this.getTarget();
-        console.log(target);
+
         if(target && typeof(target) == "object") {
             if(target instanceof yayoi.ui.common.Component) {
                 target = target.getContainer();
@@ -137,17 +144,37 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
         this.setVisible(true);
     };
 
-    this.hide = function() {
-        if (!this._rendered) {
-            this.render();
-        }
-        for(var i=0; i<this.nodes.length; i++) {
-            var node = this.nodes[i];
-            if(node.getSubMenu()) {
-                node.getSubMenu().hide();
+/**
+ * hide the menu
+ * @param  {boolean} toSubMenus if this param is true, only the sub menus will be hide;
+ * if this is false, all the menu tree will be hide
+ * @return {null}
+ */
+    this.hide = function(toSubMenus) {
+        if(toSubMenus) {
+            if (!this._rendered) {
+                this.render();
             }
+            for(var i=0; i<this.nodes.length; i++) {
+                var node = this.nodes[i];
+                if(node.getSubMenu()) {
+                    node.getSubMenu().hide(true);
+                }
+            }
+            this.setVisible(false);
+            if(this.whenHide) {
+                this.whenHide();
+            }
+        } else {
+            var topMenu = this;
+            var target = topMenu.getTarget();
+
+            while(typeof(target) == "object" && target instanceof yayoi.ui.menu.MenuNode) {
+                topMenu = target.getMenu();
+                target = topMenu.getTarget();
+            }
+            topMenu.hide(true);
         }
-        this.setVisible(false);
     };
 });
 
@@ -187,8 +214,12 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
         this.setDisabled(this.disabled);
 
         container.find(".yayoi-menunode").click(function(event) {
-            if(!that.disabled && that.click) {
-                that.click();
+            if(!that.disabled) {
+                if(that.click) {
+                    that.click();
+                }
+
+                that.getMenu().hide();
             }
         });
         container.find(".yayoi-menunode").hover(
@@ -199,7 +230,7 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
             },
             function() {
                 if(that.subMenu) {
-                    that.subMenu.hide();
+                    that.subMenu.hide(true);
                 }
             }
         );
@@ -262,6 +293,7 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
         if(typeof(menu) == "object") {
             if(menu instanceof yayoi.ui.menu.Menu) {
                 this.subMenu = menu;
+                menu.setAutoHide(true);
                 this.subMenu.setTarget(this);
             } else {
                 var newMenu = new yayoi.ui.menu.Menu(menu);

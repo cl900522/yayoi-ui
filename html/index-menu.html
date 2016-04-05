@@ -20,6 +20,7 @@
         <code>
 
         </code>
+
     </pre>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
@@ -68,14 +69,30 @@
             ]
         });
         var dialogControlButton = new yayoi.ui.common.Button({
-            icon: "remove",
-            text: "显示对话框",
-            selector: "#button1",
-            click: function() {
-                menu.show();
+            icon: "ok-sign",
+            text: "显示菜单",
+            selector: "#button1"
+        });
+        var showMenuClick = function() {
+            dialogControlButton.setText("隐藏菜单");
+            dialogControlButton.setIcon("remove");
+            menu.show();
+        };
+        var hideMenuClick = function() {
+            menu.hide();
+        };
+        dialogControlButton.setClick(function(){
+            if(dialogControlButton.getText() == "显示菜单") {
+                return showMenuClick();
+            } else {
+                return hideMenuClick();
             }
         });
         menu.setTarget(dialogControlButton);
+        menu.setWhenHide(function() {
+            dialogControlButton.setText("显示菜单");
+            dialogControlButton.setIcon("ok-sign");
+        });
 ;    </script>
 </body>
 </html>
