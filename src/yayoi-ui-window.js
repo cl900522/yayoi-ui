@@ -86,6 +86,7 @@ yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.Component", [], fun
         this._close();
     };
     this._show = function() {
+        var container = this.getContainer();
         var width = document.body.offsetWidth;
         var height = screen.height;
 
