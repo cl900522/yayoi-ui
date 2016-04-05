@@ -196,7 +196,7 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction) {
         var existType = yayoi.util.initPackages(importTypes[i]);
         usingTypes.push(existType);
     }
-    initFunction.call(newPrototype, usingTypes);
+    initFunction.apply(newPrototype, usingTypes);
 
     var newType = function (params) {
         if(this["init"] == null || !(this["init"] instanceof Function)){
