@@ -218,8 +218,9 @@ yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], fun
                 if(that.click) {
                     that.click();
                 }
-
-                that.getMenu().hide();
+                if(!that.subMenu) {
+                    that.getMenu().hide();
+                }
             }
         });
         container.find(".yayoi-menunode").hover(
