@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.store");
 
-yayoi.util.extend("yayoi.ui.store.Store", "Object", [], function() {
+yayoi.util.extend("yayoi.ui.store.Store", "Object", ["yayoi.ui.model.Model"], function() {
     this.loaded = false;
     this.model = null;
     this.url = null;

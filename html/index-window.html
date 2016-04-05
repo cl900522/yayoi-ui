@@ -4,9 +4,7 @@
     <title>UI对话框测试</title>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
 
-    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-window.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"  data-init="startYayoi"></script>
     <script type="text/javascript" src="../js/qunit.js"></script>
     <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
@@ -32,6 +30,10 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.window.Dialog");
+        yayoi.util.require("yayoi.ui.store.Store");
+
         var dialog = new yayoi.ui.window.Dialog();
         var dialogControlButton = new yayoi.ui.common.Button({
             icon: "remove",
@@ -43,6 +45,7 @@
                 });
             }
         })
+    }
     </script>
 </body>
 </html>

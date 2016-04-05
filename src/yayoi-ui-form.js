@@ -4,7 +4,7 @@ yayoi.util.initPackages("yayoi.ui.form");
 /**
  * if we define the form with out defining success & error function, the form will be submitted with our processing response data.
  */
-yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], function(){
+yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", ["yayoi.ui.model.Model"], function(){
     this.title;
     this.action;
     this.method = "post";

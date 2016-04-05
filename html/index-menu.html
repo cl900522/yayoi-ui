@@ -4,9 +4,7 @@
     <title>UI对菜单</title>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
 
-    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-menu.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
     <script type="text/javascript" src="../js/qunit.js"></script>
     <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
@@ -18,13 +16,49 @@
     <div id="button1" style="display:inline-block; width: auto"></div>
     <pre>
         <code>
-
+        var menu = new yayoi.ui.menu.Menu({
+            nodes: [
+                {
+                    text: "Open",
+                    icon: "file-alt",
+                    click: function() {
+                        yayoi.log.info("Very well, menu clicked.")
+                    }
+                },
+                {
+                    text: "Open Recent Files",
+                    icon: "book",
+                    click: function() {
+                        yayoi.log.info("Very well, menu clicked.")
+                    },
+                    subMenu: {
+                        nodes: [
+                            {
+                                text: "index.html",
+                            },
+                            {
+                                text: "Disabled",
+                                icon: "lock",
+                                click: function() {
+                                    yayoi.log.info("Very well, menu clicked.")
+                                },
+                                disabled: true
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
         </code>
-
     </pre>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.menu.Menu");
+        yayoi.util.require("yayoi.ui.store.Store");
+    }
+    $(function() {
         var menu = new yayoi.ui.menu.Menu({
             nodes: [
                 {
@@ -93,6 +127,7 @@
             dialogControlButton.setText("显示菜单");
             dialogControlButton.setIcon("ok-sign");
         });
-;    </script>
+    });
+    </script>
 </body>
 </html>

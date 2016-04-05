@@ -27,11 +27,13 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-store.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.store.Store");
+    }
+    $(function(){
         QUnit.test("Json model sync function test", 6, function(assert) {
             var model;
             var store = new yayoi.ui.store.HttpStore({
@@ -93,6 +95,7 @@
 
             assert.equal(model, null);
         });
+    })
     </script>
 </body>
 </html>

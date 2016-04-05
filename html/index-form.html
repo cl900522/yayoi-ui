@@ -7,11 +7,7 @@
 
 <!--     <script type="text/javascript" src="../js/less.min.js"></script> -->
 
-    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-store.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-model.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-form.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
     <script type="text/javascript" src="../js/qunit.js"></script>
     <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
@@ -23,6 +19,10 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.form.Form");
+        yayoi.util.require("yayoi.ui.store.Store");
+    }
     $(function() {
         QUnit.test("Form function test.", 0, function(assert) {
             var form = new yayoi.ui.form.Form({
