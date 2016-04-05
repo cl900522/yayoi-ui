@@ -38,7 +38,9 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
 
     this._parseJsonData = function(result) {
         var model = new yayoi.ui.model.JsonModel();
-        result = eval(result);
+        if(typeof(result) == "string") {
+            result = $.parseJSON(result);
+        }
         model.setRootValue(this.parseData(result));
         this.setModel(model);
 
@@ -46,7 +48,14 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
         this.success();
     };
     this._parseXmlData = function(result) {
-        this.logger.error("Currently we we donot supprt xml model");
+        var model = new yayoi.ui.model.XMLModel();
+        if(typeof(result) == "string") {
+            result = $.parseXML(result);
+        } else {
+            result = $(result);
+        }
+        model.setRootValue(this.parseData(result));
+        this.setModel(model);
 
         this.loaded = true;
         this.success();
@@ -71,7 +80,7 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
                     that._parseJsonData(result);
                 }
                 if(that.dataType == "xml") {
-                    this._parseXmlData(result);
+                    that._parseXmlData(result);
                 }
             },
             error: function(e) {

@@ -1,12 +1,12 @@
 <html>
 <html>
 <head>
-    <title>UIStoreæµ‹è¯•</title>
+    <title>UIStore²âÊÔ</title>
     <link rel="stylesheet" href="../css/qunit.css" />
 </head>
 <body>
-    <h1>UIæ¨¡å‹æµ‹è¯•</h1>
-    <p>Httpæ•°æ®å­˜å‚¨å™¨</p>
+    <h1>UIÄ£ĞÍ²âÊÔ</h1>
+    <p>HttpÊı¾İ´æ´¢Æ÷</p>
     <pre>
         <code>
         var store = new yayoi.ui.store.HttpStore({
@@ -88,6 +88,40 @@
                     assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
                     assert.equal(model.getValue("/data/users").length, 3, "/data/users has 3 users");
 
+                    done();
+                }
+            });
+            store.load();
+
+            assert.equal(model, null);
+        });
+
+        QUnit.test("XML model async function test", 8, function(assert) {
+            var model;
+            var done = assert.async();
+            var store = new yayoi.ui.store.HttpStore({
+                url: "/xml/user-data.xml",
+                method: "get",
+                async: true,
+                dataType: "xml",
+                parseData: function(result) {
+                    return result;
+                },
+                success: function() {
+                    model = store.getModel();
+                    assert.equal(model.getValue("/data/users/user/0/name"), "chenmx", "/data/setting/users/user/0/name value is chenmx");
+                    assert.equal(model.getValue("/data/users/user/1/name"), null, "/data/setting/users/user/1/name value is null");
+
+                    model.setValue("/data/users/user/0/name", "ningjiang");
+                    assert.equal(model.getValue("/data/users/user/0/name"), "ningjiang", "/data/setting/users/user/0/name value is ningjiang");
+
+                    assert.equal(model.getValue("/data/setting/span"), "5min", "/data/setting/span value is right");
+                    assert.equal(model.getValue("/data/setting/size"), 30, "/data/setting/size value is right");
+                    assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
+                    model.setValue("/data/setting/unknown", "unknow");
+                    assert.equal(model.getValue("/data/setting/unknown"), "unknow", "/data/setting/unknown value is unknown");
+
+                    root = model.getRootValue();
                     done();
                 }
             });
