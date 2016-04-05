@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UI对菜单</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-menu.js"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+</head>
+<body>
+    <h1>UI菜单</h1>
+    <p>可以创建菜单</p>
+    <div id="button1" style="display:inline-block; width: auto"></div>
+    <pre>
+        <code>
+
+        </code>
+    </pre>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript">
+        var menu = new yayoi.ui.menu.Menu({
+            nodes: [
+                {
+                    text: "Open",
+                    icon: "file-alt",
+                    click: function() {
+                        yayoi.log.info("Very well, menu clicked.")
+                    }
+                },
+                {
+                    text: "Open Recent Files",
+                    icon: "book",
+                    click: function() {
+                        yayoi.log.info("Very well, menu clicked.")
+                    },
+                    subMenu: {
+                        nodes: [
+                            {
+                                text: "index.html",
+                            },
+                            {
+                                text: "index-html.html",
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Disabled",
+                    icon: "lock",
+                    click: function() {
+                        yayoi.log.info("Very well, menu clicked.")
+                    },
+                    disabled: true
+                },
+                {
+                    text: "Close",
+                    icon: "remove",
+                    click: function() {
+                        menu.hide();
+                    }
+                }
+            ]
+        });
+        var dialogControlButton = new yayoi.ui.common.Button({
+            icon: "remove",
+            text: "显示对话框",
+            selector: "#button1",
+            click: function() {
+                menu.show();
+            }
+        });
+        menu.setTarget(dialogControlButton);
+;    </script>
+</body>
+</html>
