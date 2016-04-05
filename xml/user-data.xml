@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+    <code>1</code>
+    <msg>message good</msg>
+    <data>
+        <users>
+            <user>
+                <name>chenmx</name>
+                <age>27</age>
+            </user>
+        </users>
+        <setting>
+            <span>5min</span>,
+            <size>30</size>
+        </setting>
+    </data>
+</result>
