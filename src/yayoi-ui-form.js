@@ -72,7 +72,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", [], functio
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
 
-            var router = new yayoi.ui.path.Router(this.router);
+            var router = new yayoi.ui.util.Router(this.router);
             router.cd(field.router);
 
             field.router = router.pwd();
