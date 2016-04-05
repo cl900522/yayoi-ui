@@ -33,12 +33,14 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript" src="../js/jquery.min.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-core.js"></script>
-    <script type="text/javascript" src="../src/yayoi-ui-common.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.common.Button");
+    }
 
-    $(function(){
+    $(function() {
         var button1 = new yayoi.ui.common.Button({
             text: "删除",
             selector: "#button-1"

@@ -1,19 +1,133 @@
 "use strict";
 window.yayoi = {
     util: {},
+    config: {
+        global: {
+            inited: false,
+            useCache: false,
+            rootPath: "./js/"
+        },
+        expression: {
+            email: /^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/,
+            mobile: /^13[0-9]{1}[0-9]{8}$|15[012356789]{1}[0-9]{8}$|17[678]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$/
+        }
+    }
 };
 
-yayoi.util.checkEmail = function(email) {
-    var emailExp = /^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/;
-    return emailExp.test(email)
+/**
+ * execute init function to set params or other things
+ * you can add the function to be executed after yayoi inited to attr of script tag like:
+ * <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
+ */
+yayoi.init = function() {
+    if(!window.jQuery) {
+        throw "Please import jQuery package."
+    }
+    function parseScriptTag() {
+        $("script").each(function() {
+            var scriptSrc = $(this).attr("src");
+            if(!scriptSrc) {
+                return;
+            }
+
+            var index = scriptSrc.indexOf("yayoi-ui-core.js");
+            if(index != -1) {
+                yayoi.config.global.rootPath = scriptSrc.substring(0, index);
+                var funName = $(this).attr("data-init");
+                if(funName) {
+                    eval(funName+"()");
+                }
+                return false;
+            }
+        })
+    }
+
+    $(parseScriptTag);
+    $(function() {
+        yayoi.log = new yayoi.ui.log.Logger({typeName: "Yayoi global"});
+    });
+
+    yayoi.config.global.inited = true;
+}();
+
+
+yayoi.util.isEmial = function(email) {
+    return yayoi.config.expression.email.test(email);
 }
 
-yayoi.util.checkMobile = function(mobile) {
-    var mobileExp = /^13[0-9]{1}[0-9]{8}$|15[012356789]{1}[0-9]{8}$|17[678]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$/;
-    return mobileExp.test(mobile);
+yayoi.util.isMobile = function(mobile) {
+    return yayoi.config.expression.mobile.test(mobile);
 }
 
-yayoi.util.initPackages = function(packagesStr, defaultInitObject){
+yayoi.util.loadJS = function(url, loadSuccess, async) {
+    if(!async)  {
+        async = false;
+    }
+    $.ajax({
+        url: url,
+        type: 'GET',
+        async: async,
+        cache: true,
+        global: true,
+        dataType: "html",
+        success: function(scriptContent) {
+            eval(scriptContent);
+            if(loadSuccess) {
+                loadSuccess(scriptContent);
+            }
+        },
+        error: function() {
+            throw "Fail to load js file:" + url;
+        }
+    });
+}
+
+/**
+ * 对Date的扩展，将 Date 转化为指定格式的String
+ * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q) 可以用 1-2 个占位符
+ * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+ * eg:
+ * (new Date()).pattern("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+ * (new Date()).pattern("yyyy-MM-dd E HH:mm:ss") ==> 2009-03-10 二 20:09:04
+ * (new Date()).pattern("yyyy-MM-dd EE hh:mm:ss") ==> 2009-03-10 周二 08:09:04
+ * (new Date()).pattern("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
+ * (new Date()).pattern("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
+ */
+Date.prototype.pattern=function(fmt) {
+    var o = {
+    "M+" : this.getMonth()+1, //月份
+    "d+" : this.getDate(), //日
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+    "H+" : this.getHours(), //小时
+    "m+" : this.getMinutes(), //分
+    "s+" : this.getSeconds(), //秒
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度
+    "S" : this.getMilliseconds() //毫秒
+    };
+    var week = {
+    "0" : "/u65e5",
+    "1" : "/u4e00",
+    "2" : "/u4e8c",
+    "3" : "/u4e09",
+    "4" : "/u56db",
+    "5" : "/u4e94",
+    "6" : "/u516d"
+    };
+    if(/(y+)/.test(fmt)){
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    }
+    if(/(E+)/.test(fmt)){
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);
+    }
+    for(var k in o){
+        if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        }
+    }
+    return fmt;
+}
+
+yayoi.util.initPackages = function(packagesStr, defaultInitObject) {
     var packages = packagesStr.split(".");
     var currentPackage = window;
     for(var i=0; i<packages.length; i++){
@@ -29,22 +143,62 @@ yayoi.util.initPackages = function(packagesStr, defaultInitObject){
     return currentPackage;
 }
 
-yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
+/**
+ * Help to distinguish if model js exist. if not, will load throught http request to get js file
+ * @param  {String} packagesStr [model package path like yayoi.ui.common.Button]
+ * @return {[type]}             [description]
+ */
+yayoi.util.require = function(packagesStr) {
+    var packages = packagesStr.split(".");
+    var currentPackage = window , parentPackage = currentPackage;
+    for(var i=0; i<packages.length; i++){
+        parentPackage = currentPackage;
+        currentPackage = currentPackage["" + packages[i]];
+
+        if(!currentPackage) {
+            var packageJsFile = packages.join("-");
+            packageJsFile = packageJsFile.substring(0, packageJsFile.lastIndexOf("-")) + ".js";
+
+            if(window.localStorage && yayoi.config.global.useCache) {
+                var scriptContent = window.localStorage[packageJsFile];
+                if(scriptContent) {
+                    eval(scriptContent);
+                }
+            } else {
+                yayoi.util.loadJS(yayoi.config.global.rootPath + packageJsFile, function(scriptContent){
+                    if(window.localStorage && yayoi.config.global.useCache) {
+                        window.localStorage[packageJsFile] = scriptContent;
+                    }
+                }, false);
+            }
+
+            currentPackage = parentPackage["" + packages[i]];
+        }
+        if(currentPackage == null) {
+            throw "Can not get " + packagesStr+ " js.";
+        }
+    }
+}
+
+yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction) {
+    yayoi.util.require(baseType);
     baseType = yayoi.util.initPackages(baseType);
-    if(! baseType instanceof Function){
-        console.error("BaseType is not a function, so it can not be extended.");
+
+    if(! (baseType instanceof Function)) {
+        throw "BaseType:" + baseType +" is not a function, so it can not be extended.";
     }
 
     var newPrototype = new baseType();
 
     var usingTypes = [];
     for(var i = 0; i < importTypes.length; i++){
+        yayoi.util.require(importTypes[i]);
         var existType = yayoi.util.initPackages(importTypes[i]);
         usingTypes.push(existType);
     }
     initFunction.call(newPrototype, usingTypes);
 
-    var newType = function (params){
+    var newType = function (params) {
         if(this["init"] == null || !(this["init"] instanceof Function)){
             this.init = function(params) {
                 if(params instanceof Object){
@@ -67,7 +221,7 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction){
     return newType;
 }
 
-yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function(){
+yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function() {
     this.typeName = "";
     this.debug = function(log) {
         if(!console){
@@ -92,7 +246,7 @@ yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function(){
     };
 });
 
-yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
+yayoi.util.extend("yayoi.ui.util.Router", "Object", [], function(){
     this._paths = null;
     this.init = function(params) {
         //调用初始化_paths，as it is an object.
@@ -136,8 +290,3 @@ yayoi.util.extend("yayoi.ui.path.Router", "Object", [], function(){
         return this._paths;
     };
 });
-
-/**
- * global log object
- */
-yayoi.log = new yayoi.ui.log.Logger({typeName: "Yayoi global"});

@@ -62,7 +62,7 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
     this.getValue = function(pathsStr) {
         var value = this.getRootValue();
 
-        var router = new yayoi.ui.path.Router(pathsStr);
+        var router = new yayoi.ui.util.Router(pathsStr);
         var paths = router.parse();
 
         if(paths.length == 0){
@@ -80,7 +80,7 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
     };
     this.setValue = function(pathsStr, value) {
         var parentPath = this.getRootValue();
-        var router = new yayoi.ui.path.Router(pathsStr);
+        var router = new yayoi.ui.util.Router(pathsStr);
 
         var paths = router.parse();
         if(paths.length == 0){
