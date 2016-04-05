@@ -72,10 +72,8 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
             dataType: that.dataType,
             params : that.params,
             complete : function() {
-                that.logger.info("Http request complete.");
             },
             success : function(result) {
-                that.logger.info("Http request success.");
                 if(that.dataType == "json") {
                     that._parseJsonData(result);
                 }
@@ -84,8 +82,6 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
                 }
             },
             error: function(e) {
-                that.logger.info("Fail to load http resource.");
-                that.logger.info(e);
                 this.error();
             }
         });
