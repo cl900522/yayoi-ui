@@ -120,11 +120,11 @@
                     assert.equal(model.getValue("/data/setting/unknown"), null, "/data/setting/unknown value is null");
                     model.setValue("/data/setting/unknown", "unknow");
                     assert.equal(model.getValue("/data/setting/unknown"), "unknow", "/data/setting/unknown value is unknown");
+                    root = store.getModel().getRootValue();
                     done();
                 }
             });
             store.load();
-
             assert.equal(model, null);
         });
     })
