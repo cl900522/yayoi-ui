@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UI对菜单</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+</head>
+<body>
+    <h1>UI树图</h1>
+    <p>可以创建树形结构</p>
+    <div id="#tree">
+    </div>
+    <div id="button1" style="display:inline-block; width: auto"></div>
+    <pre>
+        <code>
+        </code>
+    </pre>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.tree.Tree");
+        yayoi.util.require("yayoi.ui.store.Store");
+    }
+    $(function() { 
+        var tree = new yayoi.ui.tree.Tree({
+            idPath: "./id",
+            parentIdPath: "./parentId",
+            selector: "#tree"
+        });
+
+        var store = new yayoi.ui.store.HttpStore({
+            url: "/json/tree-data.json",
+            method: "get",
+            async: false,
+            parseData: function(result) {
+                return (result.code == 1)? result.data.tree : null;
+            },
+            success: function() {
+                var model = store.getModel();
+                tree.setModel(model);
+            }
+        });
+        store.load();
+
+        var dialogControlButton = new yayoi.ui.common.Button({
+            icon: "ok-sign",
+            text: "载入Tree",
+            selector: "#button1"
+        });
+        var showMenuClick = function() {
+            dialogControlButton.setText("隐藏树");
+            dialogControlButton.setIcon("remove");
+            tree.setVisible(true);
+        };
+        var hideMenuClick = function() {
+            tree.setVisible(false);
+        };
+        dialogControlButton.setClick(function(){
+            if(dialogControlButton.getText() == "显示树") {
+                return showMenuClick();
+            } else {
+                return hideMenuClick();
+            }
+        });
+    });
+    </script>
+</body>
+</html>

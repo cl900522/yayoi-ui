@@ -4,6 +4,7 @@ yayoi.util.initPackages("yayoi.ui.common");
 yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
     this._container;
     this._model; // model object to storing value
+    this._modelPath = "/";
     /**
      * jquery selector to get container,
      * please reference to placeAt() function.
@@ -72,6 +73,13 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
     }
     this.getModel = function() {
         return this._model;
+    };
+    this.getModelPath = function() {
+        return this._modelPath;
+    };
+    this.getModelValue = function(path) {
+        var modelPath = this.getModelPath()
+        return this.getModel().getValue(modelPath + "/" + path);
     };
     this.getRouter = function() {
         return this.router;

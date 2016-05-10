@@ -26,34 +26,41 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
     };
 
     this.afterRender = function() {
-        this.nodes = [];
-        var nodes = this.getModel().getValue("/");
-        for (var i = 0; i < nodes.length; i++) {
-            this.addNode(nodes[i]);
+        this.invalidate();
+    };
+
+    this.invalidate = function() {
+        var model = this.getModel();
+        if(model) {
+            this.nodes = [];
+            var nodes = this.getModelValue();
+
+            var rootModelPath = this.getModelPath();
+            this.logger.info(nodes);
+            for (var i = 0; i < nodes.length; i++) {
+                var modelPath = rootModelPath+"/"+i+"/";
+                var node = new yayoi.ui.tree.TreeNode({modelPath: modelPath}});
+                this.addNode(node);
+            }
         }
     };
 
     this.initEvents = function() {};
 
     this.addNode = function(treeNode) {
-        if (typeof(treeNode) == "object") {
-            if (treeNode instanceof yayoi.ui.tree.TreeNode) {
-                var container = this.getContainer();
-                var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
+        if (typeof(treeNode) == "object" && treeNode instanceof yayoi.ui.tree.TreeNode) {
+            var container = this.getContainer();
+            var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
 
-                if (!treeNode.getParentId()) {
-                    container.append(nodeContainer);
-                    treeNode.setContainer(nodeContainer);
-                } else {
-                    for (var i = 0; i < this.nodes.length; i++) {
-                        if (this.nodes[i].getId() == treeNode.getParentId()) {
-                            this.nodes[i].addSubNode(treeNode);
-                        }
+            if (!treeNode.getParentId()) {
+                container.append(nodeContainer);
+                treeNode.setContainer(nodeContainer);
+            } else {
+                for (var i = 0; i < this.nodes.length; i++) {
+                    if (this.nodes[i].getId() == treeNode.getParentId()) {
+                        this.nodes[i].addSubNode(treeNode);
                     }
                 }
-            } else {
-                var node = new yayoi.ui.tree.treeNode(treeNode);
-                this.addNode(node);
             }
         } else {
             this.logger.info(treeNode);
@@ -97,7 +104,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
             var topMenu = this;
             var target = topMenu.getTarget();
 
-            while (typeof(target) == "object" && target instanceof yayoi.ui.menu.treeNode) {
+            while (typeof(target) == "object" && target instanceof yayoi.ui.menu.TreeNode) {
                 topMenu = target.getMenu();
                 target = topMenu.getTarget();
             }
@@ -107,7 +114,6 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
 });
 
 yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], function() {
-    this.menu = null;
     /**
      * sub treeNodes
      * @type {yayoi.ui.tree.TreeNode}
@@ -117,6 +123,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
     this.text = null;
     this.click = null;
     this.expanded = false;
+    this.checked = false;
 
     this.onRendering = function() {
         var container = this.getContainer();
@@ -211,6 +218,16 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
         this.click = click;
     };
 
+    this.getParentId = function() {
+        var model = this.getModel();
+        return mode.getValue(this.modelPath + "/" + this.parentIdPath);
+    };
+
+    this.getId = function() {
+        var model = this.getModel();
+        return mode.getValue(this.modelPath + "/" + this.idPath);
+    };
+
     this.addSubNode = function(treeNode) {
         if (!menu) {
             this.subMenu = null;
@@ -229,25 +246,4 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
             }
         }
     };
-
-    this.getSubMenu = function() {
-        return this.subMenu;
-    };
-
-    this.setMenu = function(menu) {
-        this.menu = menu;
-    };
-
-    this.getMenu = function() {
-        return this.menu
-    };
-
-    this.setDisabled = function(disabled) {
-        var container = this.getContainer();
-        if (disabled) {
-            container.find(".yayoi-treeNode").addClass("disabled");
-        } else {
-            container.find(".yayoi-treeNode").removeClass("disabled");
-        }
-    }
 });
