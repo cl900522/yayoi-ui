@@ -95,23 +95,23 @@ yayoi.util.loadJS = function(url, loadSuccess, async) {
  */
 Date.prototype.pattern=function(fmt) {
     var o = {
-    "M+" : this.getMonth()+1, //月份
-    "d+" : this.getDate(), //日
-    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
-    "H+" : this.getHours(), //小时
-    "m+" : this.getMinutes(), //分
-    "s+" : this.getSeconds(), //秒
-    "q+" : Math.floor((this.getMonth()+3)/3), //季度
-    "S" : this.getMilliseconds() //毫秒
+        "M+" : this.getMonth()+1, //月份
+        "d+" : this.getDate(), //日
+        "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+        "H+" : this.getHours(), //小时
+        "m+" : this.getMinutes(), //分
+        "s+" : this.getSeconds(), //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S" : this.getMilliseconds() //毫秒
     };
     var week = {
-    "0" : "/u65e5",
-    "1" : "/u4e00",
-    "2" : "/u4e8c",
-    "3" : "/u4e09",
-    "4" : "/u56db",
-    "5" : "/u4e94",
-    "6" : "/u516d"
+        "0" : "/u65e5",
+        "1" : "/u4e00",
+        "2" : "/u4e8c",
+        "3" : "/u4e09",
+        "4" : "/u56db",
+        "5" : "/u4e94",
+        "6" : "/u516d"
     };
     if(/(y+)/.test(fmt)){
         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
@@ -201,14 +201,19 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction) {
     var newType = function (params) {
         if(this["init"] == null || !(this["init"] instanceof Function)){
             this.init = function(params) {
-                if(params instanceof Object){
+                if(params instanceof Object) {
                     for(var p in params){
                         this[p] = params[p];
                     }
                 }
             };
         };
-        this["init"].call(this, params);
+        if(!params || params instanceof Object) {
+            this["init"].call(this, params);
+            return;
+        } else {
+            this["init_single"].call(this, params);
+        }
     }
 
     newType = yayoi.util.initPackages(newTypePath, newType);
@@ -248,13 +253,18 @@ yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function() {
 
 yayoi.util.extend("yayoi.ui.util.Router", "Object", [], function(){
     this._paths = null;
+    this.init_single = function(params) {
+        this.init(params);
+    };
+
     this.init = function(params) {
         //调用初始化_paths，as it is an object.
         this._paths = [];
         if(typeof params == "string") {
             this.cd(params);
         }
-    }
+    };
+
     this.cd = function(path) {
         if(!path){
             return;

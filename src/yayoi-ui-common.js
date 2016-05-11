@@ -15,9 +15,18 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
      */
     this._rendered = false;
 
+    this.hasProperty = function(p) {
+        return (p in this);
+    };
+
     this.init = function(params) {
         if (params instanceof Object) {
             for (var p in params) {
+                var privateP = "_" + p;
+                if(this.hasProperty(privateP)) {
+                    this[privateP] = params[p];
+                    continue;
+                }
                 this[p] = params[p];
             }
             if (this["selector"] != null) {
@@ -62,7 +71,9 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
     this.setModel = function(model) {
         if (model) {
             this._model = model;
-            this.invalidate();
+            if(this._rendered) {
+                this.invalidate();
+            }
             return true;
         } else {
             return false;
@@ -116,6 +127,24 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
     this.size = "32px";
     this.rotate = 0;
     this.click = null;
+
+    this.init_single = function(sIcon) {
+        this.init({
+            icon: sIcon
+        });
+    };
+
+    this.setSize = function(size) {
+        if(typeof(size) == "string" && size.endsWith("px")) {
+            this.size = size;
+            return;
+        }
+        if(typeof(size) == "number" && Number.isInteger(size)) {
+            this.size = size + "px";
+            return;
+        }
+        throw "Size param must be an integer or a string ends with 'px'";
+    };
 
     this.setClick = function(click) {
         this.click = click;
