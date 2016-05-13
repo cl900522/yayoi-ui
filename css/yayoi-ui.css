@@ -596,3 +596,18 @@
     height: 40px;
     float: right;
 }
+.yayoi-tree {
+
+}
+.yayoi-treeNodes-container {
+    border-left: 10px transparent solid;
+}
+.yayoi-treeNode-self {
+
+}
+.yayoi-treeNode-icon {
+    display: inline-block;
+}
+.yayoi-treeNode-text {
+    display: inline-block;
+}

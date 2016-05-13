@@ -13,7 +13,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
      */
     this.namePath = "name";
     /**
-     * parentId key path of node value 
+     * parentId key path of node value
      * @type {String}
      */
     this.parentIdPath = "parent/id"
@@ -136,6 +136,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
      * @type {yayoi.ui.tree.TreeNode}
      */
     this.subNodes = null;
+    this.subConainter = null;
     this.icon = "file-alt";
     this.click = null;
     this.expanded = false;
@@ -158,6 +159,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
         html += "<div class='yayoi-treeNodes-container'></div>";
         html += "</div>";
         container.html(html);
+        this.subConainter = container.find(".yayoi-treeNodes-container")
     };
 
     this.afterRender = function() {
@@ -224,11 +226,8 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
 
     this.addSubNode = function(treeNode) {
         if (typeof(treeNode) == "object" && treeNode instanceof yayoi.ui.tree.TreeNode) {
-            var container = this.getContainer();
-            var x = container.find(".yayoi-treeNodes-container");
-
             var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
-            x.append(nodeContainer);
+            this.subConainter.append(nodeContainer);
             treeNode.placeAt(nodeContainer);
         }
     };
