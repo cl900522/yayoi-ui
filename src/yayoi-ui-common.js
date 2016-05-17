@@ -141,16 +141,20 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
             iconElement.attr("icon-group", this.group)
             iconElement.css("font-size", this.size);
             iconElement.css("height", this.size);
-            iconElement.removeClass("icon-" + this.icon);
             iconElement.addClass("icon-" + this.icon);
         }
-    }
+    };
 
     this.reset = function(sIcon, sGroup) {
-        if(sIcon) {
+        if (sIcon) {
+            var container = this.getContainer();
+            if (container) {
+                var iconElement = container.find(".yayoi-icon");
+                iconElement.removeClass("icon-" + this.icon);
+            }
             this.icon = sIcon;
         }
-        if(sGroup) {
+        if (sGroup) {
             this.group = sGroup;
         }
         this.invalidate();
@@ -215,8 +219,8 @@ yayoi.util.extend("yayoi.ui.common.CheckBox", "yayoi.ui.common.Component", [], f
     /* Is checked*/
     this.checked = false;
     /*Action performed when clicked*/
-    this.click = function() {
-        this.logger.info("Add your own click for button.");
+    this.onChange = function() {
+        this.logger.info("Add your own change for checkbox.");
     };
 
     this.onRendering = function() {
@@ -229,25 +233,28 @@ yayoi.util.extend("yayoi.ui.common.CheckBox", "yayoi.ui.common.Component", [], f
     };
 
     this.afterRender = function() {
-        this.setIcon("uncheck");
+        this.setChecked(this.checked);
         this.setText(this.text);
     };
 
     this.initEvents = function() {
         var container = this.getContainer();
         var that = this;
-        container.find(".yayoi-icon").click(function() {
-            that.click();
+        container.find(".yayoi-checkbox").click(function() {
+            that.setChecked(!that.checked);
+            that.onChange();
         });
     };
 
     this.setIcon = function(icon) {
-        this.icon = new yayoi.ui.common.Icon(icon);
-        this.icon.setSize("20px");
-
-        var container = this.getContainer();
-        var iconContaner = container.find(".yayoi-checkbox-icon");
-        this.icon.placeAt(iconContaner);
+        if (!this.icon) {
+            this.icon = new yayoi.ui.common.Icon(icon);
+            this.icon.setSize("20px");
+            var container = this.getContainer();
+            var iconContaner = container.find(".yayoi-checkbox-icon");
+            this.icon.placeAt(iconContaner);
+        }
+        this.icon.reset(icon);
     };
 
     this.setText = function(text) {
@@ -260,13 +267,22 @@ yayoi.util.extend("yayoi.ui.common.CheckBox", "yayoi.ui.common.Component", [], f
         return this.text;
     };
 
-    this.setClick = function(click) {
-        this.click = click;
+    this.setOnChange = function(click) {
+        this.onChange = click;
     };
 
-    this.getClick = function() {
-        return this.click;
+    this.getOnChange = function() {
+        return this.onChange;
     };
+
+    this.setChecked = function(bChecked) {
+        if(bChecked) {
+            this.setIcon("check");
+        } else {
+            this.setIcon("unchecked");
+        }
+        this.checked = bChecked;
+    }
 });
 
 yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], function() {

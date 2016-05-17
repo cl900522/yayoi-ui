@@ -644,12 +644,22 @@
     display: block;
     font-size: 14px;
 }
+.yayoi-treeNode-check {
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    margin: 0px 3px;
+    cursor: pointer;
+}
 .yayoi-treeNode-icon {
     display: inline-block;
+    height: 25px;
+    margin: 0px 3px;
+    line-height: 25px;
+    cursor: pointer;
 }
 .yayoi-treeNode-text {
     display: inline-block;
-}
-.yayoi-treeNode-check {
-    display: inline-block;
+    height: 25px;
+    line-height: 25px;
 }

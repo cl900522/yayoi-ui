@@ -1,5 +1,0 @@
----
-layout: "post"
-title: "abc"
-date: "2016-05-17 13:03"
----
