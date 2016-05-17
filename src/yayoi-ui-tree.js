@@ -135,7 +135,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
      * sub treeNodes
      * @type {yayoi.ui.tree.TreeNode}
      */
-    this.subNodes = null;
+    this.subNodes = [];
     this.subConainter = null;
     this.icon = "file-alt";
     this.click = null;
@@ -148,11 +148,14 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
         var container = this.getContainer();
         container.find(".yayoi-treeNode-text").html(this.getName());
     };
-
+    this.beforeRender = function() {
+        this.subNodes = [];
+    };
     this.onRendering = function() {
         var container = this.getContainer();
         var html = "<div class='yayoi-treeNode'>";
         html += "<div class='yayoi-treeNode-self'>"
+        html += "<div class='yayoi-treeNode-check'><input type='checkbox'></input></div>"
         html += "<div class='yayoi-treeNode-icon'></div>"
         html += "<span class='yayoi-treeNode-text'></span>";
         html += "</div>"
@@ -166,10 +169,14 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
         var container = this.getContainer();
         var that = this;
 
-        container.find(".yayoi-treeNode-self").click(function(event) {
+        container.find(".yayoi-treeNode-self").click(function() {
             if (that.click) {
                 that.click();
             }
+        });
+        container.find(".yayoi-treeNode-check").click(function() {
+            var checked = that.getChecked();
+            that.setChecked(!checked);
         });
     };
 
@@ -185,6 +192,24 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
             container.find(".yayoi-treeNodes-container").hide();
         }
         this.expanded = expand;
+    };
+
+    /**
+     * check the tree node and also the sub nodes
+     * @param {boolean} checked
+     */
+    this.setChecked = function(checked) {
+        var subNodes = this.subNodes;
+        for (var i = 0; i < subNodes.length; i++) {
+            var subNode = subNodes[i];
+            console.log(subNode);
+            subNode.setChecked(checked);
+        }
+        this.checked = checked;
+    };
+
+    this.getChecked = function() {
+        return this.checked;
     };
 
     this.setIcon = function(icon) {
@@ -230,5 +255,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
             this.subConainter.append(nodeContainer);
             treeNode.placeAt(nodeContainer);
         }
+        this.subNodes.push(treeNode);
+        console.log(this.subNodes);
     };
 });

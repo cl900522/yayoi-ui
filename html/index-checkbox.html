@@ -1,0 +1,43 @@
+<html>
+<head>
+</head>
+    <link rel="stylesheet" href="../css/qunit.css" />
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+<body>
+    <h1>YayoiUI CheckBox</h1>
+    <div style="width: 600px; margin:auto; margin-bottom: 50px;">
+        <table id="listTable" style="width:100%;">
+            <tr>
+                <td id="checkbox-1"></td>
+                <td id="checkbox-2"></td>
+        </table>
+    </div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <script type="text/javascript">
+    function startYayoi() {
+        yayoi.util.require("yayoi.ui.common.CheckBox");
+    }
+
+    $(function() {
+        var checkbox1 = new yayoi.ui.common.CheckBox({
+            text: "性别男/女",
+            click: function() {
+            }
+        });
+        checkbox1.placeAt("#checkbox-1");
+        var checkbox2 = new yayoi.ui.common.CheckBox({
+            text: "是否喜欢",
+            click: function() {
+
+            }
+        });
+        checkbox2.placeAt("#checkbox-2")
+    })
+    </script>
+</body>
+</html>

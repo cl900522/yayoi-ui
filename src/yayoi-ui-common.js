@@ -23,7 +23,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
         if (params instanceof Object) {
             for (var p in params) {
                 var privateP = "_" + p;
-                if(this.hasProperty(privateP)) {
+                if (this.hasProperty(privateP)) {
                     this[privateP] = params[p];
                     continue;
                 }
@@ -71,7 +71,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
     this.setModel = function(model) {
         if (model) {
             this._model = model;
-            if(this._rendered) {
+            if (this._rendered) {
                 this.invalidate();
             }
             return true;
@@ -135,11 +135,11 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
     };
 
     this.setSize = function(size) {
-        if(typeof(size) == "string" && size.endsWith("px")) {
+        if (typeof(size) == "string" && size.endsWith("px")) {
             this.size = size;
             return;
         }
-        if(typeof(size) == "number" && Number.isInteger(size)) {
+        if (typeof(size) == "number" && Number.isInteger(size)) {
             this.size = size + "px";
             return;
         }
@@ -177,11 +177,73 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
         var container = this.getContainer();
         var that = this;
         container.find(".yayoi-icon").click(function() {
-            if(that.click) {
+            if (that.click) {
                 that.click();
             }
         });
     }
+});
+
+yayoi.util.extend("yayoi.ui.common.CheckBox", "yayoi.ui.common.Component", [], function() {
+    /*Icon value it can be set as string or Object like {icon: "remove"}*/
+    this.icon = null;
+    /*Text to be shown in button*/
+    this.text = "";
+    /* Is checked*/
+    this.checked = false;
+    /*Action performed when clicked*/
+    this.click = function() {
+        this.logger.info("Add your own click for button.");
+    };
+
+    this.onRendering = function() {
+        var container = this.getContainer();
+        var html = "<div class='yayoi-checkbox'>";
+        html += "<div class='yayoi-checkbox-icon'></div>";
+        html += "<div class='yayoi-checkbox-text'></div>";
+        html += "</div>";
+        container.html(html);
+    };
+
+    this.afterRender = function() {
+        this.setIcon("uncheck");
+        this.setText(this.text);
+    };
+
+    this.initEvents = function() {
+        var container = this.getContainer();
+        var that = this;
+        container.find(".yayoi-icon").click(function() {
+            that.click();
+        });
+    };
+
+    this.setIcon = function(icon) {
+        this.icon = new yayoi.ui.common.Icon(icon);
+        this.icon.setSize("20px");
+
+        var container = this.getContainer();
+        var iconContaner = container.find(".yayoi-checkbox-icon");
+        this.icon.placeAt(iconContaner);
+    };
+
+    this.setText = function(text) {
+        this.text = text;
+        var container = this.getContainer();
+        container.find(".yayoi-checkbox-text").html(this.text);
+    };
+
+    this.getText = function() {
+        return this.text;
+    };
+
+    this.setClick = function(click) {
+        this.click = click;
+    };
+
+    this.getClick = function() {
+        return this.click;
+    };
 });
 
 yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], function() {
@@ -198,11 +260,11 @@ yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.Component", [], fun
 
     this.onRendering = function() {
         var container = this.getContainer();
-        var html = "<div class='yayoi-button'>"
-        + "<div class='yayoi-button-icon yayoi-button-icon-left'></div>"
-        + "<div class='yayoi-button-text'></div>"
-        + "<div class='yayoi-button-icon yayoi-button-icon-right'></div>"
-        + "</div>";
+        var html = "<div class='yayoi-button'>";
+        html += "<div class='yayoi-button-icon yayoi-button-icon-left'></div>";
+        html += "<div class='yayoi-button-text'></div>";
+        html += "<div class='yayoi-button-icon yayoi-button-icon-right'></div>";
+        html += "</div>";
         container.html(html);
     };
 

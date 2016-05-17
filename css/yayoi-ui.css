@@ -17,28 +17,43 @@
     speak: none;
 }
 
-/*yayoi button*/
-.yayoi-button-icon {
+/*yayoi checkbox*/
+.yayoi-checkbox {
+    display: inline-block;
+    height: 30px;
+    width: auto;
+    margin: 0px 5px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #eee;
+    background-image: -webkit-linear-gradient(#fcfcfc, #eee);
+    background-image: linear-gradient(#fcfcfc, #eee);
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+}
+.yayoi-checkbox-icon {
     float: left;
     height: 30px;
     width: 20px;
     display: inline-block;
     line-height: 30px;
+    margin: 0px 0px 0px 5px;
 }
-.yayoi-button-icon-left {
-    margin: 0px -5px 0px 10px;
-}
-.yayoi-button-icon-right {
-    margin: 0px 10px 0px -5px;
-}
-.yayoi-button-text {
+.yayoi-checkbox-text {
     float: left;
     height: 30px;
     width: auto;
     display: inline-block;
     line-height: 30px;
-    margin: 0 10px;
+    margin: 0 5px;
 }
+
+/*yayoi button*/
 .yayoi-button {
     display: inline-block;
     height: 30px;
@@ -64,6 +79,27 @@
     background-image: -webkit-linear-gradient(#60A7FF, #60A7FF);
     background-image: linear-gradient(#60A7FF, #60A7FF);
     border-color: #60A7FF;
+}
+.yayoi-button-icon {
+    float: left;
+    height: 30px;
+    width: 20px;
+    display: inline-block;
+    line-height: 30px;
+}
+.yayoi-button-icon-left {
+    margin: 0px -5px 0px 10px;
+}
+.yayoi-button-icon-right {
+    margin: 0px 10px 0px -5px;
+}
+.yayoi-button-text {
+    float: left;
+    height: 30px;
+    width: auto;
+    display: inline-block;
+    line-height: 30px;
+    margin: 0 10px;
 }
 
 /*yayoi container*/
@@ -603,11 +639,17 @@
     border-left: 10px transparent solid;
 }
 .yayoi-treeNode-self {
-
+    height: 25px;
+    line-height: 25px;
+    display: block;
+    font-size: 14px;
 }
 .yayoi-treeNode-icon {
     display: inline-block;
 }
 .yayoi-treeNode-text {
+    display: inline-block;
+}
+.yayoi-treeNode-check {
     display: inline-block;
 }
