@@ -2,45 +2,35 @@
     "code": 1,
     "msg": "success",
     "data": {
-        "tree": [
-            {
-                "id": 1,
-                "title": "Project Head 1"
-            },
-            {
-                "id": 2,
-                "title": "Project Head 2"
-            },
-            {
-                "id": 3,
-                "title": "Project Head 3"
-            },
-            {
-                "id": 11,
-                "title": "Project Head 1.1",
-                "parentId": "1"
-            },
-            {
-                "id": 21,
-                "title": "Project Head 2.1",
-                "parentId": "2"
-            },
-            {
-                "id": 111,
-                "title": "Project Head 1.1.1",
-                "parentId": "11"
-            },
-            {
-                "id": 112,
-                "title": "Project Head 1.1.2",
-                "parentId": "11"
-            },
-            {
-                "id": "Unknown",
-                "title": "Project Head xx",
-                "parentId": "xx"
-            }
-        ]
+        "tree": [{
+            "id": 1,
+            "title": "Project Head 1"
+        }, {
+            "id": 2,
+            "title": "Project Head 2"
+        }, {
+            "id": 3,
+            "title": "Project Head 3"
+        }, {
+            "id": 11,
+            "title": "Project Head 1.1",
+            "parentId": "1"
+        }, {
+            "id": 21,
+            "title": "Project Head 2.1",
+            "parentId": "2"
+        }, {
+            "id": 111,
+            "title": "Project Head 1.1.1",
+            "parentId": "11"
+        }, {
+            "id": 112,
+            "title": "Project Head 1.1.2",
+            "parentId": "11"
+        }, {
+            "id": "Unknown",
+            "title": "Project Head xx",
+            "parentId": "xx"
+        }]
     }
 }
-

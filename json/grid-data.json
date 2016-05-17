@@ -3,33 +3,41 @@
     "msg": "success",
     "data": {
         "users": [{
-                "firstName": "Mingxuan",
-                "lastName": "Chen",
-                "birthDate": "1990-02-11",
-                "email": "545435711@qq.com",
-                "mobile": "15129387123",
-                "idCard": "512315123123",
-                "gender": "male",
-                "address": {"city": "Chengdu", "street": "Huayang Street"}
-            },{
-                "firstName": "Ningjiang",
-                "lastName": "Li",
-                "birthDate": "1990-02-11",
-                "email": "545435711@qq.com",
-                "mobile": "15129387123",
-                "idCard": "512315123123",
-                "gender": "female",
-                "address": {"city": "Nanjing", "street": "Huayang Street"}
-            },{
-                "firstName": "Xuan",
-                "lastName": "Zhao",
-                "birthDate": "1990-02-11",
-                "email": "545435711@qq.com",
-                "mobile": "15129387123",
-                "idCard": "512315123123",
-                "gender": "male",
-                "address": {"city": "Anhui", "street": "Huayang Street"}
+            "firstName": "Mingxuan",
+            "lastName": "Chen",
+            "birthDate": "1990-02-11",
+            "email": "545435711@qq.com",
+            "mobile": "15129387123",
+            "idCard": "512315123123",
+            "gender": "male",
+            "address": {
+                "city": "Chengdu",
+                "street": "Huayang Street"
             }
-        ]
+        }, {
+            "firstName": "Ningjiang",
+            "lastName": "Li",
+            "birthDate": "1990-02-11",
+            "email": "545435711@qq.com",
+            "mobile": "15129387123",
+            "idCard": "512315123123",
+            "gender": "female",
+            "address": {
+                "city": "Nanjing",
+                "street": "Huayang Street"
+            }
+        }, {
+            "firstName": "Xuan",
+            "lastName": "Zhao",
+            "birthDate": "1990-02-11",
+            "email": "545435711@qq.com",
+            "mobile": "15129387123",
+            "idCard": "512315123123",
+            "gender": "male",
+            "address": {
+                "city": "Anhui",
+                "street": "Huayang Street"
+            }
+        }]
     }
 }

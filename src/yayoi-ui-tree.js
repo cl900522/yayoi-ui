@@ -16,8 +16,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
      * parentId key path of node value
      * @type {String}
      */
-    this.parentIdPath = "parent/id"
-
+    this.parentIdPath = "parent/id";
     /**
      * 包含的全部treeNode节点
      * @type {yayoi.ui.tree.TreeNode}
@@ -30,8 +29,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
         container.html(html);
     };
 
-    this.afterRender = function() {
-    };
+    this.afterRender = function() {};
 
     this.invalidate = function() {
         this.nodes = [];
@@ -41,8 +39,10 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
 
         var rootModelPath = this.getModelPath();
         for (var i = 0; i < nodes.length; i++) {
-            var modelPath = rootModelPath+"/"+i+"/";
-            var node = new yayoi.ui.tree.TreeNode({modelPath: modelPath});
+            var modelPath = rootModelPath + "/" + i + "/";
+            var node = new yayoi.ui.tree.TreeNode({
+                modelPath: modelPath
+            });
 
             node.setModel(model);
             this.addNode(node);
@@ -71,7 +71,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
                         break;
                     }
                 }
-                if(!foundParent) {
+                if (!foundParent) {
                     var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
                     container.append(nodeContainer);
                     treeNode.placeAt(nodeContainer);
