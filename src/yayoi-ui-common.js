@@ -134,13 +134,36 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
         });
     };
 
+    this.invalidate = function() {
+        var container = this.getContainer();
+        if (container) {
+            var iconElement = container.find(".yayoi-icon");
+            iconElement.attr("icon-group", this.group)
+            iconElement.css("font-size", this.size);
+            iconElement.css("height", this.size);
+            iconElement.removeClass("icon-" + this.icon);
+            iconElement.addClass("icon-" + this.icon);
+        }
+    }
+
+    this.reset = function(sIcon, sGroup) {
+        if(sIcon) {
+            this.icon = sIcon;
+        }
+        if(sGroup) {
+            this.group = sGroup;
+        }
+        this.invalidate();
+    };
+
     this.setSize = function(size) {
-        if (typeof(size) == "string" && size.endsWith("px")) {
-            this.size = size;
+        if (typeof(size) == "number" && Number.isInteger(size)) {
+            this.setSize(size + "px");
             return;
         }
-        if (typeof(size) == "number" && Number.isInteger(size)) {
-            this.size = size + "px";
+        if (typeof(size) == "string" && size.endsWith("px")) {
+            this.size = size;
+            this.invalidate();
             return;
         }
         throw "Size param must be an integer or a string ends with 'px'";
