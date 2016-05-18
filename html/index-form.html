@@ -30,7 +30,6 @@
                 action: '/html/index-form.html',
                 method: 'get',
                 selector: '#formId',
-                router: './../user/',
                 columns : 2,
                 fields: [
                     {
@@ -73,7 +72,7 @@
                     return (result.code == 1)? result.data : null;
                 },
                 success: function() {
-                    form.setModel(store.getModel());
+                    form.setModel(store.getModel(), "./../user/");
                 }
             });
             store.load();

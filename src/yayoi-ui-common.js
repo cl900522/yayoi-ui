@@ -69,6 +69,8 @@ yayoi.util.extend("yayoi.ui.common.BasicComponent", "yayoi.ui.common.Object", []
         this.initEvents();
         this._rendered = true;
         this.invalidate();
+        var bVisible = this.getVisible();
+        this.setVisible(bVisible);
     };
     /*things done before rendering*/
     this.beforeRender = function() {};
@@ -98,14 +100,12 @@ yayoi.util.extend("yayoi.ui.common.BasicComponent", "yayoi.ui.common.Object", []
         return this._container;
     };
     this.setVisible = function(bVisible) {
-        if (this._visible != bVisible) {
-            if (bVisible) {
-                this.getContainer().show();
-            } else {
-                this.getContainer().hide();
-            }
-            this._visible = bVisible;
+        if (bVisible) {
+            this.getContainer().show();
+        } else {
+            this.getContainer().hide();
         }
+        this._visible = bVisible;
     };
     this.getVisible = function() {
         return this._visible;
@@ -155,8 +155,8 @@ yayoi.util.extend("yayoi.ui.common.ModelComponent", "yayoi.ui.common.BasicCompon
     };
     this.getModelValue = function(path) {
         if (this.getModel()) {
-            var modelPath = this._router;
-            return this.getModel().getValue(modelPath + "/" + path);
+            var router = this.getRouter();
+            return this.getModel().getValue(router + "/" + path);
         } else {
             return null;
         }
