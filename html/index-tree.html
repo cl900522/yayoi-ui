@@ -16,6 +16,8 @@
     <div id="tree">
     </div>
     <div id="button1" style="display:inline-block; width: auto"></div>
+    <div id="button2" style="display:inline-block; width: auto"></div>
+    <div id="button3" style="display:inline-block; width: auto"></div>
     <pre>
         <code>
         </code>
@@ -50,8 +52,8 @@
         store.load();
 
         var dialogControlButton = new yayoi.ui.common.Button({
-            icon: "ok-sign",
-            text: "显示树",
+            icon: "remove",
+            text: "隐藏树",
             selector: "#button1"
         });
         var showMenuClick = function() {
@@ -69,6 +71,22 @@
                 return showMenuClick();
             } else {
                 return hideMenuClick();
+            }
+        });
+        var dialogControlButton2 = new yayoi.ui.common.Button({
+            icon: "ok-sign",
+            text: "展开全部",
+            selector: "#button2",
+            click: function() {
+                tree.expandAll();
+            }
+        });
+        var dialogControlButton3 = new yayoi.ui.common.Button({
+            icon: "ok-sign",
+            text: "关闭全部",
+            selector: "#button3",
+            click: function() {
+                tree.collapseAll();
             }
         });
     });

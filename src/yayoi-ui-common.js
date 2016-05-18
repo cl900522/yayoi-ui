@@ -61,7 +61,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
         if (this.getModel() != null) {
             this.invalidate()
         }
-    }
+    };
     this.beforeRender = function() {};
     /*always rewrite this function of component to render the html content in container*/
     this.onRendering = function() {};
@@ -81,7 +81,7 @@ yayoi.util.extend("yayoi.ui.common.Component", "Object", [], function() {
     };
     this.invalidate = function() {
         this.logger.info("You can define you modelChanged function to set your value.");
-    }
+    };
     this.getModel = function() {
         return this._model;
     };
@@ -127,6 +127,7 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
     this.size = "32px";
     this.rotate = 0;
     this.click = null;
+    this.color = "black";
 
     this.init_single = function(sIcon) {
         this.init({
@@ -142,6 +143,7 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
             iconElement.css("font-size", this.size);
             iconElement.css("height", this.size);
             iconElement.addClass("icon-" + this.icon);
+            iconElement.css("color", this.color);
         }
     };
 
@@ -177,6 +179,11 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
         this.click = click;
     };
 
+    this.setColor = function(sColor) {
+        this.color = sColor;
+        this.invalidate();
+    }
+
     this.onRendering = function() {
         var container = this.getContainer();
         var html = "<span class='yayoi-icon'/></span>";
@@ -191,6 +198,7 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.Component", [], funct
         iconElement.css("font-size", this.size);
         iconElement.css("height", this.size);
         iconElement.addClass("icon-" + this.icon);
+        iconElement.css("color", this.color);
 
         var rotateDeg = "rotate(" + this.rotate + "deg)";
         iconElement.css("-webkit-transform", rotateDeg);

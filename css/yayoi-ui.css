@@ -636,6 +636,10 @@
 
 }
 .yayoi-treeNodes-container {
+    border-left: 1px black dotted;
+    margin-left: 10px;
+}
+.yayoi-treeNode-box {
     border-left: 10px transparent solid;
 }
 .yayoi-treeNode-self {
@@ -643,6 +647,13 @@
     line-height: 25px;
     display: block;
     font-size: 14px;
+}
+.yayoi-treeNode-expand {
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    margin: 0px 3px;
+    cursor: pointer;
 }
 .yayoi-treeNode-check {
     display: inline-block;

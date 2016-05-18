@@ -2,6 +2,9 @@
 yayoi.util.initPackages("yayoi.ui.tree");
 
 yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], function() {
+    this.parentExpandIcon = {icon: "folder-close", color: ""};
+    this.parentCollapseIcon = {icon: "folder-open", color: ""};
+    this.sonIcon = {icon: "file-alt", color: ""};
     /**
      * id key path of node value
      * @type {String}
@@ -59,7 +62,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
 
             var parentId = treeNode.getParentId();
             if (!parentId) {
-                var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
+                var nodeContainer = $("<div class='yayoi-treeNode-box'></div>");
                 container.append(nodeContainer);
                 treeNode.placeAt(nodeContainer);
             } else {
@@ -72,7 +75,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
                     }
                 }
                 if (!foundParent) {
-                    var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
+                    var nodeContainer = $("<div class='yayoi-treeNode-box'></div>");
                     container.append(nodeContainer);
                     treeNode.placeAt(nodeContainer);
                 }
@@ -96,35 +99,24 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
     };
 
     /**
-     * hide the menu
-     * @param  {boolean} toSubMenus if this param is true, only the sub menus will be hide;
-     * if this is false, all the menu tree will be hide
+     * collapse all the nodes
      * @return {null}
      */
-    this.collapseAll = function(toSubMenus) {
-        if (toSubMenus) {
-            if (!this._rendered) {
-                this.render();
-            }
-            for (var i = 0; i < this.nodes.length; i++) {
-                var node = this.nodes[i];
-                if (node.getSubMenu()) {
-                    node.getSubMenu().hide(true);
-                }
-            }
-            this.setVisible(false);
-            if (this.whenHide) {
-                this.whenHide();
-            }
-        } else {
-            var topMenu = this;
-            var target = topMenu.getTarget();
+    this.collapseAll = function() {
+        var nodes = this.nodes;
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].setExpand(false);
+        }
+    };
 
-            while (typeof(target) == "object" && target instanceof yayoi.ui.menu.TreeNode) {
-                topMenu = target.getMenu();
-                target = topMenu.getTarget();
-            }
-            topMenu.hide(true);
+    /**
+     * expand all the nodes
+     * @return {null}
+     */
+    this.expandAll = function() {
+        var nodes = this.nodes;
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].setExpand(true);
         }
     };
 });
@@ -137,19 +129,20 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
      */
     this.subNodes = [];
     this.subConainter = null;
-    this.icon = "file-alt";
+    this.icon = "file";
 
     this.expand = false;
+    this.expandIcon = null;
     this.checkIcon = null;
     this.checked = false;
 
     this.invalidate = function() {
-        this.setIcon(this.icon);
+        this.setIcon(this.icon, "#0b43ed");
         this.setChecked(this.getChecked());
         this.setExpand(this.expand);
 
         var container = this.getContainer();
-        container.find(".yayoi-treeNode-text").html(this.getName());
+        container.find(".yayoi-treeNode-text").first().html(this.getName());
     };
 
     this.beforeRender = function() {
@@ -160,6 +153,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
         var container = this.getContainer();
         var html = "<div class='yayoi-treeNode'>";
         html += "<div class='yayoi-treeNode-self'>"
+        html += "<div class='yayoi-treeNode-expand'></div>"
         html += "<div class='yayoi-treeNode-check'></div>"
         html += "<div class='yayoi-treeNode-icon'></div>"
         html += "<span class='yayoi-treeNode-text'></span>";
@@ -172,6 +166,11 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
 
     this.afterRender = function() {
         var container = this.getContainer();
+        container.find(".yayoi-treeNode-expand").hide();
+    };
+
+    this.initEvents = function() {
+        var container = this.getContainer();
         var that = this;
 
         container.find(".yayoi-treeNode-self").click(function() {
@@ -179,7 +178,7 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
                 that.click();
             }
         });
-        container.find(".yayoi-treeNode-self").click(function() {
+        container.find(".yayoi-treeNode-expand").click(function() {
             var expanded = that.getExpand();
             that.setExpand(!expanded);
         });
@@ -187,20 +186,20 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
             var checked = that.getChecked();
             that.setChecked(!checked);
         });
-    };
+    }
 
     /**
      * expand the tree node
      * @param {boolean} expand
      */
     this.setExpand = function(expand) {
-        var container = this.getContainer();
+        var subConainter = this.subConainter;
         if (expand) {
-            this.setIcon("folder-open-alt");
-            container.find(".yayoi-treeNodes-container").show();
+            this.setExpandIcon("collapse-alt");
+            subConainter.show();
         } else {
-            this.setIcon("folder-close-alt");
-            container.find(".yayoi-treeNodes-container").hide();
+            this.setExpandIcon("expand-alt");
+            subConainter.hide();
         }
         this.expand = expand;
     };
@@ -231,7 +230,22 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
         return this.checked;
     };
 
-    this.setCheckIcon = function(icon) {
+    this.setExpandIcon = function(sIcon, sColor) {
+        if (!this.expandIcon || !(this.expandIcon instanceof yayoi.ui.common.Icon)) {
+            this.expandIcon = new yayoi.ui.common.Icon(sIcon);
+            this.expandIcon.setSize("16px");
+
+            var container = this.getContainer();
+            var iconContaner = container.find(".yayoi-treeNode-expand");
+            this.expandIcon.placeAt(iconContaner);
+        }
+        this.expandIcon.reset(sIcon);
+        if (sColor) {
+            this.expandIcon.setColor(sColor);
+        };
+    };
+
+    this.setCheckIcon = function(icon, sColor) {
         if (!this.checkIcon || !(this.checkIcon instanceof yayoi.ui.common.Icon)) {
             this.checkIcon = new yayoi.ui.common.Icon(icon);
             this.checkIcon.setSize("16px");
@@ -241,18 +255,24 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
             this.checkIcon.placeAt(iconContaner);
         }
         this.checkIcon.reset(icon);
+        if (sColor) {
+            this.checkIcon.setColor(sColor);
+        };
     };
 
-    this.setIcon = function(icon) {
+    this.setIcon = function(icon, sColor) {
         if (!this.icon || !(this.icon instanceof yayoi.ui.common.Icon)) {
             this.icon = new yayoi.ui.common.Icon(icon);
-            this.icon.setSize("20px");
+            this.icon.setSize("18px");
 
             var container = this.getContainer();
             var iconContaner = container.find(".yayoi-treeNode-icon");
             this.icon.placeAt(iconContaner);
         }
         this.icon.reset(icon);
+        if (sColor) {
+            this.icon.setColor(sColor);
+        };
     };
 
     /*set the tree this node own to*/
@@ -282,11 +302,14 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], fun
 
     this.addSubNode = function(treeNode) {
         if (typeof(treeNode) == "object" && treeNode instanceof yayoi.ui.tree.TreeNode) {
-            var nodeContainer = $("<div class='yayoi-treeNodes-container'></div>");
+            var nodeContainer = $("<div class='yayoi-treeNode-box'></div>");
             this.subConainter.append(nodeContainer);
             treeNode.placeAt(nodeContainer);
         }
         this.subNodes.push(treeNode);
-        console.log(this.subNodes);
+
+        this.setIcon("folder-close", "#eda00b");
+        var container = this.getContainer();
+        container.find(".yayoi-treeNode-expand").first().show();
     };
 });
