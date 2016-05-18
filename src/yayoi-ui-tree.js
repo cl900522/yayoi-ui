@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.tree");
 
-yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], function() {
+yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.ModelComponent", [], function() {
     this.parentExpandIcon = {icon: "folder-close", color: ""};
     this.parentCollapseIcon = {icon: "folder-open", color: ""};
     this.sonIcon = {icon: "file-alt", color: ""};
@@ -121,7 +121,7 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.Component", [], functio
     };
 });
 
-yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.Component", [], function() {
+yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.ModelComponent", [], function() {
     this.tree = null;
     /**
      * sub treeNodes

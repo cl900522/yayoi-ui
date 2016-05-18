@@ -4,25 +4,14 @@ yayoi.util.initPackages("yayoi.ui.form");
 /**
  * if we define the form with out defining success & error function, the form will be submitted with our processing response data.
  */
-yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", ["yayoi.ui.model.Model"], function(){
+yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", [], function() {
     this.title;
-    this.action;
-    this.method = "post";
     this.columns = 2;
     this.fields = [];
     this.success;
     this.error;
-    this.invalidate = function() {
-        for(var i=0; i<this.fields.length; i++) {
-            var field = this.fields[i];
-            if(!field.setModel(this.getModel())){
-                if(field._rendered){
-                    field.invalidate();
-                }
-            }
-        }
-    };
-    this.beforeRender = function(){
+
+    this.beforeRender = function() {
         for(var i=0; i<this.fields.length; i++) {
             var field = this.createField(this.fields[i]);
             this.fields[i] = field;
@@ -30,56 +19,48 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", ["yayoi.ui.
     };
     this.onRendering = function() {
         var container = this.getContainer();
-        var formHtml = "<form class='yayoi-form' action='" + this.action + "' method='" + this.method + "' >"+
-            "<div class='yayoi-form-head'><div class='title'>" + this.title + "</div></div>" +
-            "<div class='yayoi-form-body'><table>";
+        var formHtml = "<form class='yayoi-form'>";
+        formHtml += "<div class='yayoi-form-head'><div class='title'>" + this.title + "</div></div>";
+        formHtml += "<div class='yayoi-form-body'><table>";
 
-            var i=0, totaColumns = this.columns;
-            for(i=0; i<this.fields.length; i++){
-                if (i % totaColumns == 0) {
-                    formHtml += "<tr class='yayoi-form-row'>";
-                }
-
-                var colspan = this.fields[i].colspan;
-                if(colspan > totaColumns - (i % totaColumns)){
-                    colspan = totaColumns - (i % totaColumns);
-                    this.fields[i].colspan = colspan;
-                }
-
-                formHtml += "<td class='yayoi-form-cell' data-form-cell='" + i + "' colspan='" + colspan + "'>";
-                if (i % totaColumns == totaColumns - 1) {
-                    formHtml += "</tr>";
-                }
+        var i=0, totaColumns = this.columns;
+        for(i=0; i<this.fields.length; i++){
+            if (i % totaColumns == 0) {
+                formHtml += "<tr class='yayoi-form-row'>";
             }
 
-            /**当field数量和column无法整除时，补齐剩余td标签
-             */
-            if(i % totaColumns != 0){
-                while( i % totaColumns != 0) {
-                    formHtml += "<td></td>";
-                    i++;
-                }
+            var colspan = this.fields[i].colspan;
+            if(colspan > totaColumns - (i % totaColumns)){
+                colspan = totaColumns - (i % totaColumns);
+                this.fields[i].colspan = colspan;
+            }
+
+            formHtml += "<td class='yayoi-form-cell' data-form-cell='" + i + "' colspan='" + colspan + "'>";
+            if (i % totaColumns == totaColumns - 1) {
                 formHtml += "</tr>";
             }
+        }
 
-            formHtml += "</table></div>" +
-            "<div class='yayoi-form-foot'></div>" +
-            "</form>";
+        /**当field数量和column无法整除时，补齐剩余td标签
+         */
+        if(i % totaColumns != 0){
+            while( i % totaColumns != 0) {
+                formHtml += "<td></td>";
+                i++;
+            }
+            formHtml += "</tr>";
+        }
+
+        formHtml += "</table></div>";
+        formHtml += "<div class='yayoi-form-foot'></div>";
+        formHtml += "</form>";
         container.html(formHtml);
     };
     this.afterRender = function () {
         var container = this.getContainer();
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
-
-            var router = new yayoi.ui.util.Router(this.router);
-            router.cd(field.router);
-
-            field.router = router.pwd();
-            field.setModel(this.getModel());
-
-            field.setContainer(container.find("td[data-form-cell=" + i + "]"));
-            field.render();
+            field.placeAt(container.find("td[data-form-cell=" + i + "]"));
         }
 
         /*footer buttons*/
@@ -115,6 +96,14 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", ["yayoi.ui.
             ]
         });
         buttons.placeAt(container.find(".yayoi-form-foot"));
+    };
+    this.reRender = function() {
+        for(var i=0; i<this.fields.length; i++) {
+            var field = this.fields[i];
+            var value = this.getModelValue(field.router);
+            console.log(value);
+            field.setValue(value);
+        }
     };
     this.cancel = function () {
         this.logger.info("you can defind your own cancel action here.")
@@ -190,7 +179,7 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.Component", ["yayoi.ui.
     }
 });
 
-yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", [], function(){
+yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.BasicComponent", [], function(){
     this.title = "";
     this.value = "";
     this.name;
@@ -216,25 +205,27 @@ yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.Component", [], functi
     this.getFormatter = function() {
         return this.formmater;
     };
-    this.invalidate = function() {
-        this.setValue(this.getModel().getValue(this.getRouter()))
-    };
 });
 
 yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function(){
     this.format = "text";
     this.onRendering = function(){
         var container = this.getContainer();
-        var html = "<div class='yayoi-field'>" +
-            "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
-            "<div class='yayoi-field-value'>" +
-            "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='"+this.format+"' value='' />" +
-            "</div></div>";
+        var html = "<div class='yayoi-field'>";
+        html += "<div class='yayoi-field-title'><span>" + this.title + "</span></div>";
+        html += "<div class='yayoi-field-value'>";
+        html += "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='" + this.format + "' value='' />";
+        html += "</div></div>";
         container.html(html);
     };
-    this.setValue = function(value) {
+    this.reRender = function() {
+        var value = this.value;
         var container = this.getContainer();
         container.find("input").val(value);
+    };
+    this.setValue = function(value) {
+        this.value = value;
+        this.invalidate();
     };
     this.getValue = function() {
         var container = this.getContainer();
@@ -242,18 +233,23 @@ yayoi.util.extend("yayoi.ui.form.TextFiled", "yayoi.ui.form.Field", [], function
     }
 });
 yayoi.util.extend("yayoi.ui.form.TextArea", "yayoi.ui.form.Field", [], function() {
-    this.onRendering = function(){
+    this.onRendering = function() {
         var container = this.getContainer();
-        var html = "<div class='yayoi-field'>" +
-            "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
-            "<div class='yayoi-field-value'>" +
-            "<textarea class='yayoi-field-textarea' name='" + this.name + "' placeholder='" + this.hint + "'></textarea>" +
-            "</div></div>";
+        var html = "<div class='yayoi-field'>";
+        html += "<div class='yayoi-field-title'><span>" + this.title + "</span></div>";
+        html += "<div class='yayoi-field-value'>";
+        html += "<textarea class='yayoi-field-textarea' name='" + this.name + "' placeholder='" + this.hint + "'></textarea>";
+        html += "</div></div>";
         container.html(html);
     };
-    this.setValue = function(value) {
+    this.reRender = function() {
+        var value = this.value;
         var container = this.getContainer();
         container.find("textarea").val(value);
+    };
+    this.setValue = function(value) {
+        this.value = value;
+        this.invalidate();
     };
     this.getValue = function() {
         var container = this.getContainer();
@@ -281,15 +277,17 @@ yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], funct
         }
         selectHtml += "</select>";
 
-        var html = "<div class='yayoi-field'>" +
-        "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
-        "<div class='yayoi-field-value'>" +
-        selectHtml +
-        "</div></div>";
+        var html = "<div class='yayoi-field'>";
+        html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
+        html += "<div class='yayoi-field-value'>" + selectHtml + "</div></div>";
 
         container.html(html);
     };
-
+    this.reRender = function() {
+        var value = this.value;
+        var container = this.getContainer();
+        container.find("select").val(value);
+    };
     this.select = function(value){
         var node = null;
         for(var i=0; i<this.selections.length; i++){
@@ -305,8 +303,7 @@ yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], funct
             this.container.find(".stats_v").val(node.value);
             this.container.find(".stats_i").val(node.text);
         }
-    }
-
+    };
     this.getTextOf = function(value) {
         for(var i=0; i<this.selections.length; i++) {
             if(""+value==this.selections[i].value){
@@ -314,11 +311,10 @@ yayoi.util.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], funct
             }
         }
         return "";
-    }
-
+    };
     this.setValue = function(value) {
-        var container = this.getContainer();
-        container.find("select").val(value);
+        this.value = value;
+        this.invalidate();
     };
     this.getValue = function() {
         var container = this.getContainer();
@@ -346,15 +342,17 @@ yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], functi
         }
         selectHtml += "</select>";
 
-        var html = "<div class='yayoi-field'>" +
-        "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
-        "<div class='yayoi-field-value'>" +
-        selectHtml +
-        "</div></div>";
+        var html = "<div class='yayoi-field'>";
+        html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
+        html += "<div class='yayoi-field-value'>" + selectHtml + "</div></div>";
 
         container.html(html);
     };
-
+    this.reRender = function() {
+        var value = this.value;
+        var container = this.getContainer();
+        container.find("select").val(value);
+    };
     this.select = function(value){
         var node = null;
         for(var i=0; i<this.selections.length; i++){
@@ -382,8 +380,8 @@ yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], functi
     }
 
     this.setValue = function(value) {
-        var container = this.getContainer();
-        container.find("select").val(value);
+        this.value = value;
+        this.invalidate();
     };
     this.getValue = function() {
         var container = this.getContainer();
@@ -394,19 +392,27 @@ yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], functi
 yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", [], function() {
     this.onRendering = function(){
         var container = this.getContainer();
-        var html = "<div class='yayoi-field'>" +
-            "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>" +
-            "<div class='yayoi-field-value'>" +
-            "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='date' value='' />" +
-            "</div></div>";
+        var html = "<div class='yayoi-field'>";
+        html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
+        html += "<div class='yayoi-field-value'>";
+        html += "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='date' value='' />";
+        html += "</div></div>";
         container.html(html);
     };
-    this.setValue = function(value) {
+    this.reRender = function() {
+        var value = this.value;
         var container = this.getContainer();
         container.find("input").val(value);
+    }
+    this.setValue = function(value) {
+        this.value = value;
+        this.invalidate();
     };
     this.getValue = function() {
-        var container = this.getContainer();
-        return container.find("input").val();
+        if(this.getRendered()) {
+            var container = this.getContainer();
+            this.value = container.find("input").val();
+        }
+        return this.value;
     }
 });

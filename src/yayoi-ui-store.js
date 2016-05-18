@@ -29,7 +29,7 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
     this.success = function() {
         this.logger.info("You can add your own success function");
     };
-    this.erroor = function() {
+    this.error = function() {
         this.logger.info("You can add your own error function");
     }
     this.parseData = function(data) {
@@ -82,7 +82,7 @@ yayoi.util.extend("yayoi.ui.store.HttpStore", "yayoi.ui.store.Store", [], functi
                 }
             },
             error: function(e) {
-                this.error();
+                that.error();
             }
         });
     };

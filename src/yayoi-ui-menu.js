@@ -1,10 +1,10 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.menu");
 
-yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], function() {
+yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.ModelComponent", [], function() {
     /**
      * the target that menu should be anchor to
-     * @type {yayoi.ui.common.Component || jQuery}
+     * @type {yayoi.ui.common.ModelComponent || jQuery}
      */
     this.target = null;
     /**
@@ -13,7 +13,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
      */
     this.place = "bottom";
     /**
-     * °üº¬µÄmenuµã
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½menuï¿½ï¿½
      * @type {yayoi.ui.menu.MenuNode}
      */
     this.nodes = null;
@@ -124,7 +124,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
         var target = this.getTarget();
 
         if(target && typeof(target) == "object") {
-            if(target instanceof yayoi.ui.common.Component) {
+            if(target instanceof yayoi.ui.common.BasicComponent) {
                 target = target.getContainer();
             }
         }
@@ -178,7 +178,7 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.Component", [], functio
     };
 });
 
-yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.Component", [], function() {
+yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.BasicComponent", [], function() {
     this.menu = null;
     /**
      * sub menu

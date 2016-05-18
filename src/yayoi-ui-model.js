@@ -25,8 +25,11 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
     };
     /*设置绑定的组件
      */
-    this.addListener = function (component){
-        this._listeners.push(component);
+    this.addListener = function (component) {
+        if(typeof(component) == "object" && component instanceof yayoi.ui.common.ModelComponent) {
+            this._listeners.push(component);
+            this.logger.info("Bind component with model");
+        }
     };
     /*取消绑定的组件
      */
@@ -34,6 +37,7 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
         for(var i=0; i<this._listeners.length; i++) {
             if(this._listeners[i] == component) {
                 this._listeners.splice(i, 1);
+                break;
             }
         }
     };

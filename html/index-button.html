@@ -60,14 +60,14 @@
             selector: "#button-4"
         });
         var button5 = new yayoi.ui.common.Button({
-            text: "变换按钮",
+            text: "显示图标",
             selector: "#button-5",
             click: function(){
-                if(button5.icon == null) {
+                if(button5.getText() == "显示图标") {
                     button5.setIcon("resize-full");
                     button5.setText("隐藏图标");
                 } else {
-                    button5.setIcon();
+                    button5.setIcon("chevron-left");
                     button5.setText("显示图标");
                 }
             }
