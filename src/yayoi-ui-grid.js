@@ -94,42 +94,6 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], fu
                 $(this).addClass("single-row");
             }
         })
-        for (var i = 0; i < this.pageSize; i++) {
-            for (var j = 0; j < this.columns.length; j++) {
-                var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
-                column.render();
-            }
-        }
-    };
-    this.selectRow = function(i) {
-        var container = this.getContainer();
-        container.find("div[data-grid-row=" + i + "]").addClass("selected");
-        container.find(".yayoi-frozen-grid div[data-grid-row=" + i + "] input[type=checkbox]").attr("checked", "");
-    };
-    this.unselectRow = function(i) {
-        var container = this.getContainer();
-        container.find("div[data-grid-row=" + i + "]").removeClass("selected");
-        container.find(".yayoi-frozen-grid div[data-grid-row=" + i + "] input[type=checkbox]").removeAttr("checked");
-    }
-    this.reRender = function() {
-        var container = this.getContainer();
-        var rootValue = this.getModel().getValue(this.getRouter());
-        var model = new yayoi.ui.model.JsonModel();
-
-        if (!rootValue instanceof Array) {
-            throw "Grid value is not an array object.";
-        }
-
-        for (var i = 0; i < rootValue.length; i++) {
-            model.setRootValue(rootValue[i]);
-
-            for (var j = 0; j < this.columns.length; j++) {
-                var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
-                column.setModel(model);
-            }
-        }
     };
     this.initEvents = function() {
         var container = this.getContainer();
@@ -154,6 +118,45 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], fu
             }
         });
     };
+    this.reRender = function() {
+        var container = this.getContainer();
+        var rootValue = this.getModelValue("/");
+
+        if (!rootValue instanceof Array) {
+            throw "Grid value is not an array object.";
+        }
+
+        for (var i = 0; i < this.pageSize; i++) {
+            for (var j = 0; j < this.columns.length; j++) {
+                var column = this.columns[j];
+                var value = this.getModelValue(i+"/"+this.columns[j].getRouter());
+                if(value) {
+                    columns.setValue(value);
+                }
+                column.placeAt(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
+            }
+        }
+
+        for (var i = 0; i < rootValue.length; i++) {
+            model.setRootValue(rootValue[i]);
+
+            for (var j = 0; j < this.columns.length; j++) {
+                var column = this.columns[j];
+                column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
+                column.setModel(model);
+            }
+        }
+    };
+    this.selectRow = function(i) {
+        var container = this.getContainer();
+        container.find("div[data-grid-row=" + i + "]").addClass("selected");
+        container.find(".yayoi-frozen-grid div[data-grid-row=" + i + "] input[type=checkbox]").attr("checked", "");
+    };
+    this.unselectRow = function(i) {
+        var container = this.getContainer();
+        container.find("div[data-grid-row=" + i + "]").removeClass("selected");
+        container.find(".yayoi-frozen-grid div[data-grid-row=" + i + "] input[type=checkbox]").removeAttr("checked");
+    }
     this.getColumn = function(arg1) {};
     this.createColumn = function(params) {
         var column = null,
@@ -171,7 +174,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], fu
     }
 });
 
-yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.ModelComponent", [], function() {
+yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.BasicComponent", [], function() {
     this.title = "Column Name";
     this.width = "auto";
     this.formatter;
