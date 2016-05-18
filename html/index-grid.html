@@ -25,7 +25,6 @@
             showIndex: true,
             checkable: true,
             selector: '#gridId',
-            router: 'users',
             tools: [
                 {
                     icon: "refresh", click: function() {
@@ -74,7 +73,7 @@
                 return (result.code == 1)? result.data : null;
             },
             success: function() {
-                grid.setModel(store.getModel());
+                grid.setModel(store.getModel(), "/users/");
             }
         });
         store.load();

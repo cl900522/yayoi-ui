@@ -126,24 +126,13 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], fu
             throw "Grid value is not an array object.";
         }
 
-        for (var i = 0; i < this.pageSize; i++) {
-            for (var j = 0; j < this.columns.length; j++) {
-                var column = this.columns[j];
-                var value = this.getModelValue(i+"/"+this.columns[j].getRouter());
-                if(value) {
-                    columns.setValue(value);
-                }
-                column.placeAt(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
-            }
-        }
-
         for (var i = 0; i < rootValue.length; i++) {
-            model.setRootValue(rootValue[i]);
-
+            var rowData = rootValue[i];
+            console.log(rowData);
             for (var j = 0; j < this.columns.length; j++) {
                 var column = this.columns[j];
                 column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
-                column.setModel(model);
+                column.setRowData(rowData);
             }
         }
     };
@@ -177,51 +166,37 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], fu
 yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.BasicComponent", [], function() {
     this.title = "Column Name";
     this.width = "auto";
-    this.formatter;
 
+    this.router = "";
+    this.rowData = {};
+    this.decorate;
+
+    this.setRowData = function(rowData) {
+        this.rowData = rowData;
+        this.invalidate();
+    };
+    this.getRowData = function() {
+        return this.rowData;
+    }
+    this.getValue = function() {
+        return this.rowData[this.router];
+    };
     this.setTitle = function(title) {
         this.title = title;
     };
     this.getTitle = function() {
         return this.title;
-    }
-    this.setValue = function(value) {
-        this.value = value;
     };
-    this.getValue = function() {
-        return this.value;
-    }
-    this.setFormatter = function(formmater) {
-        this.formmater = formmater;
-    };
-    this.getFormatter = function() {
-        return this.formmater;
+    this.decorate = function(rowData) {
+        return "<span>" + this.getValue() + "</span>";
     };
 });
 
 yayoi.util.extend("yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Column", [], function() {
     this.onRendering = function() {};
-    this.setValue = function(value) {
-        var model = this.getModel();
-        if (model) {
-            model.setValue(this.router, value);
-        }
-    };
-    this.getValue = function() {
-        var model = this.getModel();
-        if (model) {
-            return model.getValue(this.getRouter());
-        } else {
-            return "";
-        }
-    };
-    this.invalidate = function() {
-        var container = this.getContainer();
 
-        var rowData = this.getModel() == null ? {} : this.getModel().getValue("/");
-        container.html(this.decorate(rowData || {}));
-    };
-    this.decorate = function(rowData) {
-        return "<span>" + this.getValue() + "</span>";
+    this.reRender = function() {
+        var container = this.getContainer();
+        container.html(this.decorate(this.getRowData()));
     };
 });

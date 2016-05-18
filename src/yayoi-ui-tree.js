@@ -2,9 +2,18 @@
 yayoi.util.initPackages("yayoi.ui.tree");
 
 yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.ModelComponent", [], function() {
-    this.parentExpandIcon = {icon: "folder-close", color: ""};
-    this.parentCollapseIcon = {icon: "folder-open", color: ""};
-    this.sonIcon = {icon: "file-alt", color: ""};
+    this.parentExpandIcon = {
+        icon: "folder-close",
+        color: ""
+    };
+    this.parentCollapseIcon = {
+        icon: "folder-open",
+        color: ""
+    };
+    this.sonIcon = {
+        icon: "file-alt",
+        color: ""
+    };
     /**
      * id key path of node value
      * @type {String}
@@ -34,20 +43,22 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.ModelComponent", [], fu
 
     this.afterRender = function() {};
 
-    this.invalidate = function() {
+    this.reRender = function() {
         this.nodes = [];
 
         var model = this.getModel();
         var nodes = this.getModelValue("./");
 
-        var rootModelPath = this.getModelPath();
         for (var i = 0; i < nodes.length; i++) {
-            var modelPath = rootModelPath + "/" + i + "/";
-            var node = new yayoi.ui.tree.TreeNode({
-                modelPath: modelPath
-            });
+            var id = this.getModelValue(i + "/" + this.idPath);
+            var parentId = this.getModelValue(i + "/" + this.parentIdPath);
+            var name = this.getModelValue(i + "/" + this.namePath);
 
-            node.setModel(model);
+            var node = new yayoi.ui.tree.TreeNode({
+                id: id,
+                parentId: parentId,
+                name: name
+            });
             this.addNode(node);
         }
     };
@@ -121,28 +132,26 @@ yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.ModelComponent", [], fu
     };
 });
 
-yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.ModelComponent", [], function() {
+yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.BasicComponent", [], function() {
+    this.id = null;
+    this.parentId = null;
+    this.name = null;
+
     this.tree = null;
     /**
      * sub treeNodes
      * @type {yayoi.ui.tree.TreeNode}
      */
     this.subNodes = [];
-    this.subConainter = null;
-    this.icon = "file";
+    this.subContainer = null;
 
     this.expand = false;
     this.expandIcon = null;
     this.checkIcon = null;
     this.checked = false;
-
-    this.invalidate = function() {
-        this.setIcon(this.icon, "#0b43ed");
-        this.setChecked(this.getChecked());
-        this.setExpand(this.expand);
-
-        var container = this.getContainer();
-        container.find(".yayoi-treeNode-text").first().html(this.getName());
+    this.icon = {
+        icon: "file",
+        color: "#0b43ed"
     };
 
     this.beforeRender = function() {
@@ -161,11 +170,27 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.ModelComponent", []
         html += "<div class='yayoi-treeNodes-container'></div>";
         html += "</div>";
         container.html(html);
-        this.subConainter = container.find(".yayoi-treeNodes-container")
+        this.subContainer = container.find(".yayoi-treeNodes-container")
     };
 
     this.afterRender = function() {
         var container = this.getContainer();
+
+        this.expandIcon = new yayoi.ui.common.Icon("close-alt");
+        this.expandIcon.setSize("16px");
+        var iconContaner = container.find(".yayoi-treeNode-expand");
+        this.expandIcon.placeAt(iconContaner);
+
+        this.checkIcon = new yayoi.ui.common.Icon(this.checkIcon);
+        this.checkIcon.setSize("16px");
+        iconContaner = container.find(".yayoi-treeNode-check");
+        this.checkIcon.placeAt(iconContaner);
+
+        this.icon = new yayoi.ui.common.Icon(this.icon);
+        this.icon.setSize("18px");
+        iconContaner = container.find(".yayoi-treeNode-icon");
+        this.icon.placeAt(iconContaner);
+
         container.find(".yayoi-treeNode-expand").hide();
     };
 
@@ -188,20 +213,33 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.ModelComponent", []
         });
     }
 
+    this.reRender = function() {
+        var container = this.getContainer();
+        container.find(".yayoi-treeNode-text").first().html(this.getName());
+
+        if (this.checked) {
+            this.setCheckIcon("check")
+        } else {
+            this.setCheckIcon("unchecked")
+        }
+
+        var subContainer = this.subContainer;
+        if (this.expand) {
+            this.setExpandIcon("collapse-alt");
+            subContainer.show();
+        } else {
+            this.setExpandIcon("expand-alt");
+            subContainer.hide();
+        }
+    };
+
     /**
      * expand the tree node
      * @param {boolean} expand
      */
     this.setExpand = function(expand) {
-        var subConainter = this.subConainter;
-        if (expand) {
-            this.setExpandIcon("collapse-alt");
-            subConainter.show();
-        } else {
-            this.setExpandIcon("expand-alt");
-            subConainter.hide();
-        }
         this.expand = expand;
+        this.invalidate();
     };
 
     this.getExpand = function() {
@@ -218,92 +256,83 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.ModelComponent", []
             var subNode = subNodes[i];
             subNode.setChecked(checked);
         }
-        if (checked) {
-            this.setCheckIcon("check")
-        } else {
-            this.setCheckIcon("unchecked")
-        }
         this.checked = checked;
+        this.invalidate();
     };
 
     this.getChecked = function() {
         return this.checked;
     };
 
-    this.setExpandIcon = function(sIcon, sColor) {
-        if (!this.expandIcon || !(this.expandIcon instanceof yayoi.ui.common.Icon)) {
-            this.expandIcon = new yayoi.ui.common.Icon(sIcon);
-            this.expandIcon.setSize("16px");
-
-            var container = this.getContainer();
-            var iconContaner = container.find(".yayoi-treeNode-expand");
-            this.expandIcon.placeAt(iconContaner);
-        }
-        this.expandIcon.reset(sIcon);
-        if (sColor) {
+    this.setExpandIcon = function(sIcon, sColor = "black") {
+        if (this.expandIcon || this.expandIcon instanceof yayoi.ui.common.Icon) {
+            this.expandIcon.reset(sIcon);
             this.expandIcon.setColor(sColor);
-        };
+        } else {
+            this.expandIcon = {
+                icon: sIcon,
+                color: sColor
+            };
+        }
     };
 
-    this.setCheckIcon = function(icon, sColor) {
-        if (!this.checkIcon || !(this.checkIcon instanceof yayoi.ui.common.Icon)) {
-            this.checkIcon = new yayoi.ui.common.Icon(icon);
-            this.checkIcon.setSize("16px");
-
-            var container = this.getContainer();
-            var iconContaner = container.find(".yayoi-treeNode-check");
-            this.checkIcon.placeAt(iconContaner);
-        }
-        this.checkIcon.reset(icon);
-        if (sColor) {
+    this.setCheckIcon = function(sIcon, sColor = "black") {
+        if (this.checkIcon || this.checkIcon instanceof yayoi.ui.common.Icon) {
+            this.checkIcon.reset(sIcon);
             this.checkIcon.setColor(sColor);
-        };
+        } else {
+            this.checkIcon = {
+                icon: sIcon,
+                color: sColor
+            };
+        }
     };
 
-    this.setIcon = function(icon, sColor) {
-        if (!this.icon || !(this.icon instanceof yayoi.ui.common.Icon)) {
-            this.icon = new yayoi.ui.common.Icon(icon);
-            this.icon.setSize("18px");
-
-            var container = this.getContainer();
-            var iconContaner = container.find(".yayoi-treeNode-icon");
-            this.icon.placeAt(iconContaner);
-        }
-        this.icon.reset(icon);
-        if (sColor) {
+    this.setIcon = function(sIcon, sColor = "black") {
+        if (this.icon || this.icon instanceof yayoi.ui.common.Icon) {
+            this.icon.reset(sIcon);
             this.icon.setColor(sColor);
-        };
+        } else {
+            this.icon = {
+                icon: sIcon,
+                color: sColor
+            };
+        }
     };
 
     /*set the tree this node own to*/
     this.setTree = function(tree) {
         this.tree = tree;
     }
-
     this.getTree = function() {
         return this.tree;
     };
-
     this.setClick = function(click) {
         this.click = click;
     };
-
     this.getParentId = function() {
-        return this.getModelValue(this.getTree().parentIdPath);
+        return this.parentId;
     };
-
+    this.setParentId = function(parentId) {
+        this.parentId = parentId;
+    }
     this.getName = function() {
-        return this.getModelValue(this.getTree().namePath);
+        return this.name;
     };
-
+    this.setName = function(name) {
+        this.name = name;
+        this.invalidate();
+    };
     this.getId = function() {
-        return this.getModelValue(this.getTree().idPath);
+        return this.id;
     };
-
+    this.setId = function(id) {
+        this.id = id;
+    };
     this.addSubNode = function(treeNode) {
         if (typeof(treeNode) == "object" && treeNode instanceof yayoi.ui.tree.TreeNode) {
             var nodeContainer = $("<div class='yayoi-treeNode-box'></div>");
-            this.subConainter.append(nodeContainer);
+            this.subContainer.append(nodeContainer);
             treeNode.placeAt(nodeContainer);
         }
         this.subNodes.push(treeNode);

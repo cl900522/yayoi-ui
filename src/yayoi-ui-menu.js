@@ -1,10 +1,10 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.menu");
 
-yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.ModelComponent", [], function() {
+yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.BasicComponent", [], function() {
     /**
      * the target that menu should be anchor to
-     * @type {yayoi.ui.common.ModelComponent || jQuery}
+     * @type {yayoi.ui.common.BasicComponent || jQuery}
      */
     this.target = null;
     /**
@@ -144,12 +144,12 @@ yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.ModelComponent", [], fu
         this.setVisible(true);
     };
 
-/**
- * hide the menu
- * @param  {boolean} toSubMenus if this param is true, only the sub menus will be hide;
- * if this is false, all the menu tree will be hide
- * @return {null}
- */
+    /**
+     * hide the menu
+     * @param  {boolean} toSubMenus if this param is true, only the sub menus will be hide;
+     * if this is false, all the menu tree will be hide
+     * @return {null}
+     */
     this.hide = function(toSubMenus) {
         if(toSubMenus) {
             if (!this._rendered) {
