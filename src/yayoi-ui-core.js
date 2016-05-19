@@ -4,8 +4,9 @@ window.yayoi = {
     config: {
         global: {
             inited: false,
-            useCache: false,
-            rootPath: "./js/"
+            devMode: false,
+            rootPath: "./js/",
+            logLevel: "debug"
         },
         expression: {
             email: /^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/,
@@ -33,9 +34,15 @@ yayoi.init = function() {
             var index = scriptSrc.indexOf("yayoi-ui-core.js");
             if(index != -1) {
                 yayoi.config.global.rootPath = scriptSrc.substring(0, index);
+
+                var devMode = $(this).attr("data-devMode");
+                if(devMode === "true") {
+                    yayoi.config.global.devMode = true;
+                }
+
                 var funName = $(this).attr("data-init");
-                if(funName) {
-                    eval(funName+"()");
+                if(window[funName]) {
+                    window[funName]();
                 }
                 return false;
             }
@@ -159,17 +166,21 @@ yayoi.util.require = function(packagesStr) {
             var packageJsFile = packages.join("-");
             packageJsFile = packageJsFile.substring(0, packageJsFile.lastIndexOf("-")) + ".js";
 
-            if(window.localStorage && yayoi.config.global.useCache) {
-                var scriptContent = window.localStorage[packageJsFile];
-                if(scriptContent) {
-                    eval(scriptContent);
-                }
-            } else {
+            var scriptContent = null;
+            if(window.localStorage) {
+                scriptContent = window.localStorage[packageJsFile];
+            }
+
+            if(yayoi.config.global.devMode || !scriptContent) {
                 yayoi.util.loadJS(yayoi.config.global.rootPath + packageJsFile, function(scriptContent){
-                    if(window.localStorage && yayoi.config.global.useCache) {
+                    if(window.localStorage && yayoi.config.global.devMode) {
                         window.localStorage[packageJsFile] = scriptContent;
                     }
                 }, false);
+            } else {
+                if(scriptContent) {
+                    eval(scriptContent);
+                }
             }
 
             currentPackage = parentPackage["" + packages[i]];
@@ -227,26 +238,66 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction) {
 }
 
 yayoi.util.extend("yayoi.ui.log.Logger", "Object", [], function() {
-    this.typeName = "";
-    this.debug = function(log) {
+    this.levels = {
+        debug: 1,
+        info: 2,
+        warn: 3,
+        error: 4
+    }
+    this.typeName = null;
+    this.debug = function() {
+        var logLevel = this.levels[yayoi.config.global.logLevel];
+        if(logLevel > this.levels.debug) {
+            return;
+        }
         if(!console){
             return;
         }
-        console.debug(this.typeName + ": " + JSON.stringify(log));
+        console.log("%c" + this.typeName + " %cdebug", "color: rgb(245, 198, 31); font-size:12px; font-weight: bold;","color: rgb(245, 198, 31); font-size:12px;");
+        for(var i=0; i<arguments.length; i++) {
+            console.debug(arguments[i]);
+        }
     };
-    this.info = function(log) {
+    this.info = function() {
+        var logLevel = this.levels[yayoi.config.global.logLevel];
+        if(logLevel > this.levels.info) {
+            return;
+        }
         if(!console){
             return;
         }
-        console.info(this.typeName + ": " + JSON.stringify(log));
+        console.log("%c" + this.typeName + " %cinfo" , "color: rgb(31, 33, 245); font-size:12px; font-weight: bold;", "color: rgb(31, 33, 245); font-size:12px;");
+        for(var i=0; i<arguments.length; i++) {
+            console.info(arguments[i]);
+        }
     };
-    this.error = function(log) {
+    this.warn = function() {
+        var logLevel = this.levels[yayoi.config.global.logLevel];
+        if(logLevel > this.levels.warn) {
+            return;
+        }
         if(!console){
             return;
         }
-        console.error(this.typeName + ": " + JSON.stringify(log));
+        console.log("%c" + this.typeName + " %cwarn" , "color: rgb(245, 114, 31); font-size:12px; font-weight: bold;", "color: rgb(245, 114, 31); font-size:12px;");
+        for(var i=0; i<arguments.length; i++) {
+            console.warn(arguments[i]);
+        }
     };
-    this.clear = function(log) {
+    this.error = function() {
+        var logLevel = this.levels[yayoi.config.global.logLevel];
+        if(logLevel > this.levels.error) {
+            return;
+        }
+        if(!console){
+            return;
+        }
+        console.log("%c" + this.typeName + " %cerror" , "color: rgb(245, 31, 31); font-size:12px; font-weight: bold;", "color: rgb(245, 31, 31); font-size:12px;");
+        for(var i=0; i<arguments.length; i++) {
+            console.error(arguments[i]);
+        }
+    };
+    this.clear = function() {
         clear();
     };
 });
