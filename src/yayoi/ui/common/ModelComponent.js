@@ -39,7 +39,7 @@ yayoi.util.extend("yayoi.ui.common.ModelComponent", "yayoi.ui.common.BasicCompon
     this.getRouter = function() {
         return this._router;
     };
-    this.getModelValue = function(path) {
+    this.getModelValue = function(path = "") {
         if (this.getModel()) {
             var router = this.getRouter();
             return this.getModel().getValue(router + "/" + path);
