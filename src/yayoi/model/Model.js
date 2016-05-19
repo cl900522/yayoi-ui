@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.model");
 
-yayoi.util.extend("yayoi.model.Model", "Object", [], function() {
+yayoi.util.extend("yayoi.model.Model", "Object", ["yayoi.util.Router"], function() {
     /*根元素的值
      * */
     this._rootValue;

@@ -27,7 +27,8 @@
     <script type="text/javascript">
     function startYayoi() {
         yayoi.util.require("yayoi.ui.tree.Tree");
-        yayoi.util.require("yayoi.proxy.Proxy");
+        yayoi.util.require("yayoi.proxy.HttpProxy");
+        yayoi.util.require("yayoi.ui.common.Button");
     }
     $(function() {
         var tree = new yayoi.ui.tree.Tree({

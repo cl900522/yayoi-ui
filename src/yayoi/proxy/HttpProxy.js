@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.proxy");
 
-yayoi.util.extend("yayoi.proxy.HttpProxy", "yayoi.proxy.Proxy", ["yayoi.model.JsonModel"], function() {
+yayoi.util.extend("yayoi.proxy.HttpProxy", "yayoi.proxy.Proxy", ["yayoi.model.JsonModel", "yayoi.model.XMLModel"], function() {
     this.async = true;
     this.method = "post";
     this.params = {};

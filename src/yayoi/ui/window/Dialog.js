@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.window");
 
-yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.ModelComponent", [], function() {
+yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.ModelComponent", ["yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer"], function() {
     this.isModel = true;
     this._mask = null;
     this._cancelButton = null;
@@ -11,7 +11,7 @@ yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.ModelComponent", []
         var container = $("<div class='yayoi-dialog'></div>");
         $(document.body).append(container);
         this.setContainer(container);
-    }
+    };
     this.onRendering = function() {
         var container = this.getContainer();
 

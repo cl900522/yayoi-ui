@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.BasicComponent", "yayoi.ui.common.Object", [], function() {
+yayoi.util.extend("yayoi.ui.common.BasicComponent", "yayoi.core.Object", [], function() {
     /**
      * jquery selector to get container,
      * please reference to placeAt() function.

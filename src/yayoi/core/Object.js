@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.common");
+yayoi.util.initPackages("yayoi.core");
 
-yayoi.util.extend("yayoi.ui.common.Object", "Object", [], function() {
+yayoi.util.extend("yayoi.core.Object", "Object", [], function() {
     this.hasProperty = function(p) {
         return (p in this);
     };

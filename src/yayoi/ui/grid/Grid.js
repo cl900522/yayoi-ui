@@ -1,7 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.grid");
 
-yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], function() {
+yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn"], function() {
     this.title;
     this.columns = [];
     this.page = {
@@ -161,42 +161,4 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", [], fu
         }
         return column;
     }
-});
-
-yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.BasicComponent", [], function() {
-    this.title = "Column Name";
-    this.width = "auto";
-
-    this.router = "";
-    this.rowData = {};
-    this.decorate;
-
-    this.setRowData = function(rowData) {
-        this.rowData = rowData;
-        this.invalidate();
-    };
-    this.getRowData = function() {
-        return this.rowData;
-    }
-    this.getValue = function() {
-        return this.rowData[this.router];
-    };
-    this.setTitle = function(title) {
-        this.title = title;
-    };
-    this.getTitle = function() {
-        return this.title;
-    };
-    this.decorate = function(rowData) {
-        return "<span>" + this.getValue() + "</span>";
-    };
-});
-
-yayoi.util.extend("yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Column", [], function() {
-    this.onRendering = function() {};
-
-    this.reRender = function() {
-        var container = this.getContainer();
-        container.html(this.decorate(this.getRowData()));
-    };
 });

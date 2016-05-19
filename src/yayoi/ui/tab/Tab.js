@@ -1,49 +1,7 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.tab");
 
-yayoi.util.extend("yayoi.ui.tab.TabNode", "yayoi.ui.common.ModelComponent", [], function() {
-    this.code;
-    this.title;
-    this.closeable = true;
-});
-
-yayoi.util.extend("yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.TabNode", [], function() {
-    this.url;
-
-    this.onRendering = function() {
-        var container = this.getContainer();
-        var frame = $('<iframe src="' + this.url + '"scrolling="auto" frameborder="0"></iframe>');
-        container.append(frame);
-    };
-    this.refresh = function() {
-        this.render();
-    };
-});
-yayoi.util.extend("yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.TabNode", [], function() {
-    this.html;
-
-    this.onRendering = function() {
-        var container = this.getContainer();
-        container.html(this.html);
-    };
-    this.refresh = function() {
-        this.render();
-    };
-});
-yayoi.util.extend("yayoi.ui.tab.ComponentTabNode", "yayoi.ui.tab.TabNode", [], function() {
-    this.component;
-
-    this.onRendering = function() {
-        var container = this.getContainer();
-        component.setContainer(container);
-        component.render();
-    };
-    this.refresh = function() {
-        this.render();
-    };
-});
-
-yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.ModelComponent", [], function() {
+yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.ModelComponent", ["yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.ComponentTabNode", "yayoi.ui.common.Icon"], function() {
     this.navBar;
     this.contentContainer;
     this.tabNodes = {};
@@ -80,7 +38,7 @@ yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.ModelComponent", [], func
                 tab = new yayoi.ui.tab.HTMLTabNode(tab);
             }
             if (tab.hasOwnProperty("component")) {
-                tab = new yayoi.ui.tab.HTMLTabNode(tab);
+                tab = new yayoi.ui.tab.ComponentTabNode(tab);
             }
             this.addTab(tab);
             return;

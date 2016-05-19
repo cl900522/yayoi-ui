@@ -5,7 +5,7 @@ yayoi.util.extend("yayoi.model.JsonModel", "yayoi.model.Model", [], function(){
     this.getValue = function(pathsStr) {
         var value = this.getRootValue();
 
-        var router = new yayoi.ui.util.Router(pathsStr);
+        var router = new yayoi.util.Router(pathsStr);
         var paths = router.parse();
 
         if(paths.length == 0){
@@ -23,7 +23,7 @@ yayoi.util.extend("yayoi.model.JsonModel", "yayoi.model.Model", [], function(){
     };
     this.setValue = function(pathsStr, value) {
         var parentPath = this.getRootValue();
-        var router = new yayoi.ui.util.Router(pathsStr);
+        var router = new yayoi.util.Router(pathsStr);
 
         var paths = router.parse();
         if(paths.length == 0){

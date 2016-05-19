@@ -20,7 +20,7 @@
     <p>log.Logger用于帮助输出日志</p>
     <pre>
         <code>
-            var path = new yayoi.ui.util.Router("./../tmp/tmp/google");
+            var path = new yayoi.util.Router("./../tmp/tmp/google");
             yayoi.log.info(path.pwd());
             path.cd("../httpd");
             yayoi.log.info(path.pwd());
@@ -65,7 +65,7 @@
         });
 
         QUnit.test("Path navigation test.", 3, function(assert) {
-            var path = new yayoi.ui.util.Router("./../tmp/tmp/google");
+            var path = new yayoi.util.Router("./../tmp/tmp/google");
             assert.ok(path.pwd() == "/tmp/tmp/google", "Go ./../tmp/tmp/google  get /tmp/tmp/google");
 
             path.cd("../httpd");
@@ -76,7 +76,7 @@
         });
 
         QUnit.test("Path navigation test 2.", 3, function(assert) {
-            var newPath = new yayoi.ui.util.Router("./var/tmp/google");
+            var newPath = new yayoi.util.Router("./var/tmp/google");
             assert.ok(newPath.pwd() == "/var/tmp/google", "Go ./var/tmp/google get /var/tmp/google");
 
             newPath.cd("/usr/local/bin");
