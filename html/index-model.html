@@ -9,7 +9,7 @@
     <p>JsonMode可以通过http协议加载json数据，并提供数据获取和修改的函数</p>
     <pre>
         <code>
-        var model = new yayoi.ui.model.JsonModel();
+        var model = new yayoi.model.JsonModel();
         model.setRootValue({});
         model.setValue("/data/users/1/name/", "changed");
         </code>
@@ -21,10 +21,10 @@
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
     function startYayoi() {
-        yayoi.util.require("yayoi.ui.store.Store");
+        yayoi.util.require("yayoi.model.JsonModel");
     }
         QUnit.test("Json model sync function test", 3, function(assert) {
-            var model = new yayoi.ui.model.JsonModel();
+            var model = new yayoi.model.JsonModel();
             model.setRootValue({
                 data: {
                     users: [

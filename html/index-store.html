@@ -1,15 +1,15 @@
 <html>
 <html>
 <head>
-    <title>UIStore测试</title>
+    <title>UIProxy测试</title>
     <link rel="stylesheet" href="../css/qunit.css" />
 </head>
 <body>
-    <h1>UIStore测试</h1>
-    <p>HttpStore</p>
+    <h1>UIProxy测试</h1>
+    <p>HttpProxy</p>
     <pre>
         <code>
-        var store = new yayoi.ui.store.HttpStore({
+        var store = new yayoi.proxy.HttpProxy({
             url: "/json/user-data.json",
             method: "get",
             dataType: "json",
@@ -31,12 +31,12 @@
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
     function startYayoi() {
-        yayoi.util.require("yayoi.ui.store.Store");
+        yayoi.util.require("yayoi.proxy.HttpProxy");
     }
     $(function(){
         QUnit.test("Json model sync function test", 6, function(assert) {
             var model;
-            var store = new yayoi.ui.store.HttpStore({
+            var store = new yayoi.proxy.HttpProxy({
                 url: "/json/user-data.json",
                 method: "get",
                 async: false,
@@ -70,7 +70,7 @@
         QUnit.test("Json model async function test", 4, function(assert) {
             var model;
             var done = assert.async();
-            var store = new yayoi.ui.store.HttpStore({
+            var store = new yayoi.proxy.HttpProxy({
                 url: "/json/user-data.json",
                 method: "get",
                 async: true,
@@ -99,7 +99,7 @@
         QUnit.test("XML model async function test", 8, function(assert) {
             var model;
             var done = assert.async();
-            var store = new yayoi.ui.store.HttpStore({
+            var store = new yayoi.proxy.HttpProxy({
                 url: "/xml/user-data.xml",
                 method: "get",
                 async: true,

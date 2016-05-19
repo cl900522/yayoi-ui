@@ -21,7 +21,7 @@
     <script type="text/javascript">
     function startYayoi() {
         yayoi.util.require("yayoi.ui.form.Form");
-        yayoi.util.require("yayoi.ui.store.Store");
+        yayoi.util.require("yayoi.proxy.Proxy");
     }
     $(function() {
         QUnit.test("Form function test.", 0, function(assert) {
@@ -64,7 +64,7 @@
                 ]
             });
 
-            var store = new yayoi.ui.store.HttpStore({
+            var store = new yayoi.proxy.HttpProxy({
                 url: "/json/account-data.json",
                 method: "get",
                 async: false,

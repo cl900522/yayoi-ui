@@ -37,7 +37,7 @@
     $(function(){
         yayoi.util.initPackages("yayoi.ext");
         QUnit.test("Class extend test.", 7, function(assert) {
-            var People = yayoi.util.extend("yayoi.common.People", "Object", ["yayoi.ui.common.Icon","yayoi.ui.store.Store"], function(Icon, Store) {
+            var People = yayoi.util.extend("yayoi.common.People", "Object", ["yayoi.ui.common.Icon","yayoi.proxy.Proxy"], function(Icon, Proxy) {
                 this.name = null;
                 this.age = null;
                 this.getAge = function() {
@@ -45,7 +45,7 @@
                 }
 
                 assert.ok(Icon == yayoi.ui.common.Icon, "yayoi.ui.common.Icon is loaded");
-                assert.ok(Store == yayoi.ui.store.Store, "yayoi.ui.store.Store is loaded");
+                assert.ok(Proxy == yayoi.proxy.Proxy, "yayoi.proxy.Proxy is loaded");
             });
 
             assert.ok(yayoi.common.People instanceof Function, "Create yayoi.common.People class ok.");

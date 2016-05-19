@@ -27,7 +27,7 @@
     <script type="text/javascript">
     function startYayoi() {
         yayoi.util.require("yayoi.ui.tree.Tree");
-        yayoi.util.require("yayoi.ui.store.Store");
+        yayoi.util.require("yayoi.proxy.Proxy");
     }
     $(function() {
         var tree = new yayoi.ui.tree.Tree({
@@ -37,7 +37,7 @@
             selector: "#tree"
         });
 
-        var store = new yayoi.ui.store.HttpStore({
+        var store = new yayoi.proxy.HttpProxy({
             url: "/json/tree-data.json",
             method: "get",
             async: false,

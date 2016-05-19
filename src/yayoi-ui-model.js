@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.model");
+yayoi.util.initPackages("yayoi.model");
 
-yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
+yayoi.util.extend("yayoi.model.Model", "Object", [], function() {
     /*根元素的值
      * */
     this._rootValue;
@@ -62,7 +62,7 @@ yayoi.util.extend("yayoi.ui.model.Model", "Object", [], function() {
     };
 });
 
-yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], function(){
+yayoi.util.extend("yayoi.model.JsonModel", "yayoi.model.Model", [], function(){
     this.getValue = function(pathsStr) {
         var value = this.getRootValue();
 
@@ -101,7 +101,7 @@ yayoi.util.extend("yayoi.ui.model.JsonModel", "yayoi.ui.model.Model", [], functi
     };
 });
 
-yayoi.util.extend("yayoi.ui.model.XMLModel", "yayoi.ui.model.Model", [], function(){
+yayoi.util.extend("yayoi.model.XMLModel", "yayoi.model.Model", [], function(){
     this.getValue = function(pathsStr) {
         var parentPath = this.getRootValue();
 

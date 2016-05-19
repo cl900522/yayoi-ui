@@ -3,6 +3,7 @@ window.yayoi = {
     util: {},
     config: {
         global: {
+            version: 1.0,
             inited: false,
             devMode: false,
             rootPath: "./js/",
@@ -163,8 +164,10 @@ yayoi.util.require = function(packagesStr) {
         currentPackage = currentPackage["" + packages[i]];
 
         if(!currentPackage) {
-            var packageJsFile = packages.join("-");
-            packageJsFile = packageJsFile.substring(0, packageJsFile.lastIndexOf("-")) + ".js";
+            var packageJsFile = packages.join("/");
+            packageJsFile += ".js";
+
+            console.error(packageJsFile);
 
             var scriptContent = null;
             if(window.localStorage) {

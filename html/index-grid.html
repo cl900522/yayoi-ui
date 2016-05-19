@@ -17,7 +17,7 @@
     <script type="text/javascript">
     function startYayoi() {
         yayoi.util.require("yayoi.ui.grid.Grid");
-        yayoi.util.require("yayoi.ui.store.Store");
+        yayoi.util.require("yayoi.proxy.Proxy");
     }
     $(function(){
         grid = new yayoi.ui.grid.Grid({
@@ -65,7 +65,7 @@
             ]
         });
 
-        var store = new yayoi.ui.store.HttpStore({
+        var store = new yayoi.proxy.HttpProxy({
             url: "/json/grid-data.json",
             method: "get",
             async: false,
