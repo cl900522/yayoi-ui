@@ -6,12 +6,16 @@
     <link rel="stylesheet" href="../css/font/font-awesome.min.css">
     <style media="screen">
         #listTable {
-            display: block;
+            margin: auto;
+        }
+        #listTable tr{
             margin: auto;
         }
         #listTable td{
-            display: block;
-            width: 80px;
+            float: left;
+            width: 120px;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
     </style>
 <body>
@@ -732,16 +736,17 @@
             if(i%size == 0 && i!=0 ) {
                 html += "</tr><tr>"
             }
-            html += "<td style='width:80px' ><div id='icon-"+i+"'></div><span id='icon-name-"+i+"'></span>"
+            html += "<td><div id='icon-"+i+"'></div><span id='icon-name-"+i+"'></span></td>"
         }
         html += "</tr>"
 
         $("#listTable").html(html);
 
-        var color = "blue";
+        var color = "blue", size="20px";
         var backColor = "white";
         for(var i=0; i<iconList.length; i++) {
             iconList[i].icon.color = color;
+            iconList[i].icon.size = size;
             var icon = new yayoi.ui.common.Icon(iconList[i].icon);
             icon.placeAt("#icon-"+i);
             $("#icon-name-"+i).html(iconList[i].icon.icon);
