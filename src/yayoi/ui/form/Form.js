@@ -4,7 +4,7 @@ yayoi.util.initPackages("yayoi.ui.form");
 /**
  * if we define the form with out defining success & error function, the form will be submitted with our processing response data.
  */
-yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", ["yayoi.ui.form.TextField", "yayoi.ui.form.TextArea", "yayoi.ui.form.SingleSelect", "yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer"], function() {
+yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", ["yayoi.ui.form.TextField", "yayoi.ui.form.DateField", "yayoi.ui.form.TextArea", "yayoi.ui.form.SingleSelect", "yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer"], function() {
     this.title;
     this.columns = 2;
     this.fields = [];
