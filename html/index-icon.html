@@ -4,10 +4,21 @@
     <link rel="stylesheet" href="../css/qunit.css" />
     <link rel="stylesheet" href="../css/yayoi-ui.css" />
     <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+    <style media="screen">
+        #listTable {
+            display: block;
+            margin: auto;
+        }
+        #listTable td{
+            display: block;
+            width: 80px;
+        }
+    </style>
 <body>
     <h1>YayoiUI图标测试</h1>
     <p>展示所有支持的图标</p>
-    <div style="width: 600px;margin:auto; margin-bottom: 50px;">
+    <p>总共收集了来自FontAwesome的<span id="count"></span>个图标</p>
+    <div style="width: 1200px; margin:auto; margin-bottom: 50px;">
         <table id="listTable" style="width:100%;">
         </table>
     </div>
@@ -39,8 +50,10 @@
     iconList.push({name:"放大", icon:{icon:"zoom-in"}});
     iconList.push({name:"缩小", icon:{icon:"zoom-out"}});
     iconList.push({name:"关机", icon:{icon:"power-off"}});
+    iconList.push({name:"关机", icon:{icon:"off"}});
     iconList.push({name:"信号", icon:{icon:"signal"}});
     iconList.push({name:"齿轮", icon:{icon:"gear"}});
+    iconList.push({name:"齿轮", icon:{icon:"cog"}});
     iconList.push({name:"垃圾", icon:{icon:"trash"}});
     iconList.push({name:"主页", icon:{icon:"home"}});
     iconList.push({name:"文件", icon:{icon:"file-alt"}});
@@ -77,7 +90,7 @@
     iconList.push({name:"居中", icon:{icon:"align-center"}});
     iconList.push({name:"居右", icon:{icon:"align-right"}});
     iconList.push({name:"自动", icon:{icon:"align-justify"}});
-    iconList.push({name:"列表", icon:{icon:"align-list"}});
+    iconList.push({name:"列表", icon:{icon:"list"}});
     iconList.push({name:"左间距", icon:{icon:"indent-left"}});
     iconList.push({name:"右间距", icon:{icon:"indent-right"}});
     iconList.push({name:"视频聊天", icon:{icon:"facetime-video"}});
@@ -122,22 +135,290 @@
     iconList.push({name:"减小", icon:{icon:"minus"}});
     iconList.push({name:"星号", icon:{icon:"asterisk"}});
     iconList.push({name:"警告", icon:{icon:"exclamation-sign"}});
+
+    iconList.push({name:"收缩", icon:{icon:"gift"}});
+    iconList.push({name:"收缩", icon:{icon:"leaf"}});
+    iconList.push({name:"收缩", icon:{icon:"fire"}});
+    iconList.push({name:"收缩", icon:{icon:"eye-open"}});
+    iconList.push({name:"收缩", icon:{icon:"eye-close"}});
+    iconList.push({name:"收缩", icon:{icon:"warning-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"plane"}});
+    iconList.push({name:"收缩", icon:{icon:"calendar"}});
+    iconList.push({name:"收缩", icon:{icon:"random"}});
+    iconList.push({name:"收缩", icon:{icon:"comment"}});
+    iconList.push({name:"收缩", icon:{icon:"magnet"}});
+    iconList.push({name:"收缩", icon:{icon:"chevron-up"}});
+    iconList.push({name:"收缩", icon:{icon:"chevron-down"}});
+    iconList.push({name:"收缩", icon:{icon:"retweet"}});
+    iconList.push({name:"收缩", icon:{icon:"shopping-cart"}});
     iconList.push({name:"文件夹", icon:{icon:"folder-open"}});
     iconList.push({name:"文件夹", icon:{icon:"folder-close"}});
-    iconList.push({name:"文件夹", icon:{icon:"folder-open-alt"}});
-    iconList.push({name:"文件夹", icon:{icon:"folder-close-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"resize-vertical"}});
+    iconList.push({name:"收缩", icon:{icon:"resize-horizontal"}});
+    iconList.push({name:"收缩", icon:{icon:"bar-chart"}});
+    iconList.push({name:"收缩", icon:{icon:"twitter-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"facebook-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"camera-retro"}});
+    iconList.push({name:"收缩", icon:{icon:"key"}});
+    iconList.push({name:"收缩", icon:{icon:"gears"}});
+    iconList.push({name:"收缩", icon:{icon:"cogs"}});
+    iconList.push({name:"收缩", icon:{icon:"comments"}});
+    iconList.push({name:"收缩", icon:{icon:"thumbs-up-alt"}});
 
-    iconList.push({name:"收缩", icon:{icon:"collapse-alt"}});
-    iconList.push({name:"展开", icon:{icon:"expand-alt"}});
-    iconList.push({name:"文件夹", icon:{icon:"folder-open-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"thumbs-down-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"star-half"}});
+    iconList.push({name:"收缩", icon:{icon:"heart-empty"}});
+    iconList.push({name:"收缩", icon:{icon:"signout"}});
+    iconList.push({name:"收缩", icon:{icon:"linkedin-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"pushpin"}});
+    iconList.push({name:"收缩", icon:{icon:"external-link"}});
+    iconList.push({name:"收缩", icon:{icon:"signin"}});
+    iconList.push({name:"收缩", icon:{icon:"trophy"}});
+    iconList.push({name:"收缩", icon:{icon:"github-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"upload-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"lemon"}});
+    iconList.push({name:"收缩", icon:{icon:"phone"}});
+    iconList.push({name:"收缩", icon:{icon:"unchecked"}});
+    iconList.push({name:"收缩", icon:{icon:"check-empty"}});
+    iconList.push({name:"收缩", icon:{icon:"bookmark-empty"}});
+    iconList.push({name:"收缩", icon:{icon:"phone-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"twitter"}});
+    iconList.push({name:"收缩", icon:{icon:"facebook"}});
+    iconList.push({name:"收缩", icon:{icon:"github"}});
+    iconList.push({name:"收缩", icon:{icon:"unlock"}});
+    iconList.push({name:"收缩", icon:{icon:"credit-card"}});
+    iconList.push({name:"收缩", icon:{icon:"rss"}});
+
+    iconList.push({name:"收缩", icon:{icon:"hdd"}});
+    iconList.push({name:"收缩", icon:{icon:"bullhorn"}});
+    iconList.push({name:"收缩", icon:{icon:"bell"}});
+    iconList.push({name:"收缩", icon:{icon:"certificate"}});
+    iconList.push({name:"收缩", icon:{icon:"hand-right"}});
+    iconList.push({name:"收缩", icon:{icon:"hand-left"}});
+    iconList.push({name:"收缩", icon:{icon:"hand-up"}});
+    iconList.push({name:"收缩", icon:{icon:"hand-down"}});
+    iconList.push({name:"收缩", icon:{icon:"circle-arrow-left"}});
+    iconList.push({name:"收缩", icon:{icon:"circle-arrow-right"}});
+    iconList.push({name:"收缩", icon:{icon:"circle-arrow-up"}});
+    iconList.push({name:"收缩", icon:{icon:"circle-arrow-down"}});
+    iconList.push({name:"收缩", icon:{icon:"globe"}});
+    iconList.push({name:"收缩", icon:{icon:"wrench"}});
+    iconList.push({name:"收缩", icon:{icon:"tasks"}});
+    iconList.push({name:"收缩", icon:{icon:"filter"}});
+    iconList.push({name:"收缩", icon:{icon:"briefcase"}});
+    iconList.push({name:"收缩", icon:{icon:"fullscreen"}});
+    iconList.push({name:"收缩", icon:{icon:"group"}});
+    iconList.push({name:"收缩", icon:{icon:"link"}});
+    iconList.push({name:"收缩", icon:{icon:"cloud"}});
+    iconList.push({name:"收缩", icon:{icon:"beaker"}});
+
+    iconList.push({name:"收缩", icon:{icon:"cut"}});
+    iconList.push({name:"收缩", icon:{icon:"copy"}});
+    iconList.push({name:"收缩", icon:{icon:"paperclip"}});
+    iconList.push({name:"收缩", icon:{icon:"paper-clip"}});
+    iconList.push({name:"收缩", icon:{icon:"save"}});
+    iconList.push({name:"收缩", icon:{icon:"sign-blank"}});
+    iconList.push({name:"收缩", icon:{icon:"reorder"}});
+    iconList.push({name:"收缩", icon:{icon:"list-ul"}});
+    iconList.push({name:"收缩", icon:{icon:"list-ol"}});
+    iconList.push({name:"收缩", icon:{icon:"strikethrough"}});
+    iconList.push({name:"收缩", icon:{icon:"underline"}});
+    iconList.push({name:"收缩", icon:{icon:"table"}});
+    iconList.push({name:"收缩", icon:{icon:"magic"}});
+    iconList.push({name:"收缩", icon:{icon:"truck"}});
+    iconList.push({name:"收缩", icon:{icon:"pinterest"}});
+    iconList.push({name:"收缩", icon:{icon:"pinterest-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"google-plus-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"google-plus"}});
+    iconList.push({name:"收缩", icon:{icon:"money"}});
+    iconList.push({name:"收缩", icon:{icon:"caret-down"}});
+    iconList.push({name:"收缩", icon:{icon:"caret-up"}});
+    iconList.push({name:"收缩", icon:{icon:"caret-left"}});
+    iconList.push({name:"收缩", icon:{icon:"caret-right"}});
+    iconList.push({name:"收缩", icon:{icon:"sort"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-down"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-up"}});
+    iconList.push({name:"收缩", icon:{icon:"envelope"}});
+    iconList.push({name:"收缩", icon:{icon:"linkedin"}});
+    iconList.push({name:"收缩", icon:{icon:"rotate-left"}});
+    iconList.push({name:"收缩", icon:{icon:"undo"}});
+    iconList.push({name:"收缩", icon:{icon:"legal"}});
+    iconList.push({name:"收缩", icon:{icon:"dashboard"}});
+    iconList.push({name:"收缩", icon:{icon:"comment-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"comments-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"bolt"}});
+    iconList.push({name:"收缩", icon:{icon:"sitemap"}});
+    iconList.push({name:"收缩", icon:{icon:"umbrella"}});
+    iconList.push({name:"收缩", icon:{icon:"paste"}});
+    iconList.push({name:"收缩", icon:{icon:"lightbulb"}});
+    iconList.push({name:"收缩", icon:{icon:"exchange"}});
+    iconList.push({name:"收缩", icon:{icon:"cloud-download"}});
+    iconList.push({name:"收缩", icon:{icon:"cloud-upload"}});
+    iconList.push({name:"收缩", icon:{icon:"user-md"}});
+    iconList.push({name:"收缩", icon:{icon:"stethoscope"}});
+    iconList.push({name:"收缩", icon:{icon:"suitcase"}});
+    iconList.push({name:"收缩", icon:{icon:"bell-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"coffee"}});
+    iconList.push({name:"收缩", icon:{icon:"food"}});
+    iconList.push({name:"收缩", icon:{icon:"file-text-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"building"}});
+    iconList.push({name:"收缩", icon:{icon:"hospital"}});
+    iconList.push({name:"收缩", icon:{icon:"ambulance"}});
+    iconList.push({name:"收缩", icon:{icon:"medkit"}});
+    iconList.push({name:"收缩", icon:{icon:"fighter-jet"}});
+    iconList.push({name:"收缩", icon:{icon:"beer"}});
+    iconList.push({name:"收缩", icon:{icon:"h-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"plus-sign-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"double-angle-left"}});
+    iconList.push({name:"收缩", icon:{icon:"double-angle-right"}});
+    iconList.push({name:"收缩", icon:{icon:"double-angle-up"}});
+
+    iconList.push({name:"收缩", icon:{icon:"double-angle-down"}});
+    iconList.push({name:"收缩", icon:{icon:"angle-left"}});
+    iconList.push({name:"收缩", icon:{icon:"angle-right"}});
+    iconList.push({name:"收缩", icon:{icon:"angle-up"}});
+    iconList.push({name:"收缩", icon:{icon:"angle-down"}});
+    iconList.push({name:"收缩", icon:{icon:"desktop"}});
+    iconList.push({name:"收缩", icon:{icon:"laptop"}});
+    iconList.push({name:"收缩", icon:{icon:"tablet"}});
+    iconList.push({name:"收缩", icon:{icon:"mobile-phone"}});
+    iconList.push({name:"收缩", icon:{icon:"circle-blank"}});
+    iconList.push({name:"收缩", icon:{icon:"quote-left"}});
+    iconList.push({name:"收缩", icon:{icon:"quote-right"}});
+    iconList.push({name:"收缩", icon:{icon:"spinner"}});
+    iconList.push({name:"收缩", icon:{icon:"circle"}});
+    iconList.push({name:"收缩", icon:{icon:"mail-reply"}});
+    iconList.push({name:"收缩", icon:{icon:"reply"}});
+    iconList.push({name:"收缩", icon:{icon:"github-alt"}});
+
     iconList.push({name:"文件夹", icon:{icon:"folder-close-alt"}});
+    iconList.push({name:"文件夹", icon:{icon:"folder-open-alt"}});
+    iconList.push({name:"展开", icon:{icon:"expand-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"collapse-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"smile"}});
+    iconList.push({name:"收缩", icon:{icon:"frown"}});
+    iconList.push({name:"收缩", icon:{icon:"meh"}});
+    iconList.push({name:"收缩", icon:{icon:"gamepad"}});
+    iconList.push({name:"收缩", icon:{icon:"keyboard"}});
+    iconList.push({name:"收缩", icon:{icon:"flag-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"flag-checkered"}});
+    iconList.push({name:"收缩", icon:{icon:"terminal"}});
+    iconList.push({name:"收缩", icon:{icon:"code"}});
+    iconList.push({name:"收缩", icon:{icon:"reply-all"}});
+    iconList.push({name:"收缩", icon:{icon:"mail-reply-all"}});
+    iconList.push({name:"收缩", icon:{icon:"star-half-full"}});
+
+    iconList.push({name:"收缩", icon:{icon:"star-half-empty"}});
+    iconList.push({name:"收缩", icon:{icon:"location-arrow"}});
+    iconList.push({name:"收缩", icon:{icon:"crop"}});
+    iconList.push({name:"收缩", icon:{icon:"code-fork"}});
+    iconList.push({name:"收缩", icon:{icon:"unlink"}});
+    iconList.push({name:"收缩", icon:{icon:"question"}});
+    iconList.push({name:"收缩", icon:{icon:"info"}});
+    iconList.push({name:"收缩", icon:{icon:"exclamation"}});
+    iconList.push({name:"收缩", icon:{icon:"superscript"}});
+    iconList.push({name:"收缩", icon:{icon:"subscript"}});
+    iconList.push({name:"收缩", icon:{icon:"eraser"}});
+    iconList.push({name:"收缩", icon:{icon:"puzzle-piece"}});
+    iconList.push({name:"收缩", icon:{icon:"microphone"}});
+    iconList.push({name:"收缩", icon:{icon:"microphone-off"}});
+    iconList.push({name:"收缩", icon:{icon:"shield"}});
+    iconList.push({name:"收缩", icon:{icon:"calendar-empty"}});
+    iconList.push({name:"收缩", icon:{icon:"fire-extinguisher"}});
+    iconList.push({name:"收缩", icon:{icon:"rocket"}});
+
+    iconList.push({name:"收缩", icon:{icon:"maxcdn"}});
+    iconList.push({name:"收缩", icon:{icon:"chevron-sign-left"}});
+    iconList.push({name:"收缩", icon:{icon:"chevron-sign-right"}});
+    iconList.push({name:"收缩", icon:{icon:"chevron-sign-up"}});
+    iconList.push({name:"收缩", icon:{icon:"chevron-sign-down"}});
+    iconList.push({name:"收缩", icon:{icon:"html5"}});
+    iconList.push({name:"收缩", icon:{icon:"css3"}});
+    iconList.push({name:"收缩", icon:{icon:"anchor"}});
+    iconList.push({name:"收缩", icon:{icon:"unlock-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"bullseye"}});
+    iconList.push({name:"收缩", icon:{icon:"ellipsis-horizontal"}});
+    iconList.push({name:"收缩", icon:{icon:"ellipsis-vertical"}});
+    iconList.push({name:"收缩", icon:{icon:"rss-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"play-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"ticket"}});
+    iconList.push({name:"收缩", icon:{icon:"minus-sign-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"minus-sign-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"level-up"}});
+    iconList.push({name:"收缩", icon:{icon:"level-down"}});
+    iconList.push({name:"收缩", icon:{icon:"check-sign"}});
+
+    iconList.push({name:"收缩", icon:{icon:"edit-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"external-link-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"share-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"compass"}});
+    iconList.push({name:"收缩", icon:{icon:"collapse"}});
+    iconList.push({name:"收缩", icon:{icon:"collapse-top"}});
+    iconList.push({name:"收缩", icon:{icon:"expand"}});
+    iconList.push({name:"收缩", icon:{icon:"euro"}});
+    iconList.push({name:"收缩", icon:{icon:"gbp"}});
+    iconList.push({name:"收缩", icon:{icon:"dollar"}});
+    iconList.push({name:"收缩", icon:{icon:"rupee"}});
+    iconList.push({name:"收缩", icon:{icon:"yen"}});
+    iconList.push({name:"收缩", icon:{icon:"renminbi"}});
+    iconList.push({name:"收缩", icon:{icon:"won"}});
+    iconList.push({name:"收缩", icon:{icon:"bitcoin"}});
+    iconList.push({name:"收缩", icon:{icon:"file"}});
+    iconList.push({name:"收缩", icon:{icon:"file-text"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-by-alphabet"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-by-alphabet-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-by-attributes"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-by-attributes-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-by-order"}});
+    iconList.push({name:"收缩", icon:{icon:"sort-by-order-alt"}});
+    iconList.push({name:"收缩", icon:{icon:"thumbs-up"}});
+    iconList.push({name:"收缩", icon:{icon:"thumbs-down"}});
+    iconList.push({name:"收缩", icon:{icon:"youtube-sign"}});
+
+    iconList.push({name:"收缩", icon:{icon:"youtube"}});
+    iconList.push({name:"收缩", icon:{icon:"xing"}});
+    iconList.push({name:"收缩", icon:{icon:"xing-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"youtube-play"}});
+    iconList.push({name:"收缩", icon:{icon:"dropbox"}});
+    iconList.push({name:"收缩", icon:{icon:"stackexchange"}});
+    iconList.push({name:"收缩", icon:{icon:"instagram"}});
+    iconList.push({name:"收缩", icon:{icon:"flickr"}});
+    iconList.push({name:"收缩", icon:{icon:"adn"}});
+    iconList.push({name:"收缩", icon:{icon:"bitbucket"}});
+    iconList.push({name:"收缩", icon:{icon:"bitbucket-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"tumblr"}});
+    iconList.push({name:"收缩", icon:{icon:"tumblr-sign"}});
+    iconList.push({name:"收缩", icon:{icon:"long-arrow-down"}});
+    iconList.push({name:"收缩", icon:{icon:"long-arrow-up"}});
+    iconList.push({name:"收缩", icon:{icon:"long-arrow-left"}});
+    iconList.push({name:"收缩", icon:{icon:"long-arrow-right"}});
+    iconList.push({name:"收缩", icon:{icon:"apple"}});
+    iconList.push({name:"收缩", icon:{icon:"windows"}});
+    iconList.push({name:"收缩", icon:{icon:"android"}});
+    iconList.push({name:"收缩", icon:{icon:"linux"}});
+    iconList.push({name:"收缩", icon:{icon:"dribbble"}});
+    iconList.push({name:"收缩", icon:{icon:"skype"}});
+    iconList.push({name:"收缩", icon:{icon:"foursquare"}});
+    iconList.push({name:"收缩", icon:{icon:"trello"}});
+    iconList.push({name:"收缩", icon:{icon:"female"}});
+    iconList.push({name:"收缩", icon:{icon:"male"}});
+    iconList.push({name:"收缩", icon:{icon:"gittip"}});
+    iconList.push({name:"收缩", icon:{icon:"sun"}});
+    iconList.push({name:"收缩", icon:{icon:"moon"}});
+    iconList.push({name:"收缩", icon:{icon:"archive"}});
+    iconList.push({name:"收缩", icon:{icon:"bug"}});
+    iconList.push({name:"收缩", icon:{icon:"vk"}});
+    iconList.push({name:"收缩", icon:{icon:"weibo"}});
+    iconList.push({name:"收缩", icon:{icon:"renren"}});
+
     $(function(){
+        $("#count").html(iconList.length);
         var size = 10, html="<tr>";
         for(var i=0; i<iconList.length; i++) {
             if(i%size == 0 && i!=0 ) {
                 html += "</tr><tr>"
             }
-            html += "<td><div id='icon-"+i+"'></div><span id='icon-name-"+i+"'></span>"
+            html += "<td style='width:80px' ><div id='icon-"+i+"'></div><span id='icon-name-"+i+"'></span>"
         }
         html += "</tr>"
 
@@ -146,7 +427,7 @@
         for(var i=0; i<iconList.length; i++) {
             var icon = new yayoi.ui.common.Icon(iconList[i].icon);
             icon.placeAt("#icon-"+i);
-            $("#icon-name-"+i).html(iconList[i].name);
+            $("#icon-name-"+i).html(iconList[i].icon.icon);
         }
     })
     </script>
