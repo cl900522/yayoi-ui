@@ -1,3 +1,6 @@
+"use strict";
+yayoi.util.initPackages("yayoi.util.DateUtil");
+
 /**
  * 对Date的扩展，将 Date 转化为指定格式的String
  * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q) 可以用 1-2 个占位符
@@ -9,7 +12,7 @@
  * (new Date()).pattern("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
  * (new Date()).pattern("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
  */
-Date.prototype.pattern = function(fmt) {
+Date.prototype.format = function(fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份
         "d+": this.getDate(), //日

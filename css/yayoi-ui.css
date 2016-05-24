@@ -233,7 +233,7 @@
     height: 40px;
     width: 100%;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .yayoi-date-picker .head .icon-left-box {
     height: 40px;
@@ -269,21 +269,36 @@
     display: block;
     margin: auto;
 }
-.date-picker-date thead, .date-picker-date tbody, .date-picker-date tr {
+.date-picker-days thead, .date-picker-days tbody, .date-picker-days tr {
     width: auto;
     margin: auto;
     font-size: 10px;
     display: block
 }
-.date-picker-date td {
+.date-picker-days td {
     width: 28px;
     text-align: center;
     border: 1px solid transparent;
 }
-.date-picker-date thead td {
+.date-picker-days thead td {
     font-weight: bold;
 }
-.date-picker-date tbody td:hover {
+.date-picker-days tbody td:hover {
+    border: 1px solid #1E90FF;
+}
+.date-picker-months tbody, .date-picker-months tr {
+    width: auto;
+    margin: auto;
+    font-size: 10px;
+    display: block
+}
+.date-picker-months td {
+    width: 50px;
+    text-align: center;
+    border: 1px solid transparent;
+    padding-bottom: 5px;
+}
+.date-picker-months td:hover {
     border: 1px solid #1E90FF;
 }
 /*date picker define finished*/
