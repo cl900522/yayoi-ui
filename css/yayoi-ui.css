@@ -264,15 +264,14 @@
     padding:0px 5px 10px 5px;
     width: 100%;
 }
-.date-picker-date {
-    width: 100%;
-    display: block;
-    margin: auto;
+.datepicker-body tbody td.current {
+    color: black;
 }
 .date-picker-days thead, .date-picker-days tbody, .date-picker-days tr {
     width: auto;
     margin: auto;
     font-size: 10px;
+    color: gray;
     display: block
 }
 .date-picker-days td {
@@ -282,6 +281,7 @@
 }
 .date-picker-days thead td {
     font-weight: bold;
+    color: black;
 }
 .date-picker-days tbody td:hover {
     border: 1px solid #1E90FF;
@@ -290,6 +290,7 @@
     width: auto;
     margin: auto;
     font-size: 10px;
+    color: gray;
     display: block
 }
 .date-picker-months td {
@@ -299,6 +300,22 @@
     padding-bottom: 5px;
 }
 .date-picker-months td:hover {
+    border: 1px solid #1E90FF;
+}
+.date-picker-years tbody, .date-picker-years tr {
+    width: auto;
+    margin: auto;
+    font-size: 10px;
+    color: gray;
+    display: block
+}
+.date-picker-years td {
+    width: 50px;
+    text-align: center;
+    border: 1px solid transparent;
+    padding-bottom: 5px;
+}
+.date-picker-years td:hover {
     border: 1px solid #1E90FF;
 }
 /*date picker define finished*/

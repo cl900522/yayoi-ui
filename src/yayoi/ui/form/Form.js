@@ -101,7 +101,6 @@ yayoi.util.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", ["yayo
         for(var i=0; i<this.fields.length; i++) {
             var field = this.fields[i];
             var value = this.getModelValue(field.router);
-            console.log(value);
             field.setValue(value);
         }
     };

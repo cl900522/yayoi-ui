@@ -5,7 +5,7 @@ yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.c
     this.picker = null;
     this.date = new Date();
 
-    this.onRendering = function(){
+    this.onRendering = function() {
         var container = this.getContainer();
         var html = "<div class='yayoi-field'>";
         html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
@@ -18,7 +18,14 @@ yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.c
     this.afterRender = function() {
         var container = this.getContainer();
         var input = container.find("input");
-        this.picker = new yayoi.ui.form.DatePicker({target: input});
+        var that = this;
+
+        this.picker = new yayoi.ui.form.DatePicker({
+            target: input,
+            onSelect: function(date) {
+                that.setValue(date);
+            }
+        });
     };
 
     this.initEvents = function() {
@@ -27,26 +34,34 @@ yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.c
 
         var input = container.find("input");
         input.focus(function() {
-            that.picker.show(function() {
-                that.logger.info(that.picker);
-            });
+            that.picker.setValue(that.getValue());
+            that.picker.show();
         });
     };
 
     this.reRender = function() {
         var value = this.value;
         var container = this.getContainer();
-        container.find("input").val(value);
-    }
+        if (value && value instanceof Date) {
+            container.find("input").val(value.format("yyyy-MM-dd"));
+        }
+    };
+
     this.setValue = function(value) {
-        this.value = value;
+        if (value && value instanceof Date) {
+            this.value = value;
+        } else {
+            try {
+                this.value = new Date(value)
+            } catch (e) {
+                this.value = new Date();
+            } finally {
+            }
+        }
         this.invalidate();
     };
+
     this.getValue = function() {
-        var container = this.getContainer();
-        if(container) {
-            this.value = container.find("input").val();
-        }
         return this.value;
     };
 });
