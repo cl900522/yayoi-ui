@@ -220,6 +220,105 @@
 .yayoi-field-input:ACTIVE, .yayoi-field-input:FOCUS {
     border-color: #1E90FF;
 }
+/*date picker css define*/
+.yayoi-date-picker {
+    width: 220px;
+    height: auto;
+    position: absolute;
+    z-index: 50px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+.yayoi-date-picker .head {
+    height: 40px;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 5px;
+}
+.yayoi-date-picker .head .icon-left-box {
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    width: 20px;
+    margin-left: 20px;
+    display: inline-block;
+}
+.yayoi-date-picker .head .title-box {
+    height: 40px;
+    line-height: 40px;
+    width: 140px;
+    display: inline-block;
+    text-align: center;
+    font-size: 12px;
+}
+.yayoi-date-picker .head .icon-right-box{
+    height: 40px;
+    line-height: 40px;
+    float: right;
+    width: 20px;
+    margin-right: 20px;
+    display: inline-block;
+    text-align: right;
+}
+.datepicker-body {
+    padding:0px 5px 10px 5px;
+    width: 100%;
+}
+.datepicker-body tbody td.current {
+    color: black;
+}
+.date-picker-days thead, .date-picker-days tbody, .date-picker-days tr {
+    width: auto;
+    margin: auto;
+    font-size: 10px;
+    color: gray;
+    display: block
+}
+.date-picker-days td {
+    width: 28px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+.date-picker-days thead td {
+    font-weight: bold;
+    color: black;
+}
+.date-picker-days tbody td:hover {
+    border: 1px solid #1E90FF;
+}
+.date-picker-months tbody, .date-picker-months tr {
+    width: auto;
+    margin: auto;
+    font-size: 10px;
+    color: gray;
+    display: block
+}
+.date-picker-months td {
+    width: 50px;
+    text-align: center;
+    border: 1px solid transparent;
+    padding-bottom: 5px;
+}
+.date-picker-months td:hover {
+    border: 1px solid #1E90FF;
+}
+.date-picker-years tbody, .date-picker-years tr {
+    width: auto;
+    margin: auto;
+    font-size: 10px;
+    color: gray;
+    display: block
+}
+.date-picker-years td {
+    width: 50px;
+    text-align: center;
+    border: 1px solid transparent;
+    padding-bottom: 5px;
+}
+.date-picker-years td:hover {
+    border: 1px solid #1E90FF;
+}
+/*date picker define finished*/
 .yayoi-field-textarea {
     display: inline-block;
     width: calc(100% - 50px);

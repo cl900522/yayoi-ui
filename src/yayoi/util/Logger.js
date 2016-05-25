@@ -17,7 +17,7 @@ yayoi.util.extend("yayoi.util.Logger", "Object", [], function() {
         if(!console){
             return;
         }
-        console.log("%c" + this.typeName + " %cdebug", "color: rgb(245, 198, 31); font-size:12px; font-weight: bold;","color: rgb(245, 198, 31); font-size:12px;");
+        console.log("%c" + this.typeName + " %cdebug", "color: rgb(80, 245, 31); font-size:12px; font-weight: bold;","color: rgb(245, 198, 31); font-size:12px;");
         for(var i=0; i<arguments.length; i++) {
             console.debug(arguments[i]);
         }
