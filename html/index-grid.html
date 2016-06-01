@@ -25,10 +25,10 @@
             showIndex: true,
             checkable: true,
             selector: '#gridId',
+            rowPath: "/users",
             tools: [
                 {
                     icon: "refresh", click: function() {
-
                     }
                 }, {
                     icon: "add", click: function() {
@@ -70,10 +70,13 @@
             method: "get",
             async: false,
             parseData: function(result) {
-                return (result.code == 1)? result.data : null;
+                var o = (result.code == 1)? result.data : {};
+                o.page = {};
+                store.logger.info(o);
+                return o;
             },
             success: function() {
-                grid.setModel(store.getModel(), "/users/");
+                grid.setModel(store.getModel(), "/");
             }
         });
         store.load();

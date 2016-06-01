@@ -1,8 +1,11 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.grid");
 
-yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn"], function() {
+yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Pager"], function() {
     this.title;
+    this.dataPath = "/rows";
+    this.totalPath = "/total";
+
     this.columns = [];
     this.page = {
         pageSize: 10,
@@ -94,6 +97,10 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
                 $(this).addClass("single-row");
             }
         })
+
+        this.pager = new yayoi.ui.grid.Pager();
+        var footer = container.find(".yayoi-grid-foot");
+        this.pager.placeAt(footer);
     };
     this.initEvents = function() {
         var container = this.getContainer();
@@ -120,7 +127,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
     };
     this.reRender = function() {
         var container = this.getContainer();
-        var rootValue = this.getModelValue("/");
+        var rootValue = this.getRows();
 
         if (!rootValue instanceof Array) {
             throw "Grid value is not an array object.";
@@ -128,7 +135,6 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
 
         for (var i = 0; i < rootValue.length; i++) {
             var rowData = rootValue[i];
-            console.log(rowData);
             for (var j = 0; j < this.columns.length; j++) {
                 var column = this.columns[j];
                 column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
@@ -145,7 +151,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
         var container = this.getContainer();
         container.find("div[data-grid-row=" + i + "]").removeClass("selected");
         container.find(".yayoi-frozen-grid div[data-grid-row=" + i + "] input[type=checkbox]").removeAttr("checked");
-    }
+    };
     this.getColumn = function(arg1) {};
     this.createColumn = function(params) {
         var column = null,
@@ -160,5 +166,11 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
                 throw "Column type can not be supported";
         }
         return column;
-    }
+    };
+    this.getTotal = function() {
+        return this.getModelValue(this.totalPath);
+    };
+    this.getRows = function() {
+        return this.getModelValue(this.rowPath)||[];
+    };
 });
