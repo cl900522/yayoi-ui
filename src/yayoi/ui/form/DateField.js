@@ -3,6 +3,8 @@ yayoi.util.initPackages("yayoi.ui.form");
 
 yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.common.Icon", "yayoi.ui.form.DatePicker"], function() {
     this.picker = null;
+    this.dateIcon = null;
+
     this.date = new Date();
 
     this.onRendering = function() {
@@ -10,7 +12,8 @@ yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.c
         var html = "<div class='yayoi-field'>";
         html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
         html += "<div class='yayoi-field-value'>";
-        html += "<input class='yayoi-field-input' name='" + this.name + "' placeholder='" + this.hint + "' type='text' value='' />";
+        html += "<input class='yayoi-field-date' name='" + this.name + "' placeholder='" + this.hint + "' type='text' disabled='disabled' value='' />";
+        html += "<div class='yayoi-field-date-icon'></div>";
         html += "</div></div>";
         container.html(html);
     };
@@ -26,14 +29,15 @@ yayoi.util.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.c
                 that.setValue(date);
             }
         });
+
+        this.dateIcon = new yayoi.ui.common.Icon({icon: "calendar", size: "20px"});
+        this.dateIcon.placeAt(container.find(".yayoi-field-date-icon"))
     };
 
     this.initEvents = function() {
-        var container = this.getContainer();
         var that = this;
 
-        var input = container.find("input");
-        input.focus(function() {
+        this.dateIcon.setClick(function() {
             that.picker.setValue(that.getValue());
             that.picker.show();
         });

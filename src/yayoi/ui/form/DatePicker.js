@@ -223,7 +223,6 @@ yayoi.util.extend("yayoi.ui.form.DatePicker", "yayoi.ui.common.BasicComponent", 
 
     this.generateYearList = function() {
         var cursor = new Date(this.tempDate.getTime());
-        this.logger.info(cursor.getFullYear());
 
         cursor.setFullYear(cursor.getFullYear() - 6);
         var yearsString = "<tr>";
