@@ -11,7 +11,7 @@ yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yay
         var html = "<div class='yayoi-pager'>";
         html += "<div class='yayoi-pager-icon yayoi-pager-first'>第一页</div>";
         html += "<div class='yayoi-pager-icon yayoi-pager-previous'>前一页</div>";
-        html += "<input class='yayoi-pager-input' value='1'/>";
+        html += "<div class='yayoi-pager-input'><input value='1'/></div>";
         html += "<div class='yayoi-pager-icon yayoi-pager-next'>后一页</div>";
         html += "<div class='yayoi-pager-icon yayoi-pager-last'>最后一页</div>";
         html += "</div>";
@@ -62,7 +62,7 @@ yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yay
         this.lastIcon.setClick(function() {
             that.setCurrentPageNo(that.totalPageNo);
         });
-        container.find(".yayoi-pager-input").change(function(event) {
+        container.find(".yayoi-pager-input input").change(function(event) {
             var value = $(this).val();
             try {
                 value = parseInt(value)
@@ -78,7 +78,7 @@ yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yay
 
     this.reRender = function() {
         var container = this.getContainer();
-        container.find(".yayoi-pager-input").val(this.currentNo);
+        container.find(".yayoi-pager-input input").val(this.currentNo);
     };
     this.setCurrentPageNo = function(currentNo) {
         if (currentNo > this.totalPageNo) {
@@ -87,18 +87,20 @@ yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yay
         if (currentNo < 1) {
             currentNo = 1;
         }
+        if(this.currentNo == currentNo) {
+            return;
+        }
         this.currentNo = currentNo;
         this.invalidate();
         if (this.onChange) {
-            this.onChange();
+            this.onChange(this.currentNo);
         }
     };
     this.setTotalPageNo = function(totalPageNo) {
         this.totalPageNo = Math.ceil(totalPageNo);
         if (this.currentNo > this.totalPageNo) {
-            this.currentNo = this.totalPageNo;
+            this.setCurrentPageNo(this.totalPageNo)
         }
-        this.invalidate();
     };
     this.setOnChange = function(onChange) {
         this.onChange = onChange;

@@ -26,7 +26,6 @@ yayoi.util.extend("yayoi.proxy.HttpProxy", "yayoi.proxy.Proxy", ["yayoi.model.Js
         model.setRootValue(this.parseData(result));
         this.setModel(model);
 
-        this.loaded = true;
         this.success();
     };
     this._parseXmlData = function(result) {
@@ -39,14 +38,11 @@ yayoi.util.extend("yayoi.proxy.HttpProxy", "yayoi.proxy.Proxy", ["yayoi.model.Js
         model.setRootValue(this.parseData(result));
         this.setModel(model);
 
-        this.loaded = true;
         this.success();
     };
     this.load = function() {
         var that = this;
-        if(this.loaded) {
-            return;
-        }
+
         $.ajax({
             url : that.url,
             async : that.async,

@@ -153,18 +153,39 @@
 /*date picker define finished*/
 /*yayoi date picker*/
 .yayoi-pager {
-    height: 30px;
+    height: 20px;
 }
 .yayoi-pager .yayoi-pager-icon{
     padding: 0px 5px;
     margin: 0px 5px;
     display: inline-block;
+    cursor: pointer;
+    height: 20px;
+    line-height: 20px;
+    border: 1px solid transparent;
+}
+.yayoi-pager .yayoi-pager-icon:active{
+    border: 1px solid #1E90FF;
 }
 .yayoi-pager .yayoi-pager-input{
     padding: 0px 5px;
     margin: 0px 5px;
-    width: 20px;
     display: inline-block;
+    cursor: pointer;
+    height: 20px;
+    line-height: 20px;
+    border: 1px solid transparent;
+}
+.yayoi-pager .yayoi-pager-input input{
+    padding: 0px 5px;
+    margin: 0px 5px;
+    width: 20px;
+    height: 20px;
+    line-height: 16px;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #1E90FF;
 }
 /*yayoi button*/
 .yayoi-button {
@@ -710,7 +731,6 @@
     border-top: 0;
     font-size: 14px;
     line-height: 17px;
-    display: block;
 }
 .yayoi-grid-foot .buttons {
     display: block;

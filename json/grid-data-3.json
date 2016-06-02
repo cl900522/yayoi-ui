@@ -3,8 +3,8 @@
     "msg": "success",
     "data": {
         "users": [{
-            "firstName": "Mingxuan",
-            "lastName": "Chen",
+            "firstName": "User21",
+            "lastName": "User21",
             "birthDate": "1990-02-11",
             "email": "545435711@qq.com",
             "mobile": "15129387123",
@@ -24,6 +24,30 @@
             "gender": "female",
             "address": {
                 "city": "Nanjing",
+                "street": "Huayang Street"
+            }
+        }, {
+            "firstName": "Xuan",
+            "lastName": "Zhao",
+            "birthDate": "1990-02-11",
+            "email": "545435711@qq.com",
+            "mobile": "15129387123",
+            "idCard": "512315123123",
+            "gender": "male",
+            "address": {
+                "city": "Anhui",
+                "street": "Huayang Street"
+            }
+        }, {
+            "firstName": "Xuan",
+            "lastName": "Zhao",
+            "birthDate": "1990-02-11",
+            "email": "545435711@qq.com",
+            "mobile": "15129387123",
+            "idCard": "512315123123",
+            "gender": "male",
+            "address": {
+                "city": "Anhui",
                 "street": "Huayang Street"
             }
         }, {

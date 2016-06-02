@@ -27,18 +27,6 @@
             checkable: true,
             selector: '#gridId',
             rowPath: "/users",
-            tools: [
-                {
-                    icon: "refresh", click: function() {
-                    }
-                }, {
-                    icon: "add", click: function() {
-                    }
-                }, {
-                    icon: "update", click: function() {
-                    }
-                }
-            ],
             columns: [
                 {
                     type: "text", format: "text", title: "Whole Name", router: "firstName", width: "160px", decorate: function(rowData) {
@@ -63,11 +51,16 @@
                         return rowData.address.city + "." + rowData.address.street
                     }
                 }
-            ]
+            ],
+            onRefresh: function(page) {
+                var model = grid.getModel();
+                store.url = "/json/grid-data-" + page.pageNo + ".json"
+                store.load();
+            }
         });
 
         var store = new yayoi.proxy.HttpProxy({
-            url: "/json/grid-data.json",
+            url: "/json/grid-data-1.json",
             method: "get",
             async: false,
             parseData: function(result) {

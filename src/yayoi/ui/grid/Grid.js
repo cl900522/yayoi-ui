@@ -1,16 +1,15 @@
 "use strict";
 yayoi.util.initPackages("yayoi.ui.grid");
 
-yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Pager"], function() {
+yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Pager", "yayoi.ui.common.ComponentsContainer"], function() {
     this.title;
     this.dataPath = "/rows";
     this.totalPath = "/total";
 
     this.columns = [];
-    this.page = {
-        pageSize: 10,
-        pageNo: 1
-    };
+    this.pageSize = 10;
+    this.onRefresh;
+
     this.checkable = true;
     this.showIndex = false;
 
@@ -43,7 +42,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
         formHtml += tr;
         /*frozen grid content start*/
         formHtml += "</table></div><div class='yayoi-grid-content'><table class='yayoi-grid-table'>";
-        for (var i = 0; i < this.page.pageSize; i++) {
+        for (var i = 0; i < this.pageSize; i++) {
             var tr = "<tr>";
             if (this.showIndex) {
                 tr += "<td><div class='row-column' data-grid-row=" + i + "><span>" + (i + 1) + "</span></div></td>"
@@ -70,7 +69,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
         /*flex grid content start*/
         formHtml += "<div class='yayoi-grid-content'><table class='yayoi-grid-table'>";
 
-        for (var i = 0; i < this.page.pageSize; i++) {
+        for (var i = 0; i < this.pageSize; i++) {
             formHtml += "<tr>";
             for (var j = 0; j < totalColumns; j++) {
                 formHtml += "<td style='width:" + this.columns[j].width + "'><div class='column' data-grid-row='" + i + "' data-grid-column='" + j + "' ></div></td>";
@@ -91,6 +90,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
     };
     this.afterRender = function() {
         var container = this.getContainer();
+        var that = this;
         container.find("[data-grid-row]").each(function() {
             var row = $(this).attr("data-grid-row");
             if (parseInt(row) % 2 == 0) {
@@ -98,20 +98,33 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
             }
         })
 
-        this.pager = new yayoi.ui.grid.Pager();
-        var footer = container.find(".yayoi-grid-foot");
-        this.pager.placeAt(footer);
+        this.pager = new yayoi.ui.grid.Pager({currentPageNo: 1, totalPageNo: 1});
+        this.pager.setOnChange(function(pageNo) {
+            var pageSize = that.pageSize;
+            if(that.onRefresh) {
+
+                that.onRefresh({pageNo: pageNo, pageSize: pageSize});
+            }
+        });
+
+        var footContainer = new yayoi.ui.common.ComponentsContainer({
+            align: "rtl",
+            components: [
+                this.pager
+            ]
+        });
+        footContainer.placeAt(container.find(".yayoi-grid-foot"));
     };
     this.initEvents = function() {
         var container = this.getContainer();
         var that = this;
         container.find(".check-all").click(function() {
             if ($(this).attr("checked")) {
-                for (var i = 0; i < that.page.pageSize; i++) {
+                for (var i = 0; i < that.pageSize; i++) {
                     that.selectRow(i);
                 }
             } else {
-                for (var i = 0; i < that.page.pageSize; i++) {
+                for (var i = 0; i < that.pageSize; i++) {
                     that.unselectRow(i);
                 }
             }
@@ -128,19 +141,26 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
     this.reRender = function() {
         var container = this.getContainer();
         var rootValue = this.getRows();
+        var totalPageNo = Math.ceil(this.getTotal()/this.pageSize);
 
         if (!rootValue instanceof Array) {
             throw "Grid value is not an array object.";
         }
 
-        for (var i = 0; i < rootValue.length; i++) {
+        for (var i = 0; i < this.pageSize; i++) {
             var rowData = rootValue[i];
-            for (var j = 0; j < this.columns.length; j++) {
-                var column = this.columns[j];
-                column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
-                column.setRowData(rowData);
+            if(!rowData) {
+                container.find(".column[data-grid-row=" + i + "]").html("");
+            } else {
+                for (var j = 0; j < this.columns.length; j++) {
+                    var column = this.columns[j];
+                    column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
+                    column.setRowData(rowData);
+                }
             }
         }
+
+        this.pager.setTotalPageNo(totalPageNo);
     };
     this.selectRow = function(i) {
         var container = this.getContainer();
@@ -152,7 +172,9 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
         container.find("div[data-grid-row=" + i + "]").removeClass("selected");
         container.find(".yayoi-frozen-grid div[data-grid-row=" + i + "] input[type=checkbox]").removeAttr("checked");
     };
-    this.getColumn = function(arg1) {};
+    this.getColumn = function() {
+
+    };
     this.createColumn = function(params) {
         var column = null,
             columnType = params["type"] || "text";
@@ -173,4 +195,7 @@ yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayo
     this.getRows = function() {
         return this.getModelValue(this.rowPath)||[];
     };
+    this.setRefresh = function(refreshCall) {
+        this.onRefresh = refreshCall;
+    }
 });

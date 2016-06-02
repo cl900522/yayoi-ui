@@ -17,7 +17,7 @@ yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.BasicComponent", [], 
         return this.rowData;
     }
     this.getValue = function() {
-        return this.rowData[this.router];
+        return this.rowData[this.router]||"";
     };
     this.setTitle = function(title) {
         this.title = title;
