@@ -2,10 +2,8 @@
 yayoi.util.initPackages("yayoi.ui.grid");
 
 yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
-    this.pageSize = 10;
-    this.total = 0;
     this.currentNo = 1;
-    this.totalPageNo = 0;
+    this.totalPageNo = 12;
     this.onChange;
 
     this.onRendering = function() {
@@ -19,39 +17,87 @@ yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yay
         html += "</div>";
         container.html(html);
     };
+
     this.afterRender = function() {
         var container = this.getContainer();
         var iconSize = "22px";
-        this.firstIcon = new yayoi.ui.common.Icon({icon: "double-angle-left", size: iconSize});
+        this.firstIcon = new yayoi.ui.common.Icon({
+            icon: "double-angle-left",
+            size: iconSize
+        });
         this.firstIcon.placeAt(container.find(".yayoi-pager-first"));
 
-        this.previousIcon = new yayoi.ui.common.Icon({icon: "angle-left", size: iconSize});
+        this.previousIcon = new yayoi.ui.common.Icon({
+            icon: "angle-left",
+            size: iconSize
+        });
         this.previousIcon.placeAt(container.find(".yayoi-pager-previous"));
 
-        this.nextIcon = new yayoi.ui.common.Icon({icon: "angle-right", size: iconSize});
+        this.nextIcon = new yayoi.ui.common.Icon({
+            icon: "angle-right",
+            size: iconSize
+        });
         this.nextIcon.placeAt(container.find(".yayoi-pager-next"));
 
-        this.lastIcon = new yayoi.ui.common.Icon({icon: "double-angle-right", size: iconSize});
+        this.lastIcon = new yayoi.ui.common.Icon({
+            icon: "double-angle-right",
+            size: iconSize
+        });
         this.lastIcon.placeAt(container.find(".yayoi-pager-last"));
     };
-    this.reRender = function() {
+
+    this.initEvents = function() {
         var container = this.getContainer();
-        this.totalPageNo = Math.ceil(this.total / this.pageSize);
-        if(this.currentNo > this.totalPageNo) {
-            this.currentNo = this.totalPageNo;
-        }
+        var that = this;
+
+        this.firstIcon.setClick(function() {
+            that.setCurrentPageNo(1);
+        });
+        this.previousIcon.setClick(function() {
+            that.setCurrentPageNo(that.currentNo - 1);
+        });
+        this.nextIcon.setClick(function() {
+            that.setCurrentPageNo(that.currentNo + 1);
+        });
+        this.lastIcon.setClick(function() {
+            that.setCurrentPageNo(that.totalPageNo);
+        });
+        container.find(".yayoi-pager-input").change(function(event) {
+            var value = $(this).val();
+            try {
+                value = parseInt(value)
+                if (Number.isNaN(value)) {
+                    value = 1;
+                }
+            } catch (e) {
+                value = 1;
+            }
+            that.setCurrentPageNo(value);
+        });
     };
 
-    this.setTotal = function(total) {
-        this.total = total;
-        this.invalidate();
-    }
-    this.setCurrentNo = function(currentNo) {
+    this.reRender = function() {
+        var container = this.getContainer();
+        container.find(".yayoi-pager-input").val(this.currentNo);
+    };
+    this.setCurrentPageNo = function(currentNo) {
+        if (currentNo > this.totalPageNo) {
+            currentNo = this.totalPageNo;
+        }
+        if (currentNo < 1) {
+            currentNo = 1;
+        }
         this.currentNo = currentNo;
         this.invalidate();
+        if (this.onChange) {
+            this.onChange();
+        }
     };
-    this.setPageSize = function(pageSize) {
-        this.pageSize = pageSize;
+    this.setTotalPageNo = function(totalPageNo) {
+        this.totalPageNo = Math.ceil(totalPageNo);
+        if (this.currentNo > this.totalPageNo) {
+            this.currentNo = this.totalPageNo;
+        }
         this.invalidate();
     };
     this.setOnChange = function(onChange) {
