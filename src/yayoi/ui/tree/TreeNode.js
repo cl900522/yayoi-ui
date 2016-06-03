@@ -133,7 +133,10 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.BasicComponent", ["
         return this.checked;
     };
 
-    this.setExpandIcon = function(sIcon, sColor = "black") {
+    this.setExpandIcon = function(sIcon, sColor) {
+        if (!sColor) {
+            sColor = "black";
+        }
         if (this.expandIcon || this.expandIcon instanceof yayoi.ui.common.Icon) {
             this.expandIcon.reset(sIcon);
             this.expandIcon.setColor(sColor);
@@ -145,7 +148,10 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.BasicComponent", ["
         }
     };
 
-    this.setCheckIcon = function(sIcon, sColor = "black") {
+    this.setCheckIcon = function(sIcon, sColor) {
+        if (!sColor) {
+            sColor = "black";
+        }
         if (this.checkIcon || this.checkIcon instanceof yayoi.ui.common.Icon) {
             this.checkIcon.reset(sIcon);
             this.checkIcon.setColor(sColor);
@@ -157,7 +163,10 @@ yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.BasicComponent", ["
         }
     };
 
-    this.setIcon = function(sIcon, sColor = "black") {
+    this.setIcon = function(sIcon, sColor) {
+        if (!sColor) {
+            sColor = "black";
+        }
         if (this.icon || this.icon instanceof yayoi.ui.common.Icon) {
             this.icon.reset(sIcon);
             this.icon.setColor(sColor);
