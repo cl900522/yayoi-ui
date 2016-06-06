@@ -23,20 +23,54 @@ module.exports = function(grunt) {
                         var fileresult = dest + folder + filename + '.js';
                         grunt.log.writeln("现处理文件：" + src + "  处理后文件：" + fileresult);
                         return fileresult;
-                        //return  filename + '.min.js';
                     }
                 }]
+            },
+        },
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['css/**'],
+                        dest: 'build/',
+                        filter: 'isFile'
+                    }
+                ]
+            }
+        },
+        autoprefixer: {
+            build: {
+                expand: false,
+                cwd: '',
+                src: ['build/css/yayoi-ui.css'],
+                dest: 'build/css/yayoi-ui-auto.css'
+            }
+        },
+        cssmin: {
+            css: {
+                src: 'build/css/yayoi-ui-auto.css',
+                dest: 'build/css/yayoi-ui.css'
+            }
+        },
+        clean: {
+            build: {
+                src: ["build/css/yayoi-ui-auto.css"]
             }
         },
         qunit: {
             files: ['html/**/*.html']
-        },
+        }
     });
 
-    // 加载包含 "uglify" 任务的插件。
+    // 加载任务的插件。
+    grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-autoprefixer');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-css');
 
     // 默认被执行的任务列表。
-    grunt.registerTask('default', ['uglify']);
-
+    grunt.registerTask('default', ["uglify", "copy", "autoprefixer", "cssmin", "clean"]);
 };
