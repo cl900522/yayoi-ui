@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.proxy");
+yayoi.initPackages("yayoi.proxy");
 
-yayoi.util.extend("yayoi.proxy.Proxy", "Object", ["yayoi.model.Model"], function() {
+yayoi.extend("yayoi.proxy.Proxy", "yayoi.core.Object", ["yayoi.model.Model"], function() {
     this.loaded = false;
     this.model = null;
     this.url = null;

@@ -17,8 +17,8 @@
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
     function startYayoi() {
-        yayoi.util.require("yayoi.ui.grid.Grid");
-        yayoi.util.require("yayoi.proxy.HttpProxy");
+        yayoi.require("yayoi.ui.grid.Grid");
+        yayoi.require("yayoi.proxy.HttpProxy");
     }
     $(function(){
         grid = new yayoi.ui.grid.Grid({
@@ -66,7 +66,7 @@
             parseData: function(result) {
                 var o = (result.code == 1)? result.data : {};
                 o.page = {};
-                store.logger.info(o);
+                yayoi.logger.info(o);
                 return o;
             },
             success: function() {

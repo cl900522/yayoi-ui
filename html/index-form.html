@@ -20,8 +20,8 @@
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
     function startYayoi() {
-        yayoi.util.require("yayoi.ui.form.Form");
-        yayoi.util.require("yayoi.proxy.HttpProxy");
+        yayoi.require("yayoi.ui.form.Form");
+        yayoi.require("yayoi.proxy.HttpProxy");
     }
     $(function() {
         QUnit.test("Form function test.", 0, function(assert) {

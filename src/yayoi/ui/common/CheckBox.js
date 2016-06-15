@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.common");
+yayoi.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.CheckBox", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
+yayoi.extend("yayoi.ui.common.CheckBox", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
     /*Icon value it can be set as string or Object like {icon: "remove"}*/
     this.icon = null;
     /*Text to be shown in button*/

@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.common");
+yayoi.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.Button", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
+yayoi.extend("yayoi.ui.common.Button", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
     /* To do decide icon shown on  leftor right*/
     this.iconPlace = "left";
     /*Icon value it can be set as string or Object like {icon: "remove"}*/

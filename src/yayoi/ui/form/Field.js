@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.form");
+yayoi.initPackages("yayoi.ui.form");
 
-yayoi.util.extend("yayoi.ui.form.Field", "yayoi.ui.common.BasicComponent", [], function(){
+yayoi.extend("yayoi.ui.form.Field", "yayoi.ui.common.BasicComponent", [], function(){
     this.title = "";
     this.value = "";
     this.name;

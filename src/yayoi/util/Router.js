@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.util");
+yayoi.initPackages("yayoi.util");
 
-yayoi.util.extend("yayoi.util.Router", "Object", [], function(){
+yayoi.extend("yayoi.util.Router", "yayoi.core.Object", [], function(){
     this._paths = null;
     this.init_single = function(params) {
         this.init(params);

@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.tree");
+yayoi.initPackages("yayoi.ui.tree");
 
-yayoi.util.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.ModelComponent", ["yayoi.ui.tree.TreeNode"], function() {
+yayoi.extend("yayoi.ui.tree.Tree", "yayoi.ui.common.ModelComponent", ["yayoi.ui.tree.TreeNode"], function() {
     this.parentExpandIcon = {
         icon: "folder-close",
         color: ""

@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.window");
+yayoi.initPackages("yayoi.ui.window");
 
-yayoi.util.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.ModelComponent", ["yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer"], function() {
+yayoi.extend("yayoi.ui.window.Dialog", "yayoi.ui.common.ModelComponent", ["yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer"], function() {
     this.isModel = true;
     this._mask = null;
     this._cancelButton = null;

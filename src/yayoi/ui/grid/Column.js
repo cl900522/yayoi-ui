@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.grid");
+yayoi.initPackages("yayoi.ui.grid");
 
-yayoi.util.extend("yayoi.ui.grid.Column", "yayoi.ui.common.BasicComponent", [], function() {
+yayoi.extend("yayoi.ui.grid.Column", "yayoi.ui.common.BasicComponent", [], function() {
     this.title = "Column Name";
     this.width = "auto";
 

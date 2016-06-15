@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.common");
+yayoi.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.ModelComponent", "yayoi.ui.common.BasicComponent", [], function() {
+yayoi.extend("yayoi.ui.common.ModelComponent", "yayoi.ui.common.BasicComponent", [], function() {
     this._model; // model object to storing value
     this._router; //value path in model
 

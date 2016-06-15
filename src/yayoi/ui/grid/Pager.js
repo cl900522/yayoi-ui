@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.grid");
+yayoi.initPackages("yayoi.ui.grid");
 
-yayoi.util.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
+yayoi.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
     this.currentNo = 1;
     this.totalPageNo = 12;
     this.onChange;

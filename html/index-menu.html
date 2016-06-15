@@ -22,14 +22,14 @@
                     text: "Open",
                     icon: "file-alt",
                     click: function() {
-                        yayoi.log.info("Very well, menu clicked.")
+                        yayoi.logger.info("Very well, menu clicked.")
                     }
                 },
                 {
                     text: "Open Recent Files",
                     icon: "book",
                     click: function() {
-                        yayoi.log.info("Very well, menu clicked.")
+                        yayoi.logger.info("Very well, menu clicked.")
                     },
                     subMenu: {
                         nodes: [
@@ -40,7 +40,7 @@
                                 text: "Disabled",
                                 icon: "lock",
                                 click: function() {
-                                    yayoi.log.info("Very well, menu clicked.")
+                                    yayoi.logger.info("Very well, menu clicked.")
                                 },
                                 disabled: true
                             }
@@ -55,9 +55,9 @@
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
     function startYayoi() {
-        yayoi.util.require("yayoi.ui.menu.Menu");
-        yayoi.util.require("yayoi.ui.common.Button");
-        yayoi.util.require("yayoi.proxy.HttpProxy");
+        yayoi.require("yayoi.ui.menu.Menu");
+        yayoi.require("yayoi.ui.common.Button");
+        yayoi.require("yayoi.proxy.HttpProxy");
     }
     $(function() {
         var menu = new yayoi.ui.menu.Menu({
@@ -66,14 +66,14 @@
                     text: "Open",
                     icon: "file-alt",
                     click: function() {
-                        yayoi.log.info("Very well, menu clicked.")
+                        yayoi.logger.info("Very well, menu clicked.")
                     }
                 },
                 {
                     text: "Open Recent Files",
                     icon: "book",
                     click: function() {
-                        yayoi.log.info("Very well, menu clicked.")
+                        yayoi.logger.info("Very well, menu clicked.")
                     },
                     subMenu: {
                         nodes: [
@@ -90,7 +90,7 @@
                     text: "Disabled",
                     icon: "lock",
                     click: function() {
-                        yayoi.log.info("Very well, menu clicked.")
+                        yayoi.logger.info("Very well, menu clicked.")
                     },
                     disabled: true
                 },

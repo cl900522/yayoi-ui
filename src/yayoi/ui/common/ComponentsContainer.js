@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.common");
+yayoi.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.ComponentsContainer", "yayoi.ui.common.BasicComponent", [], function() {
+yayoi.extend("yayoi.ui.common.ComponentsContainer", "yayoi.ui.common.BasicComponent", [], function() {
     /* Components list*/
     this.components;
     /*How components were placed, ltr[left to right](defalut) or rtl[right to left]*/

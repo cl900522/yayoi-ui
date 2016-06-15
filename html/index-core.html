@@ -7,7 +7,7 @@
     <p>extend函数，用于辅助继承类</p>
     <pre>
         <code>
-    var People = yayoi.util.extend("yayoi.common.People", "Object", [], function() {
+    var People = yayoi.extend("yayoi.common.People", "Object", [], function() {
         this.name = null;
         this.age = null;
         this.getAge = function() {
@@ -21,11 +21,11 @@
     <pre>
         <code>
             var path = new yayoi.util.Router("./../tmp/tmp/google");
-            yayoi.log.info(path.pwd());
+            yayoi.logger.info(path.pwd());
             path.cd("../httpd");
-            yayoi.log.info(path.pwd());
+            yayoi.logger.info(path.pwd());
             path.cd("../google");
-            yayoi.log.info(path.pwd());
+            yayoi.logger.info(path.pwd());
         </code>
     </pre>
     <div id="qunit"></div>
@@ -35,9 +35,9 @@
     <script type="text/javascript" src="../js/qunit.js"></script>
     <script type="text/javascript">
     $(function(){
-        yayoi.util.initPackages("yayoi.ext");
+        yayoi.initPackages("yayoi.ext");
         QUnit.test("Class extend test.", 7, function(assert) {
-            var People = yayoi.util.extend("yayoi.common.People", "Object", ["yayoi.ui.common.Icon","yayoi.proxy.Proxy"], function(Icon, Proxy) {
+            var People = yayoi.extend("yayoi.common.People", "yayoi.core.Object", ["yayoi.ui.common.Icon","yayoi.proxy.Proxy"], function(Icon, Proxy) {
                 this.name = null;
                 this.age = null;
                 this.getAge = function() {

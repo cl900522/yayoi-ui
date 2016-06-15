@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.tab");
+yayoi.initPackages("yayoi.ui.tab");
 
-yayoi.util.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.ModelComponent", ["yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.ComponentTabNode", "yayoi.ui.common.Icon"], function() {
+yayoi.extend("yayoi.ui.tab.Tab", "yayoi.ui.common.ModelComponent", ["yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.ComponentTabNode", "yayoi.ui.common.Icon"], function() {
     this.navBar;
     this.contentContainer;
     this.tabNodes = {};

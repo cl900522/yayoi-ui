@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.form");
+yayoi.initPackages("yayoi.ui.form");
 
-yayoi.util.extend("yayoi.ui.form.TextArea", "yayoi.ui.form.Field", [], function() {
+yayoi.extend("yayoi.ui.form.TextArea", "yayoi.ui.form.Field", [], function() {
     this.onRendering = function() {
         var container = this.getContainer();
         var html = "<div class='yayoi-field'>";

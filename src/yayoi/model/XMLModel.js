@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.model");
+yayoi.initPackages("yayoi.model");
 
-yayoi.util.extend("yayoi.model.XMLModel", "yayoi.model.Model", [], function(){
+yayoi.extend("yayoi.model.XMLModel", "yayoi.model.Model", [], function(){
     this.getValue = function(pathsStr) {
         var parentPath = this.getRootValue();
 

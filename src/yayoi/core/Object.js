@@ -1,10 +1,22 @@
 "use strict";
-yayoi.util.initPackages("yayoi.core");
+yayoi.initPackages("yayoi.core");
 
-yayoi.util.extend("yayoi.core.Object", "Object", [], function() {
+yayoi.core.Object = function() {
+    this.id;
+    this.typeName = "yayoi.core.Object";
+
+    this.getId = function() {
+        return this.id;
+    };
+
+    this.destroy = function() {
+        yayoi.getCore().unregist(this);
+    };
+
     this.hasProperty = function(p) {
         return (p in this);
     };
+
     this.init = function(params) {
         if (params instanceof Object) {
             for (var p in params) {
@@ -17,4 +29,7 @@ yayoi.util.extend("yayoi.core.Object", "Object", [], function() {
             }
         }
     };
-});
+    this.toString = function() {
+        return this.typeName;
+    };
+}

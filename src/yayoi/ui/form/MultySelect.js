@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.form");
+yayoi.initPackages("yayoi.ui.form");
 
-yayoi.util.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], function() {
+yayoi.extend("yayoi.ui.form.MultySelect", "yayoi.ui.form.Field", [], function() {
     this.selections = []; //每个对象包含value, text
     this.nullable = true;
 

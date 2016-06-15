@@ -1,14 +1,13 @@
 "use strict";
-yayoi.util.initPackages("yayoi.util");
+yayoi.initPackages("yayoi.util");
 
-yayoi.util.extend("yayoi.util.Logger", "Object", [], function() {
+yayoi.extend("yayoi.util.Logger", "Object", [], function() {
     this.levels = {
         debug: 1,
         info: 2,
         warn: 3,
         error: 4
     };
-    this.typeName = null;
     this.debug = function() {
         var logLevel = this.levels[yayoi.config.global.logLevel];
         if(logLevel > this.levels.debug) {
@@ -17,7 +16,7 @@ yayoi.util.extend("yayoi.util.Logger", "Object", [], function() {
         if(!console){
             return;
         }
-        console.log("%c" + this.typeName + " %cdebug", "color: rgb(80, 245, 31); font-size:12px; font-weight: bold;","color: rgb(245, 198, 31); font-size:12px;");
+        //console.log("%c" + arguments.callee.typeName + " %cdebug", "color: rgb(80, 245, 31); font-size:12px; font-weight: bold;","color: rgb(245, 198, 31); font-size:12px;");
         for(var i=0; i<arguments.length; i++) {
             console.debug(arguments[i]);
         }
@@ -30,7 +29,7 @@ yayoi.util.extend("yayoi.util.Logger", "Object", [], function() {
         if(!console){
             return;
         }
-        console.log("%c" + this.typeName + " %cinfo" , "color: rgb(31, 33, 245); font-size:12px; font-weight: bold;", "color: rgb(31, 33, 245); font-size:12px;");
+        //console.log("%c" + arguments.callee.typeName + " %cinfo" , "color: rgb(31, 33, 245); font-size:12px; font-weight: bold;", "color: rgb(31, 33, 245); font-size:12px;");
         for(var i=0; i<arguments.length; i++) {
             console.info(arguments[i]);
         }
@@ -43,7 +42,7 @@ yayoi.util.extend("yayoi.util.Logger", "Object", [], function() {
         if(!console){
             return;
         }
-        console.log("%c" + this.typeName + " %cwarn" , "color: rgb(245, 114, 31); font-size:12px; font-weight: bold;", "color: rgb(245, 114, 31); font-size:12px;");
+        //console.log("%c" + arguments.callee.typeName + " %cwarn" , "color: rgb(245, 114, 31); font-size:12px; font-weight: bold;", "color: rgb(245, 114, 31); font-size:12px;");
         for(var i=0; i<arguments.length; i++) {
             console.warn(arguments[i]);
         }
@@ -56,7 +55,7 @@ yayoi.util.extend("yayoi.util.Logger", "Object", [], function() {
         if(!console){
             return;
         }
-        console.log("%c" + this.typeName + " %cerror" , "color: rgb(245, 31, 31); font-size:12px; font-weight: bold;", "color: rgb(245, 31, 31); font-size:12px;");
+        //console.log("%c" + arguments.callee.typeName + " %cerror" , "color: rgb(245, 31, 31); font-size:12px; font-weight: bold;", "color: rgb(245, 31, 31); font-size:12px;");
         for(var i=0; i<arguments.length; i++) {
             console.error(arguments[i]);
         }

@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.form");
+yayoi.initPackages("yayoi.ui.form");
 
-yayoi.util.extend("yayoi.ui.form.DatePicker", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon", "yayoi.util.DateUtil"], function() {
+yayoi.extend("yayoi.ui.form.DatePicker", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon", "yayoi.util.DateUtil"], function() {
 
     this.tempDate = new Date();
     this.onSelect = function(value) {

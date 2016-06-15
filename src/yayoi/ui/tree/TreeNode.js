@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.tree");
+yayoi.initPackages("yayoi.ui.tree");
 
-yayoi.util.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
+yayoi.extend("yayoi.ui.tree.TreeNode", "yayoi.ui.common.BasicComponent", ["yayoi.ui.common.Icon"], function() {
     this.id = null;
     this.parentId = null;
     this.name = null;

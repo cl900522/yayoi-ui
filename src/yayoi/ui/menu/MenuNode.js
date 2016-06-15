@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.menu");
+yayoi.initPackages("yayoi.ui.menu");
 
-yayoi.util.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.BasicComponent", [], function() {
+yayoi.extend("yayoi.ui.menu.MenuNode", "yayoi.ui.common.BasicComponent", [], function() {
     this.menu = null;
     /**
      * sub menu

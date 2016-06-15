@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.common");
+yayoi.initPackages("yayoi.ui.common");
 
-yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], function() {
+yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], function() {
     this.group = "FontAwesome";
     this.icon = "";
     this.src = "";
@@ -54,6 +54,11 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], 
         this.invalidate();
     }
 
+    this.setRotate = function(rotate) {
+        this.rotate = rotate;
+        this.invalidate();
+    };
+
     this.onRendering = function() {
         var container = this.getContainer();
         var html = "<span class='yayoi-icon'/></span>";
@@ -61,14 +66,6 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], 
     };
 
     this.afterRender = function() {
-        var container = this.getContainer();
-        var iconElement = container.find(".yayoi-icon");
-        var rotateDeg = "rotate(" + this.rotate + "deg)";
-        iconElement.css("-webkit-transform", rotateDeg);
-        iconElement.css("-moz-transform", rotateDeg);
-        iconElement.css("-ms-transform", rotateDeg);
-        iconElement.css("-o-transform", rotateDeg);
-        iconElement.css("transform", rotateDeg);
     };
 
     this.reRender = function() {
@@ -79,12 +76,19 @@ yayoi.util.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], 
         iconElement.css("height", this.size);
         iconElement.addClass("icon-" + this.icon);
         iconElement.css("color", this.color);
+
+        var rotateDeg = "rotate(" + this.rotate + "deg)";
+        iconElement.css("-webkit-transform", rotateDeg);
+        iconElement.css("-moz-transform", rotateDeg);
+        iconElement.css("-ms-transform", rotateDeg);
+        iconElement.css("-o-transform", rotateDeg);
+        iconElement.css("transform", rotateDeg);
     };
 
     this.initEvents = function() {
         var container = this.getContainer();
         var that = this;
-        container.find(".yayoi-icon").click(function() {
+        container.click(function() {
             if (that.click) {
                 that.click();
             }

@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.menu");
+yayoi.initPackages("yayoi.ui.menu");
 
-yayoi.util.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.BasicComponent", ["yayoi.ui.menu.MenuNode"], function() {
+yayoi.extend("yayoi.ui.menu.Menu", "yayoi.ui.common.BasicComponent", ["yayoi.ui.menu.MenuNode"], function() {
     /**
      * the target that menu should be anchor to
      * @type {yayoi.ui.common.BasicComponent || jQuery}

@@ -1,5 +1,5 @@
 "use strict";
-yayoi.util.initPackages("yayoi.util.DateUtil");
+yayoi.initPackages("yayoi.util");
 
 /**
  * 对Date的扩展，将 Date 转化为指定格式的String
@@ -44,4 +44,14 @@ Date.prototype.format = function(fmt) {
         }
     }
     return fmt;
+}
+
+yayoi.util.DateUtil = new function() {
+    this.format = function(dDate, sFormat) {
+        if(dDate && dDate instanceof Date) {
+            return dDate.format(sFormat)
+        } else {
+            return "";
+        }
+    };
 }

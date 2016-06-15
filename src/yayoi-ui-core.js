@@ -1,11 +1,10 @@
 "use strict";
 window.yayoi = {
-    util: {},
+    instance: null,
     config: {
         global: {
             element: null,
             version: 1.0,
-            inited: false,
             devMode: false,
             rootPath: "/js/",
             logLevel: "debug"
@@ -44,16 +43,21 @@ yayoi.init = function() {
             }
         });
 
-        yayoi.util.require("yayoi.util.Logger");
-        yayoi.log = new yayoi.util.Logger({
-            typeName: "Yayoi global"
-        });
-
         /* decide if in dev mode */
         var devMode = element.attr("data-devMode");
         if (devMode === "true") {
             yayoi.config.global.devMode = true;
         }
+
+        yayoi.require("yayoi.core.Object");
+
+        yayoi.require("yayoi.util.Logger");
+        this.logger = new yayoi.util.Logger({
+            typeName: "Yayoi Global"
+        });
+
+        yayoi.require("yayoi.core.Core");
+        yayoi.instance = new yayoi.core.Core();
 
         /*execute init method*/
         var funName = element.attr("data-init");
@@ -63,11 +67,15 @@ yayoi.init = function() {
     }
 
     $(parseScriptTag);
-
-    yayoi.config.global.inited = true;
 }();
 
-yayoi.util.loadJS = function(url, loadSuccess, async) {
+yayoi.getCore = function() {
+    if (yayoi.instance && yayoi.instance.inited) {
+        return yayoi.instance;
+    }
+};
+
+yayoi.loadJS = function(url, loadSuccess, async) {
     if (!async) {
         async = false;
     }
@@ -90,7 +98,7 @@ yayoi.util.loadJS = function(url, loadSuccess, async) {
     });
 }
 
-yayoi.util.initPackages = function(packagesStr, defaultInitObject) {
+yayoi.initPackages = function(packagesStr, defaultInitObject) {
     var packages = packagesStr.split(".");
     var currentPackage = window;
     for (var i = 0; i < packages.length; i++) {
@@ -111,7 +119,7 @@ yayoi.util.initPackages = function(packagesStr, defaultInitObject) {
  * @param  {String} packagesStr [model package path like yayoi.ui.common.Button]
  * @return {[type]}             [description]
  */
-yayoi.util.require = function(packagesStr) {
+yayoi.require = function(packagesStr) {
     var packages = packagesStr.split(".");
     var currentPackage = window,
         parentPackage = currentPackage;
@@ -129,7 +137,7 @@ yayoi.util.require = function(packagesStr) {
             }
 
             if (yayoi.config.global.devMode || !scriptContent) {
-                yayoi.util.loadJS(yayoi.config.global.rootPath + packageJsFile, function(gotScriptContent) {
+                yayoi.loadJS(yayoi.config.global.rootPath + packageJsFile, function(gotScriptContent) {
                     if (window.localStorage) {
                         window.localStorage[packageKey] = gotScriptContent;
                     }
@@ -146,12 +154,13 @@ yayoi.util.require = function(packagesStr) {
             throw "Can not get " + packagesStr + " js.";
         }
     }
+    return currentPackage;
 }
 
-yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction) {
-    yayoi.util.require(baseType);
+yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
+    yayoi.require(baseType);
 
-    baseType = yayoi.util.initPackages(baseType);
+    baseType = yayoi.initPackages(baseType);
 
     if (!baseType || !(baseType instanceof Function)) {
         throw "BaseType:" + baseType + " is not a function, so it can not be extended.";
@@ -161,37 +170,31 @@ yayoi.util.extend = function(newTypePath, baseType, importTypes, initFunction) {
 
     var usingTypes = [];
     for (var i = 0; i < importTypes.length; i++) {
-        yayoi.util.require(importTypes[i]);
-        var existType = yayoi.util.initPackages(importTypes[i]);
+        yayoi.require(importTypes[i]);
+        var existType = yayoi.initPackages(importTypes[i]);
         usingTypes.push(existType);
     }
-    initFunction.apply(newPrototype, usingTypes);
 
-    var newType = function(params) {
-        if (!this["init"] || !(this["init"] instanceof Function)) {
-            this.init = function(params) {
-                if (params instanceof Object) {
-                    for (var p in params) {
-                        this[p] = params[p];
-                    }
-                }
-            };
-        };
-        if (!params || params instanceof Object) {
-            this["init"].call(this, params);
-        } else {
-            this["init_single"].call(this, params);
+    initFunction.apply(newPrototype, usingTypes);
+    newPrototype.typeName = newTypePath;
+    if (newPrototype instanceof yayoi.core.Object) {
+        newPrototype.logger = new yayoi["util"]["Logger"]({
+            typeName: newTypePath
+        });
+    }
+
+    var yayoiObject = function(params) {
+        if (newPrototype instanceof yayoi.core.Object) {
+            if (!params || params instanceof Object) {
+                this["init"].call(this, params);
+            } else {
+                this["init_single"].call(this, params);
+            }
         }
     }
 
-    newType = yayoi.util.initPackages(newTypePath, newType);
+    yayoiObject = yayoi.initPackages(newTypePath, yayoiObject);
+    yayoiObject.prototype = newPrototype;
 
-    newPrototype["_typeName"] = newTypePath;
-    newPrototype["logger"] = new yayoi.util.Logger({
-        typeName: newTypePath
-    });
-
-    newType.prototype = newPrototype;
-    newType.constructor = baseType;
-    return newType;
+    return yayoiObject;
 }

@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.tab");
+yayoi.initPackages("yayoi.ui.tab");
 
-yayoi.util.extend("yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.TabNode", [], function() {
+yayoi.extend("yayoi.ui.tab.HTMLTabNode", "yayoi.ui.tab.TabNode", [], function() {
     this.html;
 
     this.onRendering = function() {

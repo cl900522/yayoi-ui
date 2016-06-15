@@ -1,7 +1,7 @@
 "use strict";
-yayoi.util.initPackages("yayoi.ui.grid");
+yayoi.initPackages("yayoi.ui.grid");
 
-yayoi.util.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Pager", "yayoi.ui.common.ComponentsContainer"], function() {
+yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Pager", "yayoi.ui.common.ComponentsContainer"], function() {
     this.title;
     this.dataPath = "/rows";
     this.totalPath = "/total";
