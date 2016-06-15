@@ -178,9 +178,12 @@ yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
     initFunction.apply(newPrototype, usingTypes);
     newPrototype.typeName = newTypePath;
     if (newPrototype instanceof yayoi.core.Object) {
-        newPrototype.logger = new yayoi["util"]["Logger"]({
-            typeName: newTypePath
-        });
+        if(newTypePath != "yayoi.util.Logger") {
+            var Logger = yayoi.require("yayoi.util.Logger");
+            newPrototype.logger = new Logger({
+                typeName: newTypePath
+            });
+        }
     }
 
     var yayoiObject = function(params) {
