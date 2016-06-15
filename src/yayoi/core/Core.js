@@ -44,6 +44,4 @@ yayoi.extend("yayoi.core.Core", "yayoi.core.Object", ["yayoi.util.Common"], func
     this.getObject = function(sId) {
         return this.components[sId];
     };
-
-    this.destory = function(yObject) {};
 });
