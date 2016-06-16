@@ -64,6 +64,11 @@ yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], funct
         this.invalidate();
     };
 
+    this.setSrc = function(src) {
+        this.src = src;
+        this.invalidate();
+    };
+
     this.onRendering = function() {
         var container = this.getContainer();
         var html = "<span class='yayoi-icon'/></span>";
@@ -79,8 +84,10 @@ yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], funct
         iconElement.attr("icon-group", this.group)
         iconElement.css("font-size", this.size);
         iconElement.css("height", this.size);
+        iconElement.css("width", this.size);
         iconElement.addClass("icon-" + this.icon);
         iconElement.css("color", this.color);
+        iconElement.css("background", "url('" + this.src + "') no-repeat");
 
         var rotateDeg = "rotate(" + this.rotate + "deg)";
         iconElement.css("-webkit-transform", rotateDeg);
