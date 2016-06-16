@@ -18,17 +18,9 @@ yayoi.core.Object = function() {
     };
 
     this.init = function(params) {
-        if (params instanceof Object) {
-            for (var p in params) {
-                var privateP = "_" + p;
-                if (this.hasProperty(privateP)) {
-                    this[privateP] = params[p];
-                    continue;
-                }
-                this[p] = params[p];
-            }
-        }
+        yayoi.merge(this, params);
     };
+
     this.toString = function() {
         return this.typeName;
     };

@@ -3,11 +3,13 @@ window.yayoi = {
     instance: null,
     config: {
         global: {
-            element: null,
             version: 1.0,
             devMode: false,
             rootPath: "/js/",
             logLevel: "debug"
+        },
+        user: {
+
         },
         expression: {
             email: /^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/,
@@ -52,29 +54,47 @@ yayoi.init = function() {
         yayoi.require("yayoi.core.Object");
 
         yayoi.require("yayoi.util.Logger");
-        this.logger = new yayoi.util.Logger({
+        yayoi.logger = new yayoi.util.Logger({
             typeName: "Yayoi Global"
         });
 
         yayoi.require("yayoi.core.Core");
         yayoi.instance = new yayoi.core.Core();
 
-        /*execute init method*/
+        /*execute init method if defined with data-init attribute*/
         var funName = element.attr("data-init");
-        if (window[funName]) {
-            window[funName]();
+        if (funName) {
+            if (window[funName]) {
+                window[funName]();
+            } else {
+                yayoi.logger.error("Can not find function " + funName + " definded with data-init attribute in javascript context,")
+            }
         }
     }
 
     $(parseScriptTag);
-}();
+};
+yayoi.init();
 
+/**
+ * get yayoi the only instance
+ * @return {yayoi.core.Core} core instance
+ */
 yayoi.getCore = function() {
     if (yayoi.instance && yayoi.instance.inited) {
         return yayoi.instance;
+    } else {
+        yayoi.logger.error("Yayoi instance is not started.");
     }
 };
 
+/**
+ * load js file and execute js content with loadSuccess function
+ * @param  {string} url         js file url
+ * @param  {Function} loadSuccess [description]
+ * @param  {boolean} async       async or not
+ * @return {null}
+ */
 yayoi.loadJS = function(url, loadSuccess, async) {
     if (!async) {
         async = false;
@@ -98,18 +118,23 @@ yayoi.loadJS = function(url, loadSuccess, async) {
     });
 }
 
+/**
+ * init package, if null, just give the defaultInitObject to it
+ * @param  {string} packagesStr       [description]
+ * @param  {any} defaultInitObject [description]
+ * @return {[type]}                   [description]
+ */
 yayoi.initPackages = function(packagesStr, defaultInitObject) {
+    if (!defaultInitObject) {
+        defaultInitObject = {};
+    }
     var packages = packagesStr.split(".");
     var currentPackage = window;
     for (var i = 0; i < packages.length; i++) {
-        if (currentPackage["" + packages[i]] == null) {
-            if (i == packages.length - 1 && defaultInitObject != null) {
-                currentPackage["" + packages[i]] = defaultInitObject;
-            } else {
-                currentPackage["" + packages[i]] = {};
-            }
+        if (!currentPackage[packages[i]]) {
+            currentPackage[packages[i]] = defaultInitObject;
         }
-        currentPackage = currentPackage["" + packages[i]];
+        currentPackage = currentPackage[packages[i]];
     }
     return currentPackage;
 }
@@ -117,7 +142,7 @@ yayoi.initPackages = function(packagesStr, defaultInitObject) {
 /**
  * Help to distinguish if model js exist. if not, will load throught http request to get js file
  * @param  {String} packagesStr [model package path like yayoi.ui.common.Button]
- * @return {[type]}             [description]
+ * @return {object}             [package object]
  */
 yayoi.require = function(packagesStr) {
     var packages = packagesStr.split(".");
@@ -125,11 +150,11 @@ yayoi.require = function(packagesStr) {
         parentPackage = currentPackage;
     for (var i = 0; i < packages.length; i++) {
         parentPackage = currentPackage;
-        currentPackage = currentPackage["" + packages[i]];
+        currentPackage = currentPackage[packages[i]];
 
         if (!currentPackage) {
             var packageJsFile = packages.join("/") + ".js";
-            var packageKey = packagesStr + yayoi.config.global.version;
+            var packageKey = packagesStr + "." + yayoi.config.global.version;
 
             var scriptContent = null;
             if (window.localStorage) {
@@ -150,13 +175,22 @@ yayoi.require = function(packagesStr) {
 
             currentPackage = parentPackage["" + packages[i]];
         }
-        if (currentPackage == null) {
+        if (!currentPackage) {
             throw "Can not get " + packagesStr + " js.";
         }
     }
+
     return currentPackage;
 }
 
+/**
+ * creat new class
+ * @param  {string} newTypePath  [description]
+ * @param  {string} baseType     [description]
+ * @param  {array} importTypes  [description]
+ * @param  {Function} initFunction [description]
+ * @return {Function}              [description]
+ */
 yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
     yayoi.require(baseType);
 
@@ -166,7 +200,7 @@ yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
         throw "BaseType:" + baseType + " is not a function, so it can not be extended.";
     }
 
-    var newPrototype = new baseType();
+    var baseProtoType = new baseType();
 
     var usingTypes = [];
     for (var i = 0; i < importTypes.length; i++) {
@@ -175,29 +209,46 @@ yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
         usingTypes.push(existType);
     }
 
-    initFunction.apply(newPrototype, usingTypes);
-    newPrototype.typeName = newTypePath;
-    if (newPrototype instanceof yayoi.core.Object) {
-        if(newTypePath != "yayoi.util.Logger") {
+    initFunction.apply(baseProtoType, usingTypes);
+    baseProtoType.typeName = newTypePath;
+    if (baseProtoType instanceof yayoi.core.Object) {
+        if (newTypePath != "yayoi.util.Logger") {
             var Logger = yayoi.require("yayoi.util.Logger");
-            newPrototype.logger = new Logger({
+            baseProtoType.logger = new Logger({
                 typeName: newTypePath
             });
         }
     }
 
     var yayoiObject = function(params) {
-        if (newPrototype instanceof yayoi.core.Object) {
-            if (!params || params instanceof Object) {
-                this["init"].call(this, params);
-            } else {
-                this["init_single"].call(this, params);
-            }
+        if (baseProtoType instanceof yayoi.core.Object) {
+            this["init"].call(this, params);
         }
     }
 
     yayoiObject = yayoi.initPackages(newTypePath, yayoiObject);
-    yayoiObject.prototype = newPrototype;
+    yayoiObject.prototype = baseProtoType;
 
     return yayoiObject;
+}
+
+/**
+ * merge all properties in source to target
+ * @param  {object} target [description]
+ * @param  {object} source [description]
+ * @return {null}        [description]
+ */
+yayoi.merge = function(target, source) {
+    if (source instanceof Object) {
+        for (var p in source) {
+            if(target instanceof yayoi.core.Object) {
+                var privateP = "_" + p;
+                if (target.hasProperty(privateP)) {
+                    target[privateP] = source[p];
+                    continue;
+                }
+            }
+            target[p] = source[p];
+        }
+    }
 }

@@ -11,21 +11,12 @@ yayoi.extend("yayoi.ui.common.BasicComponent", "yayoi.core.Object", [], function
     this._visible = true;
 
     this.init = function(params) {
-        if (params instanceof Object) {
-            for (var p in params) {
-                var privateP = "_" + p;
-                if (this.hasProperty(privateP)) {
-                    this[privateP] = params[p];
-                    continue;
-                }
-                this[p] = params[p];
-            }
-            if (this["selector"] != null) {
-                this.placeAt(this["selector"]);
-                delete this["selector"];
-            }
-            yayoi.getCore().regist(this);
+        yayoi.merge(this, params);
+        if (this["selector"] != null) {
+            this.placeAt(this["selector"]);
+            delete this["selector"];
         }
+        yayoi.getCore().regist(this);
     };
 
     this.placeAt = function(selector) {

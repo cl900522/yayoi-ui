@@ -11,10 +11,15 @@ yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], funct
     this.color = "black";
     this.click = null;
 
-    this.init_single = function(sIcon) {
-        this.init({
-            icon: sIcon
-        });
+    this.init = function(params) {
+        yayoi.merge(this, params);
+        if(typeof(params) == "string") {
+            this.icon = params;
+        }
+        if (this["selector"] != null) {
+            this.placeAt(this["selector"]);
+            delete this["selector"];
+        }
     };
 
     this.reset = function(sIcon, sGroup) {
