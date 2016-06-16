@@ -20,6 +20,13 @@
     </style>
 <body>
     <h1>YayoiUI图标测试</h1>
+    <p>此处展示自定义图标，使用gif或者其他图片代替</p>
+    <div style="width: 1200px; margin:auto; margin-bottom: 50px;">
+        <div id="selfIcon" style="width:100%; display:inline-block;">
+        </div>
+    </div>
+
+    <h1>YayoiUI图标测试</h1>
     <p>此页面展示所有来自<a href="http://fontawesome.io/">FontAwesome4.6.3</a>的<span id="count"></span>个图标</p>
 
     <div style="width: 1200px; margin:auto; margin-bottom: 50px;">
@@ -751,6 +758,9 @@
             icon.placeAt("#icon-"+i);
             $("#icon-name-"+i).html(iconList[i].icon.icon);
         }
+
+        var icon = new yayoi.ui.common.Icon({id: "selfIcon", src: "/images/compatible_chrome.gif"});
+        icon.placeAt("#selfIcon");
     })
     </script>
 </body>
