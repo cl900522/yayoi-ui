@@ -2,13 +2,7 @@
 Yayoi UI Project
 ============
 
-bEST
-==========
-Best
-
-
-Chapter1
+How to Run
 ------------
-
-### Very good to see you!
-[Hello](http://www.baidu.com)
+1. Please install nodejs on your machine
+2. Run in shell: node ./httpServer.js
