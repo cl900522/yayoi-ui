@@ -220,10 +220,9 @@ yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
         }
     }
 
-    var yayoiObject = function(params) {
-        if (baseProtoType instanceof yayoi.core.Object) {
-            this["init"].call(this, params);
-        }
+    var yayoiObject = function() {};
+    if (baseProtoType instanceof yayoi.core.Object) {
+        yayoiObject = new Function("params", "this['init'](params)");
     }
 
     yayoiObject = yayoi.initPackages(newTypePath, yayoiObject);
@@ -241,7 +240,7 @@ yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
 yayoi.merge = function(target, source) {
     if (source instanceof Object) {
         for (var p in source) {
-            if(target instanceof yayoi.core.Object) {
+            if (target instanceof yayoi.core.Object) {
                 var privateP = "_" + p;
                 if (target.hasProperty(privateP)) {
                     target[privateP] = source[p];
