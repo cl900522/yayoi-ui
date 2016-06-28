@@ -9,7 +9,7 @@ yayoi.extend("yayoi.ui.window.Dialog", "yayoi.ui.window.Window", ["yayoi.ui.comm
     this._cancelButton = null;
     this._confirmButton = null;
 
-    this.open = function(title, content, confirmFun) {
+    this.show = function(title, content, confirmFun) {
         var that = this;
         /*footer buttons*/
         this._cancelButton = new yayoi.ui.common.Button({
