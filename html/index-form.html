@@ -61,6 +61,26 @@
                     }, {
                         type: "textarea", title: "Remark", name: "remark", router: "remark", hint: "Input Your Remark", colspan :1
                     }
+                ],
+                buttons: [
+                    {
+                        text: "取消",
+                        icon: "remove",
+                        click: function() {
+                            history.back();
+                        }
+                    }, {
+                        text: "重置",
+                        icon: "rotate-right",
+                        click: function() {
+                            form.invalidate();
+                        }
+                    }, {
+                        text: "确定",
+                        icon: "ok-sign",
+                        click: function() {
+                        }
+                    }
                 ]
             });
 
