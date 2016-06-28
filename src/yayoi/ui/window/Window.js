@@ -37,7 +37,7 @@ yayoi.extend("yayoi.ui.window.Window", "yayoi.ui.common.BasicComponent", ["yayoi
         var that = this;
         /*body components*/
         var bodyContainer = new yayoi.ui.common.ComponentsContainer({
-            align: "rtl",
+            align: "utd",
             components: this.components
         });
         bodyContainer.placeAt(container.find(".yayoi-dialog-body"));
