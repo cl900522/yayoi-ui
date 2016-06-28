@@ -74,10 +74,13 @@ yayoi.extend("yayoi.ui.common.BasicComponent", "yayoi.core.Object", [], function
         return this._container;
     };
     this.setVisible = function(bVisible) {
-        if (bVisible) {
-            this.getContainer().show();
-        } else {
-            this.getContainer().hide();
+        var container = this.getContainer();
+        if(container) {
+            if (bVisible) {
+                container.show();
+            } else {
+                container.hide();
+            }
         }
         this._visible = bVisible;
     };

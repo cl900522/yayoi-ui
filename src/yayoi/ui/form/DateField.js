@@ -12,7 +12,7 @@ yayoi.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.common
         var html = "<div class='yayoi-field'>";
         html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
         html += "<div class='yayoi-field-value'>";
-        html += "<input class='yayoi-field-date' name='" + this.name + "' placeholder='" + this.hint + "' type='text' disabled='disabled' value='' />";
+        html += "<input class='yayoi-field-date' name='" + this.name + "' placeholder='" + this.hint + "' type='text' readonly='true' value='' />";
         html += "<div class='yayoi-field-date-icon'></div>";
         html += "</div></div>";
         container.html(html);
@@ -29,18 +29,34 @@ yayoi.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.common
                 that.setValue(date);
             }
         });
+        that.picker.setVisible(false);
 
-        this.dateIcon = new yayoi.ui.common.Icon({icon: "calendar", size: "20px"});
-        this.dateIcon.placeAt(container.find(".yayoi-field-date-icon"))
+        this.dateIcon = new yayoi.ui.common.Icon({
+            icon: "calendar",
+            size: "20px"
+        });
+        this.dateIcon.placeAt(container.find(".yayoi-field-date-icon"));
     };
 
     this.initEvents = function() {
         var that = this;
+        var container = this.getContainer();
 
-        this.dateIcon.setClick(function() {
-            that.picker.setValue(that.getValue());
-            that.picker.show();
-        });
+        var tooglePicker = function() {
+            that.tooglePicker();
+        };
+
+        this.dateIcon.setClick(tooglePicker);
+        container.find("input").click(tooglePicker);
+    };
+
+    this.tooglePicker = function() {
+        if (this.picker.getVisible()) {
+            this.picker.setVisible(false);
+        } else {
+            this.picker.setValue(this.getValue());
+            this.picker.show();
+        }
     };
 
     this.reRender = function() {
@@ -59,8 +75,7 @@ yayoi.extend("yayoi.ui.form.DateField", "yayoi.ui.form.Field", ["yayoi.ui.common
                 this.value = new Date(value)
             } catch (e) {
                 this.value = new Date();
-            } finally {
-            }
+            } finally {}
         }
         this.invalidate();
     };
