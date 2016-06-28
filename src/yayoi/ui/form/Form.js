@@ -122,5 +122,14 @@ yayoi.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
                 throw "Field type can not be supported";
         }
         return field;
+    };
+    this.finishEdit = function() {
+        var fields = this.fields;
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            var value = field.getValue();
+            this.setModelValue(field.router, value);
+        }
+        return true;
     }
 });

@@ -50,4 +50,15 @@ yayoi.extend("yayoi.ui.common.ModelComponent", "yayoi.ui.common.BasicComponent",
             return null;
         }
     };
+    this.setModelValue = function(path, value) {
+        if(!path) {
+            path = "";
+        }
+        if (this.getModel()) {
+            var router = this.getRouter();
+            return this.getModel().setValue(router + "/" + path, value);
+        } else {
+            return null;
+        }
+    };
 });
