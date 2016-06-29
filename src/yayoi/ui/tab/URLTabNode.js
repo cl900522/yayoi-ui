@@ -9,7 +9,4 @@ yayoi.extend("yayoi.ui.tab.URLTabNode", "yayoi.ui.tab.TabNode", [], function() {
         var frame = $('<iframe src="' + this.url + '"scrolling="auto" frameborder="0"></iframe>');
         container.append(frame);
     };
-    this.refresh = function() {
-        this.render();
-    };
 });
