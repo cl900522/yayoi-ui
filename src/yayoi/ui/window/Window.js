@@ -12,7 +12,11 @@ yayoi.extend("yayoi.ui.window.Window", "yayoi.ui.common.BasicComponent", ["yayoi
         var buttons = this.buttons;
         this.buttons = [];
         for (var i = 0; i < buttons.length; i++) {
-            this.buttons.push(new yayoi.ui.common.Button(buttons[i]));
+            if(buttons[i] instanceof yayoi.ui.common.Button) {
+                this.buttons.push(buttons[i]);
+            } else {
+                this.buttons.push(new yayoi.ui.common.Button(buttons[i]));
+            }
         }
     };
     this.onRendering = function() {
@@ -64,9 +68,8 @@ yayoi.extend("yayoi.ui.window.Window", "yayoi.ui.common.BasicComponent", ["yayoi
         container.find(".title").html(this.title || "");
     };
     this.open = function() {
-        var container = this.getContainer();
-        if (!container) {
-            container = $("<div class='yayoi-dialog'></div>");
+        if (!this.getRendered()) {
+            var container = $("<div class='yayoi-dialog'></div>");
             $(document.body).append(container);
             this.placeAt(container);
         }
