@@ -8,7 +8,7 @@ http.createServer(function(request, response) {
         url += "index.html";
     }
     var index = url.lastIndexOf("?");
-    if(index != -1) {
+    if (index != -1) {
         url = url.substring(0, index);
     }
 
@@ -18,16 +18,28 @@ http.createServer(function(request, response) {
     });
 
     var filePath = pwd + url;
+    fs.exists((filePath), (exist) => {
+        if(exist) {
+            fs.stat(filePath,(err, states)=>{
+                if(states.isDirectory()) {
+                    filePath += "/index.html";
+                }
+                fs.readFile(filePath, function(err, fileContent) {
+                    if (err) {
+                        response.write("" + err);
+                    } else {
+                        response.write(fileContent);
+                    }
 
-    fs.readFile(filePath, function(err, fileContent) {
-        if (err) {
-            response.write("" + err);
+                    response.end();
+                });
+            });
         } else {
-            response.write(fileContent);
+            response.write("No such file.");
+            response.end();
         }
-
-        response.end();
     });
+
 }).listen(80);
 
 
