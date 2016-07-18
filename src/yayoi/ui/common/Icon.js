@@ -1,7 +1,7 @@
 "use strict";
 yayoi.initPackages("yayoi.ui.common");
 
-yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], function() {
+yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], function(BasicComponent) {
     this.group = "FontAwesome";
     this.icon = "";
     this.src = "";
@@ -12,15 +12,11 @@ yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], funct
     this.click = null;
 
     this.init = function(params) {
-        yayoi.merge(this, params);
         if(typeof(params) == "string") {
             this.icon = params;
         }
-        if (this["selector"] != null) {
-            this.placeAt(this["selector"]);
-            delete this["selector"];
-        }
-        yayoi.getCore().regist(this);
+
+        BasicComponent.prototype.init.call(this, params)
     };
 
     this.reset = function(sIcon, sGroup) {
