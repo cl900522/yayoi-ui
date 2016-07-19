@@ -203,6 +203,7 @@ yayoi.extend = function(newTypePath, baseType, importTypes, initFunction) {
     var baseProtoType = new baseType();
 
     var usingTypes = [];
+    usingTypes.push(baseType);
     for (var i = 0; i < importTypes.length; i++) {
         yayoi.require(importTypes[i]);
         var existType = yayoi.initPackages(importTypes[i]);
