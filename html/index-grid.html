@@ -33,15 +33,15 @@
                         return rowData.lastName +" "+ rowData.firstName
                     }
                 }, {
-                    type: "text", format: "text", title: "Gender", router: "gender", width: "200px", decorate: function(rowData) {
-                        if (rowData.gender=="male") {
+                    type: "text", format: "text", title: "Gender", router: "gender", width: "100px", decorate: function(rowData) {
+                        if (rowData.gender == "male") {
                             return "男";
                         } else {
                             return "女";
                         }
                     }
                 }, {
-                    type: "text", format: "text", title: "BirthDate", router: "birthDate", width: "200px",
+                    type: "text", format: "text", title: "BirthDate", router: "birthDate", width: "150px",
                 }, {
                     type: "text", format: "text", title: "Email", router: "email", width: "200px",
                 }, {
