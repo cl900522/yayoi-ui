@@ -11,7 +11,7 @@ yayoi.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var html = "<div class='yayoi-pager'>";
         html += "<div class='yayoi-pager-icon yayoi-pager-first'>第一页</div>";
         html += "<div class='yayoi-pager-icon yayoi-pager-previous'>前一页</div>";
-        html += "<div class='yayoi-pager-input'><input value='1'/></div>";
+        html += "<div class='yayoi-pager-input'>第<input type='text' value='1'/>共<span class='totalPageNo'>12</span>页</div>";
         html += "<div class='yayoi-pager-icon yayoi-pager-next'>后一页</div>";
         html += "<div class='yayoi-pager-icon yayoi-pager-last'>最后一页</div>";
         html += "</div>";
@@ -79,6 +79,7 @@ yayoi.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.reRender = function() {
         var container = this.getContainer();
         container.find(".yayoi-pager-input input").val(this.currentNo);
+        container.find(".yayoi-pager-input span.totalPageNo").html(this.totalPageNo);
     };
     this.setCurrentPageNo = function(currentNo) {
         if (currentNo > this.totalPageNo) {
@@ -101,6 +102,7 @@ yayoi.extend("yayoi.ui.grid.Pager", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         if (this.currentNo > this.totalPageNo) {
             this.setCurrentPageNo(this.totalPageNo)
         }
+        this.invalidate();
     };
     this.setOnChange = function(onChange) {
         this.onChange = onChange;
