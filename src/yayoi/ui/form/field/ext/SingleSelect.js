@@ -8,10 +8,11 @@ yayoi.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], function()
     this.onRendering = function() {
         var container = this.getContainer();
 
-        var selectHtml = "<select class='yayoi-field-select' name='" + this.name + "'></select>"
-
         var html = "<div class='yayoi-field'>";
         html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
+
+        var selectHtml = "<input class='yayoi-field-select' name='" + this.name + "'></input>";
+        selectHtml = "<div class='yayoi-field-select-selections'></div>";
         html += "<div class='yayoi-field-value'>" + selectHtml + "</div></div>";
 
         container.html(html);

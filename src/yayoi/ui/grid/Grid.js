@@ -84,7 +84,7 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
 
         /*css setting*/
         var frozenWidth = container.find(".yayoi-frozen-grid").width();
-        var flexWidth = container.width() - frozenWidth;
+        var flexWidth = container.width() - frozenWidth - 1;
         container.find(".yayoi-flex-grid").width(flexWidth);
         container.find(".yayoi-flex-grid table").width(columnWidth + totalColumns * 2);
     };
