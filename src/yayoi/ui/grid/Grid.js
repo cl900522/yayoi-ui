@@ -1,7 +1,7 @@
 "use strict";
 yayoi.initPackages("yayoi.ui.grid");
 
-yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.Pager", "yayoi.ui.common.ComponentsContainer"], function() {
+yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.grid.TextColumn", "yayoi.ui.grid.OperationColumn", "yayoi.ui.grid.Pager", "yayoi.ui.common.ComponentsContainer"], function() {
     this.title;
     this.dataPath = "/rows";
     this.totalPath = "/total";
@@ -12,12 +12,15 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
 
     this.checkable = true;
     this.showIndex = false;
+    this.operations = [];
 
     this.beforeRender = function() {
         for (var i = 0; i < this.columns.length; i++) {
             var column = this.createColumn(this.columns[i]);
             this.columns[i] = column;
         }
+        var operationColumn = new yayoi.ui.grid.OperationColumn({operations: this.operations});
+        this.columns.push(operationColumn);
     };
 
     this.onRendering = function() {
@@ -41,7 +44,8 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
         tr += "</tr>";
         formHtml += tr;
         /*frozen grid content start*/
-        formHtml += "</table></div><div class='yayoi-grid-content'><table class='yayoi-grid-table'>";
+        formHtml += "</table></div>"
+        formHtml += "<div class='yayoi-grid-content'><table class='yayoi-grid-table'>";
         for (var i = 0; i < this.pageSize; i++) {
             var tr = "<tr>";
             if (this.showIndex) {
@@ -53,7 +57,8 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
             tr += "</tr>";
             formHtml += tr;
         }
-        formHtml += "</table></div></div>";
+        formHtml += "</table></div>";
+        formHtml += "</div>";
 
         /*flex grid start*/
         /*flex grid titles start*/
@@ -64,6 +69,7 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
 
             columnWidth += parseInt(this.columns[i].width.replace("px", ""));
         }
+
         formHtml += "</tr></table></div>";
 
         /*flex grid content start*/
@@ -102,7 +108,6 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
         this.pager.setOnChange(function(pageNo) {
             var pageSize = that.pageSize;
             if(that.onRefresh) {
-
                 that.onRefresh({pageNo: pageNo, pageSize: pageSize});
             }
         });

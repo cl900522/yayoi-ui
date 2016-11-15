@@ -52,6 +52,18 @@
                     }
                 }
             ],
+            operations: [
+                {title: "add", icon: "plus", click: function(rowData) {
+                        yayoi.logger.info("update");
+                        yayoi.logger.info(rowData);
+                    }
+                },
+                {title: "delete", icon: "remove", click: function(rowData) {
+                        yayoi.logger.info("delete");
+                        yayoi.logger.info(rowData);
+                    }
+                },
+            ],
             onRefresh: function(page) {
                 var model = grid.getModel();
                 store.url = "/json/grid-data-" + page.pageNo + ".json"
