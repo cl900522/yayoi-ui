@@ -16,7 +16,7 @@ yayoi.extend("yayoi.ui.common.Icon", "yayoi.ui.common.BasicComponent", [], funct
             this.icon = params;
         }
 
-        BasicComponent.prototype.init.call(this, params)
+        BasicComponent.prototype.init.call(this, params);
     };
 
     this.reset = function(sIcon, sGroup) {

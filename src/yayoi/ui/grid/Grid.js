@@ -154,9 +154,8 @@ yayoi.extend("yayoi.ui.grid.Grid", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
 
         for (var i = 0; i < this.pageSize; i++) {
             var rowData = rootValue[i];
-            if(!rowData) {
-                container.find(".column[data-grid-row=" + i + "]").html("");
-            } else {
+            container.find(".column[data-grid-row=" + i + "]").html("");
+            if(rowData) {
                 for (var j = 0; j < this.columns.length; j++) {
                     var column = this.columns[j];
                     column.setContainer(container.find("div[data-grid-column=" + j + "][data-grid-row=" + i + "]"));
