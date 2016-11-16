@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require("fs");
 var pwd = process.cwd();
+var httpPort = 9090;
 
 http.createServer(function(request, response) {
     var url = request.url;
@@ -39,9 +40,7 @@ http.createServer(function(request, response) {
             response.end();
         }
     });
-
-}).listen(80);
-
+}).listen(httpPort);
 
 var parseContentType = function(url) {
     if (url.endsWith(".html")) {
@@ -92,4 +91,4 @@ var parseContentType = function(url) {
         return "application/octet-stream";
     }
 }
-console.log("HTTP server is listening at port 80.");
+console.log("HTTP server is listening at port " + httpPort + ".");

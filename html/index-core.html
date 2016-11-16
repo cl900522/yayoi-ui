@@ -37,18 +37,18 @@
     $(function(){
         yayoi.initPackages("yayoi.ext");
         QUnit.test("Class extend test.", 7, function(assert) {
-            var People = yayoi.extend("yayoi.common.People", "yayoi.core.Object", ["yayoi.ui.common.Icon","yayoi.proxy.Proxy"], function(Icon, Proxy) {
+            var People = yayoi.extend("yayoi.common.People", "yayoi.core.Object", ["yayoi.ui.common.Icon","yayoi.proxy.Proxy"], function(Object, Icon, Proxy) {
                 this.name = null;
                 this.age = null;
                 this.getAge = function() {
                     return this.age;
                 }
 
-                assert.ok(Icon == yayoi.ui.common.Icon, "yayoi.ui.common.Icon is loaded");
-                assert.ok(Proxy == yayoi.proxy.Proxy, "yayoi.proxy.Proxy is loaded");
+                assert.ok(Icon == yayoi.ui.common.Icon, "yayoi.ui.common.Icon is not loaded");
+                assert.ok(Proxy == yayoi.proxy.Proxy, "yayoi.proxy.Proxy is not loaded");
             });
 
-            assert.ok(yayoi.common.People instanceof Function, "Create yayoi.common.People class ok.");
+            assert.ok(yayoi.common.People instanceof Function, "Create yayoi.common.People class not ok.");
             var mx = new People({
                 address : "Jiagnsu.Yizheng",
                 "age": 11
@@ -58,10 +58,10 @@
             });
             nj["age"] = 12;
 
-            assert.ok(mx.age == 11, "Mingxuan age is 11.");
-            assert.ok(nj.age == 12, "Ningjiang age is 12.");
-            assert.ok(mx.address == "Jiagnsu.Yizheng", "Mingxuan address is Jiagnsu.Yizheng.");
-            assert.ok(nj.address == "Hubei,Yichang", "Ningjiang address is Hubei,Yichang.");
+            assert.ok(mx.age == 11, "Mingxuan age is not 11.");
+            assert.ok(nj.age == 12, "Ningjiang age is not 12.");
+            assert.ok(mx.address == "Jiagnsu.Yizheng", "Mingxuan address is not Jiagnsu.Yizheng.");
+            assert.ok(nj.address == "Hubei,Yichang", "Ningjiang address is not Hubei,Yichang.");
         });
 
         QUnit.test("Path navigation test.", 3, function(assert) {

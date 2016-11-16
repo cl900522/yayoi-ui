@@ -22,7 +22,7 @@ yayoi.extend("yayoi.model.Model", "yayoi.core.Object", ["yayoi.util.Router"], fu
     this.addListener = function(component) {
         if (typeof(component) == "object" && component instanceof yayoi.ui.common.ModelComponent) {
             this._listeners.push(component);
-            this.logger.debug("Bind component with model", component);
+            this.logger.info(component);
         }
     };
     /*取消绑定的组件*/

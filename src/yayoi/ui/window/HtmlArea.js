@@ -3,7 +3,7 @@ yayoi.initPackages("yayoi.ui.window");
 
 yayoi.extend("yayoi.ui.window.HtmlArea", "yayoi.ui.common.BasicComponent", [], function() {
     this.htmlContent = "";
-    this.css = [];
+    this.css = {};
 
     this.onRendering = function() {
         var container = this.getContainer();
@@ -12,8 +12,9 @@ yayoi.extend("yayoi.ui.window.HtmlArea", "yayoi.ui.common.BasicComponent", [], f
     };
     this.reRender = function() {
         var container = this.getContainer();
-        container.css("color", this.color);
-        container.css("color", this.color);
+        for(var p in this.css) {
+            container.css(p, this.css[p]);
+        }
         container.find(".yayoi-htmlarea").html(this.htmlContent);
     };
     this.setHtmlContent = function(htmlContent) {

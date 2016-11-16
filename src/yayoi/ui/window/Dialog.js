@@ -26,7 +26,8 @@ yayoi.extend("yayoi.ui.window.Dialog", "yayoi.ui.window.Window", ["yayoi.ui.wind
             });
             this.buttons = [this._cancelButton, this._confirmButton];
 
-            this._msgComponent = new yayoi.ui.window.HtmlArea();
+            var contentCss = {"color": "black", "text-indent": "20px"};
+            this._msgComponent = new yayoi.ui.window.HtmlArea({css: contentCss});
             this.components = [this._msgComponent];
         }
 
