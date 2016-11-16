@@ -1,7 +1,12 @@
 var http = require('http');
 var fs = require("fs");
 var pwd = process.cwd();
+var argv = process.argv;
+
 var httpPort = 9090;
+if(argv[2]) {
+    httpPort = parseInt(argv[2]);
+}
 
 http.createServer(function(request, response) {
     var url = request.url;
