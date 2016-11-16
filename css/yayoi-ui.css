@@ -688,15 +688,15 @@
     width: auto;
     border-bottom: 1px solid #d8d8d8;
     display: block;
-    height: 30px;
-    line-height: 30px;
+    height: 35px;
+    line-height: 35px;
 }
 .yayoi-grid-table tr:last-child {
 }
 .yayoi-grid-table td {
     border-right: 1px solid #d8d8d8;
-    line-height: 30px;
-    height: 30px;
+    line-height: 35px;
+    height: 35px;
     text-align: center;
 }
 .yayoi-grid-table td>div {
@@ -717,6 +717,16 @@
 }
 .yayoi-grid-table div.check-column input[type=checkbox] {
     cursor: pointer;
+}
+.yayoi-grid-table .operation-icon {
+    cursor: pointer;
+    float:left;
+}
+.yayoi-grid-table .operation-icon:hover {
+    border: 1px solid #cccccc;
+}
+.yayoi-grid-table .operation-icon:first-child {
+    margin-left: 50px;
 }
 .yayoi-grid-titles .yayoi-grid-table {
     font-weight: bold;

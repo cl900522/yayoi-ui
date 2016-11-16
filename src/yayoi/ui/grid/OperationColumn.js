@@ -1,7 +1,7 @@
 "use strict";
 yayoi.initPackages("yayoi.ui.grid");
 
-yayoi.extend("yayoi.ui.grid.OperationColumn", "yayoi.ui.grid.Column", ["yayoi.ui.common.Icon"], function(Column) {
+yayoi.extend("yayoi.ui.grid.OperationColumn", "yayoi.ui.grid.Column", ["yayoi.ui.common.Icon"], function(Column, Icon) {
     this.onRendering = function() {};
     this.operations = [];
     this.title = "操作";
@@ -35,11 +35,8 @@ yayoi.extend("yayoi.ui.grid.OperationColumn", "yayoi.ui.grid.Column", ["yayoi.ui
                 size: "20px",
                 click: genClick(operation, rowData)
             };
-            icon = new yayoi.ui.common.Icon(icon);
-            var iconDiv = $("<div style='float:left'></div>");
-            if (i == 0) {
-                iconDiv.css("margin-left", "50px");
-            }
+            icon = new Icon(icon);
+            var iconDiv = $("<div class='operation-icon'></div>");
             container.append(iconDiv);
             icon.placeAt(iconDiv);
         }
