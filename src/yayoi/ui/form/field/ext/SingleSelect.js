@@ -1,72 +1,83 @@
 "use strict";
-yayoi.initPackages("yayoi.ui.form");
+yayoi.initPackages("yayoi.ui.form.field.ext");
 
-yayoi.extend("yayoi.ui.form.SingleSelect", "yayoi.ui.form.Field", [], function() {
+yayoi.extend("yayoi.ui.form.field.ext.SingleSelect", "yayoi.ui.form.Field", [], function(Field) {
     this.selections = []; //每个对象包含value, text
     this.nullable = true;
+    this.inputArea = null;
+    this.selectArea = null;
 
     this.onRendering = function() {
+        Field.prototype.onRendering.call(this);
         var container = this.getContainer();
+        var valueDiv = container.find(".yayoi-field-value");
 
-        var html = "<div class='yayoi-field'>";
-        html += "<div class='yayoi-field-title'><span>" + this.getTitle() + "</span></div>";
-
-        var selectHtml = "<input class='yayoi-field-select' name='" + this.name + "'></input>";
-        selectHtml = "<div class='yayoi-field-select-selections'></div>";
-        html += "<div class='yayoi-field-value'>" + selectHtml + "</div></div>";
-
-        container.html(html);
+        this.inputArea = $("<input class='yayoi-field-select' name='" + this.name + "'></input>");
+        this.selectArea = $("<div class='yayoi-field-select-selections'><ul></ul></div>");
+        valueDiv.append(this.inputArea);
+        valueDiv.append(this.selectArea);
     };
     this.reRender = function() {
+        var ul = this.selectArea.find("ul");
+        ul.find("li").remove();
+
+        var me = this;
+        function clickRow(i) {
+            return function() {
+                me.selectIndex(i);
+                me.selectArea.hide();
+            }
+        }
+
         var value = this.value;
-        var container = this.getContainer();
-
-        var selectHtml = "";
-        if(this.nullable){
-            selectHtml += "<option value=''>请选择</option>";
-        }
-        for(var i=0; i<this.selections.length; i++) {
-            if((""+this.selections[i].value) == (""+this.value)) {
-                selectHtml += "<option value='" + this.selections[i].value + "' selected='selected'>" + this.selections[i].text + "</option>";
-            } else {
-                selectHtml += "<option value='" + this.selections[i].value + "'>" + this.selections[i].text + "</option>";
+        var found = false;
+        for (var i = 0; i < this.selections.length; i++) {
+            var selection = this.selections[i];
+            var li = $("<li>" + selection.text + "</li>");
+            li.bind("click", clickRow(i));
+            ul.append(li);
+            if (selection.value == value) {
+                found = true;
+                clickRow(i)();
             }
         }
-        container.find("select").html(selectHtml);
-
-        container.find("select").val(value);
+        if (!found) {
+            this.getContainer().find(".yayoi-field-select").val("");
+            this.getContainer().find(".yayoi-field-select-selections li").removeClass("selected");
+        }
     };
-    this.select = function(value){
-        var node = null;
-        for(var i=0; i<this.selections.length; i++){
-            if( "" + this.selections[i].value == "" + value) {
-                this.selected = i;
-                node = this.selections[i];
-            }
+    this.initEvents = function() {
+        var me = this;
+        this.inputArea.bind("click", function() {
+            me.selectArea.show();
+        });
+    };
+    this.selectIndex = function(index) {
+        this.selected = index;
+        if (index >= this.selections.length) {
+            throw "SingleSelect has only " + this.selections.length + "selections.";
         }
-        if(node){
-            this.container.find("a").removeClass("select").removeClass("white");
-            this.container.find("a[param="+node.value+"]").addClass("white").addClass("select");
-
-            this.container.find(".stats_v").val(node.value);
-            this.container.find(".stats_i").val(node.text);
+        var node = this.selections[index];
+        if (node) {
+            this.getContainer().find(".yayoi-field-select").val(node.text);
+            this.getContainer().find(".yayoi-field-select-selections li").removeClass("selected");
+            this.getContainer().find(".yayoi-field-select-selections li").eq(index).addClass("selected");
         }
     };
     this.getTextOf = function(value) {
-        for(var i=0; i<this.selections.length; i++) {
-            if(""+value==this.selections[i].value){
+        for (var i = 0; i < this.selections.length; i++) {
+            if (value == this.selections[i].value) {
                 return this.selections[i].text;
             }
         }
-        return "";
+        return null;
     };
     this.setValue = function(value) {
         this.value = value;
         this.invalidate();
     };
     this.getValue = function() {
-        var container = this.getContainer();
-        return container.find("select").val();
+        return this.selections[this.selected].value;
     };
     this.setSelections = function(selections) {
         this.selections = selections;

@@ -4,7 +4,10 @@ yayoi.initPackages("yayoi.ui.form");
 /**
  * if we define the form with out defining success & error function, the form will be submitted with our processing response data.
  */
-yayoi.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", ["yayoi.ui.form.TextField", "yayoi.ui.form.DateField", "yayoi.ui.form.TextArea", "yayoi.ui.form.SingleSelect", "yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer"], function() {
+yayoi.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent",
+    ["yayoi.ui.form.TextField", "yayoi.ui.form.DateField", "yayoi.ui.form.TextArea",
+    "yayoi.ui.form.SingleSelect", "yayoi.ui.common.Button", "yayoi.ui.common.ComponentsContainer",
+    "yayoi.ui.form.field.ext.SingleSelect"], function() {
     this.title;
     this.columns = 2;
     this.fields = [];
@@ -110,7 +113,7 @@ yayoi.extend("yayoi.ui.form.Form", "yayoi.ui.common.ModelComponent", ["yayoi.ui.
                 field = new yayoi.ui.form.TextField(params);
                 break;
             case "singleSelect":
-                field = new yayoi.ui.form.SingleSelect(params);
+                field = new yayoi.ui.form.field.ext.SingleSelect(params);
                 break;
             case "date":
                 field = new yayoi.ui.form.DateField(params);

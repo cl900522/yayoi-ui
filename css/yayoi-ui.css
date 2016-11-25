@@ -437,6 +437,35 @@
 .yayoi-field-select:ACTIVE, .yayoi-field-select:FOCUS {
     border-color: #1E90FF;
 }
+.yayoi-field-select-selections {
+    display: none;
+    position: absolute;
+    min-width: 300px;
+    max-height: 300px;
+    border: 1px #cccccc solid;
+}
+.yayoi-field-select-selections ul {
+    display: block;
+    background-color: white;
+    width: 100%;
+}
+.yayoi-field-select-selections ul>li {
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    text-indent: 10px;
+    display: block;
+    width: 100%;
+}
+.yayoi-field-select-selections ul .selected {
+    font-size: 15px;
+    font-weight: bold;
+}
+.yayoi-field-select-selections ul>li:HOVER {
+    color: white;
+    background-color: #1E90FF;
+    font-size: 15px;
+}
 .yayoi-form-foot {
     display: block;
     padding: 5px 0px;
