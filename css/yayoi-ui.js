@@ -160,7 +160,8 @@ export default StyleSheet.create({
         "color": "black"
     },
     "date-picker-days tbody td:hover": {
-        "border": "1px solid #1E90FF"
+        "border": "1px solid #1E90FF",
+        "cursor": "pointer"
     },
     "date-picker-months tbody": {
         "width": "auto",
