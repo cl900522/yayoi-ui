@@ -47,13 +47,12 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
             if (me.moving) {
                 var x = me.moveStart.x - event.clientX;
                 var y = me.moveStart.y - event.clientY;
-
                 var newTop = me.prePosition.top - y;
                 var newLeft = me.prePosition.left - x;
-                if (newTop < 0) newTop = 0;
-                if (newLeft < 0) newLeft = 0;
 
-                me.position = {top: newTop, left: newLeft};
+                var position = me.wall.findPosition(me, {top: newTop, left: newLeft});
+
+                me.position = position;
                 me.invalidate();
             }
         }
