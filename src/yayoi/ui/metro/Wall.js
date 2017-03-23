@@ -7,7 +7,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.rowSpan = 20;
     this.colSpan = 20;
     this.width = 800;
-    this.height = 600;
+    this.height = 800;
     this.tileWidth = 100;
     this.tileHeight = 100;
     this.tiles = null;
@@ -26,31 +26,37 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var tileHeight = rowSize * this.tileHeight + (rowSize - 1) * this.rowSpan;
 
         var maxTop = 0, maxLeft = 0;
-        var bottomRightTile = null;
+        var bottomMostTile = null, rightMostTile = null;
         for(var i=0; i<this.tiles.length; i++) {
             var tile = this.tiles[i];
-            if (maxTop < tile.position.top+ tile.height) {
-                maxTop = tile.position.top+ tile.height;
-                bottomRightTile = tile;
+            if (maxTop < tile.position.top + tile.height) {
+                maxTop = tile.position.top + tile.height;
+                bottomMostTile = tile;
             }
-            if (maxLeft < tile.position.left+ tile.width) {
-                maxLeft = tile.position.left+ tile.width;
-                bottomRightTile = tile;
+            if (maxLeft < tile.position.left + tile.width) {
+                maxLeft = tile.position.left + tile.width;
+                rightMostTile = tile;
             }
         }
 
-        if (bottomRightTile != null) {
-            maxLeft = bottomRightTile.position.left + bottomRightTile.width;
-            maxTop = bottomRightTile.position.top + bottomRightTile.height + this.colSpan;
-            if (maxTop + tileHeight > this.height) {
-                if (this.lockHeight) {
-                    maxLeft = bottomRightTile.position.left + bottomRightTile.width + this.colSpan;
-                    maxTop = this.rowSpan;
-                }
+        var newTop=0, newLeft=0;
+        if (bottomMostTile != null) {
+            maxTop += this.rowSpan;
+            maxLeft += this.colSpan;
+
+            if (maxTop + tileHeight > this.height && this.lockHeight) {
+                newLeft = rightMostTile.position.left + rightMostTile.width + this.colSpan;
+                newTop = this.rowSpan;
+            } else if (maxLeft + tileWidth > this.width && this.lockWidth){
+                newLeft = this.colSpan;
+                newTop = bottomMostTile.position.top + bottomMostTile.height + this.rowSpan;
+            } else {
+                newTop = bottomMostTile.position.top + bottomMostTile.height + this.rowSpan;
+                newLeft = rightMostTile.position.left;
             }
         } else {
-            maxLeft = this.colSpan;
-            maxTop = this.rowSpan;
+            newTop = this.colSpan;
+            newLeft = this.rowSpan;
         }
 
         var tile = new yayoi.ui.metro.Tile({
@@ -58,7 +64,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             rowSize: rowSize,
             width: tileWidth,
             height: tileHeight,
-            position: {top: maxTop, left: maxLeft},
+            position: {top: newTop, left: newLeft},
             wall: this
         });
         var container = this.getContainer();
