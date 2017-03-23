@@ -881,3 +881,14 @@
     height: 25px;
     line-height: 25px;
 }
+
+.yayoi-ui-metro-wall {
+    background-color: rgb(244, 204, 141);
+    position: relative;
+}
+.yayoi-ui-metro-tile {
+    background-color: rgb(128, 201, 137);
+    position: absolute;
+    cursor: pointer;
+    z-index: 5;
+}

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>UI磁贴测试</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.form.js"></script>
+
+    <script type="text/javascript" src="../src/yayoi-ui-core.js" data-init="startYayoi" data-devMode="true"></script>
+    <script type="text/javascript" src="../js/qunit.js"></script>
+    <link rel="stylesheet" href="../css/qunit.css" />
+    <link rel="stylesheet" href="../css/yayoi-ui.css" />
+    <link rel="stylesheet" href="../css/font/font-awesome.min.css">
+</head>
+<body>
+    <h1>UI磁贴测试</h1>
+    <p>可以创建磁贴，以及增加、删除、移动瓷砖</p>
+    <pre>
+        <code>
+        </code>
+    </pre>
+    <div id='mertorId' style='margin: auto;'></div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script type="text/javascript">
+    function startYayoi() {
+        yayoi.require("yayoi.ui.metro.Wall");
+        yayoi.require("yayoi.ui.metro.Tile");
+        yayoi.require("yayoi.proxy.Proxy");
+    }
+    $(function(){
+        tab = new yayoi.ui.metro.Wall({
+            selector: "#mertorId"
+        });
+        tile = tab.createTile(1, 1);
+        tile = tab.createTile(1, 1);
+        tile = tab.createTile(1, 2);
+        tile = tab.createTile(2, 2);
+        tile = tab.createTile(2, 1);
+    })
+    </script>
+</body>
+</html>

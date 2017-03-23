@@ -1068,5 +1068,15 @@ export default StyleSheet.create({
         "display": "inline-block",
         "height": 25,
         "lineHeight": 25
+    },
+    "yayoi-ui-metro-wall": {
+        "backgroundColor": "rgb(244, 204, 141)",
+        "position": "relative"
+    },
+    "yayoi-ui-metro-tile": {
+        "backgroundColor": "rgb(128, 201, 137)",
+        "position": "absolute",
+        "cursor": "pointer",
+        "zIndex": 5
     }
 });
