@@ -75,4 +75,26 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         console.log(this.tiles);
         return tile;
     };
+    this.getTilesInArea = function(topLeft, rightBottom) {
+        var tiles = [];
+        for(var i=0; i<this.tiles.length; i++) {
+            var tile = this.tiles[i];
+            var testTop = tile.position.top;
+            var testLeft = tile.position.left;
+            if ((topLeft.top > testTop > rightBottom.top)
+            && (topLeft.left > testLeft > rightBottom.left)) {
+                tiles.push(tile);
+                continue;
+            }
+
+            testTop = tile.position.top + tile.height;
+            testLeft = tile.position.left + tile.width;
+            if ((topLeft.top > testTop > rightBottom.top)
+            && (topLeft.left > testLeft > rightBottom.left)) {
+                tiles.push(tile);
+                continue;
+            }
+        }
+        return tiles;
+    }
 });
