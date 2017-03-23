@@ -7,7 +7,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.rowSpan = 20;
     this.colSpan = 20;
     this.width = 800;
-    this.height = 800;
+    this.height = 700;
     this.tileWidth = 100;
     this.tileHeight = 100;
     this.tiles = null;
@@ -21,10 +21,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         container.width(this.width);
         container.height(this.height);
     };
-    this.createTile = function(colSize, rowSize) {
-        var tileWidth = colSize * this.tileWidth + (colSize - 1) * this.colSpan;
-        var tileHeight = rowSize * this.tileHeight + (rowSize - 1) * this.rowSpan;
-
+    this.getPosition = function(tileWidth, tileHeight) {
         var top = 0, left = 0, right=0, bottom=0, found=false;
         for(var j=0; j <100; j++) {
             for(var i=0; i<100; i++) {
@@ -45,13 +42,19 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
                 break;
             }
         }
+        return {top: top, left: left};
+    }
+     this.createTile = function(colSize, rowSize) {
+        var tileWidth = colSize * this.tileWidth + (colSize - 1) * this.colSpan;
+        var tileHeight = rowSize * this.tileHeight + (rowSize - 1) * this.rowSpan;
+        var position = this.getPosition(tileWidth, tileHeight);
 
         var tile = new yayoi.ui.metro.Tile({
             colSize: colSize,
             rowSize: rowSize,
             width: tileWidth,
             height: tileHeight,
-            position: {top: top, left: left},
+            position: position,
             wall: this
         });
         var container = this.getContainer();
@@ -73,14 +76,15 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var tiles = [];
         for(var i=0; i<this.tiles.length; i++) {
             var tile = this.tiles[i];
-            var testTop = tile.position.top;
-            var testLeft = tile.position.left;
-            console.log(testTop, testLeft, tile.height, tile.width);
-            console.log(topLeft, rightBottom);
-            if (!((testTop + tile.height <= topLeft.top )||
-                (testTop >= rightBottom.top) ||
-                (testLeft >= rightBottom.left) ||
-                (testLeft + tile.width <= topLeft.left))) {
+            var tileTop = tile.position.top;
+            var tileLeft = tile.position.left;
+            var tileBottom = tileTop + tile.height;
+            var tileRight = tileLeft + tile.width;
+
+            if (!((tileBottom <= topLeft.top ) ||
+                (tileTop >= rightBottom.top) ||
+                (tileLeft >= rightBottom.left) ||
+                (tileRight <= topLeft.left))) {
                 tiles.push(tile);
                 continue;
             }
