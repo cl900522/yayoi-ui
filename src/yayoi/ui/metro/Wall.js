@@ -8,8 +8,8 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.colSpan = 20;
     this.width = 800;
     this.height = 600;
-    this.tileWidth = 150;
-    this.tileHeight = 150;
+    this.tileWidth = 100;
+    this.tileHeight = 100;
     this.tiles = null;
     this.onRendering = function() {
         var container = this.getContainer();
@@ -40,7 +40,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         }
 
         if (bottomRightTile != null) {
-            maxLeft = bottomRightTile.position.left;
+            maxLeft = bottomRightTile.position.left + bottomRightTile.width;
             maxTop = bottomRightTile.position.top + bottomRightTile.height + this.colSpan;
             if (maxTop + tileHeight > this.height) {
                 if (this.lockHeight) {

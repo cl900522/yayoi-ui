@@ -25,13 +25,12 @@
     function startYayoi() {
         yayoi.require("yayoi.ui.metro.Wall");
         yayoi.require("yayoi.ui.metro.Tile");
-        yayoi.require("yayoi.proxy.Proxy");
     }
     $(function(){
         tab = new yayoi.ui.metro.Wall({
             selector: "#mertorId"
         });
-        tile = tab.createTile(1, 1);
+        tile = tab.createTile(3, 3);
         tile = tab.createTile(1, 1);
         tile = tab.createTile(1, 2);
         tile = tab.createTile(2, 2);

@@ -5,10 +5,12 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
     this.wall = null;
     this.rowSize = 1;
     this.colSize = 1;
+    this.width = 0;
+    this.height = 0;
     this.moving = false;
     this.moveStart = null;
-    this.prePosition = null;
     this.position = {top: 0, left: 0};
+    this.prePosition = null;
 
     this.onRendering = function() {
         var container = this.getContainer();
