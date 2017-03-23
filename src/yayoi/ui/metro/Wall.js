@@ -25,38 +25,25 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var tileWidth = colSize * this.tileWidth + (colSize - 1) * this.colSpan;
         var tileHeight = rowSize * this.tileHeight + (rowSize - 1) * this.rowSpan;
 
-        var maxTop = 0, maxLeft = 0;
-        var bottomMostTile = null, rightMostTile = null;
-        for(var i=0; i<this.tiles.length; i++) {
-            var tile = this.tiles[i];
-            if (maxTop < tile.position.top + tile.height) {
-                maxTop = tile.position.top + tile.height;
-                bottomMostTile = tile;
+        var top = 0, left = 0, right=0, bottom=0, found=false;
+        for(var j=0; j <100; j++) {
+            for(var i=0; i<100; i++) {
+                top = i * (this.tileHeight) + (i+1) * this.rowSpan;
+                left = j * (this.tileWidth) + (j+1) *this.colSpan;
+                bottom = top + tileHeight;
+                right = left + tileWidth;
+                if (bottom > this.height && this.lockHeight) {
+                    continue;
+                }
+                found = !this.hasTilesInArea({top: top, left: left}, {top: bottom, left: right});
+                // console.log(top, left, right, bottom, found);
+                if(found) {
+                    break;
+                }
             }
-            if (maxLeft < tile.position.left + tile.width) {
-                maxLeft = tile.position.left + tile.width;
-                rightMostTile = tile;
+            if(found) {
+                break;
             }
-        }
-
-        var newTop=0, newLeft=0;
-        if (bottomMostTile != null) {
-            maxTop += this.rowSpan;
-            maxLeft += this.colSpan;
-
-            if (maxTop + tileHeight > this.height && this.lockHeight) {
-                newLeft = rightMostTile.position.left + rightMostTile.width + this.colSpan;
-                newTop = this.rowSpan;
-            } else if (maxLeft + tileWidth > this.width && this.lockWidth){
-                newLeft = this.colSpan;
-                newTop = bottomMostTile.position.top + bottomMostTile.height + this.rowSpan;
-            } else {
-                newTop = bottomMostTile.position.top + bottomMostTile.height + this.rowSpan;
-                newLeft = rightMostTile.position.left;
-            }
-        } else {
-            newTop = this.colSpan;
-            newLeft = this.rowSpan;
         }
 
         var tile = new yayoi.ui.metro.Tile({
@@ -64,7 +51,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             rowSize: rowSize,
             width: tileWidth,
             height: tileHeight,
-            position: {top: newTop, left: newLeft},
+            position: {top: top, left: left},
             wall: this
         });
         var container = this.getContainer();
@@ -72,8 +59,15 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         container.append(tileContainer);
         tile.placeAt(tileContainer);
         this.tiles.push(tile);
-        console.log(this.tiles);
         return tile;
+    };
+    this.hasTilesInArea = function(topLeft, rightBottom) {
+        var tiles = this.getTilesInArea(topLeft, rightBottom);
+        if (tiles.length == 0) {
+            return false;
+        } else {
+            return true;
+        }
     };
     this.getTilesInArea = function(topLeft, rightBottom) {
         var tiles = [];
@@ -81,16 +75,12 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             var tile = this.tiles[i];
             var testTop = tile.position.top;
             var testLeft = tile.position.left;
-            if ((topLeft.top > testTop > rightBottom.top)
-            && (topLeft.left > testLeft > rightBottom.left)) {
-                tiles.push(tile);
-                continue;
-            }
-
-            testTop = tile.position.top + tile.height;
-            testLeft = tile.position.left + tile.width;
-            if ((topLeft.top > testTop > rightBottom.top)
-            && (topLeft.left > testLeft > rightBottom.left)) {
+            console.log(testTop, testLeft, tile.height, tile.width);
+            console.log(topLeft, rightBottom);
+            if (!((testTop + tile.height <= topLeft.top )||
+                (testTop >= rightBottom.top) ||
+                (testLeft >= rightBottom.left) ||
+                (testLeft + tile.width <= topLeft.left))) {
                 tiles.push(tile);
                 continue;
             }
