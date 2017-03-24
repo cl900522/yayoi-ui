@@ -7,10 +7,19 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.rowSpan = 20;
     this.colSpan = 20;
     this.width = 800;
-    this.height = 700;
+    this.height = 600;
     this.tileWidth = 100;
     this.tileHeight = 100;
     this.tiles = null;
+    this.beforeRender = function() {
+        var i = (this.height - this.rowSpan) / (this.rowSpan + this.tileHeight);
+        var j = (this.width - this.colSpan) / (this.colSpan + this.tileWidth);
+        i = Math.round(i);
+        j = Math.round(j);
+
+        this.height = i * this.tileHeight + (i + 1) * this.rowSpan;
+        this.width = j * this.tileWidth + (j + 1) * this.colSpan;
+    }
     this.onRendering = function() {
         var container = this.getContainer();
         container.addClass("yayoi-ui-metro-wall");
@@ -126,7 +135,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
 
         var top = i * this.tileHeight + (i + 1) * this.rowSpan;
         var left = j * this.tileWidth + (j + 1) * this.colSpan;
-        // return {left: left, top: top};
-        return position;
+        return {left: left, top: top};
+        //return position;
     }
 });

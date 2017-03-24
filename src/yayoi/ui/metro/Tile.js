@@ -32,6 +32,7 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
         container.height(this.height);
         container.css("top", this.position.top);
         container.css("left", this.position.left);
+        container.css("transition", "0.2s");
     };
     this.startMove = function(positon) {
         var container = this.getContainer();

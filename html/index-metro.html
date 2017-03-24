@@ -18,29 +18,57 @@
         <code>
         </code>
     </pre>
-    <div id='mertorId' style='margin: auto;margin-bottom:200px'></div>
+
+    <div id='mertorId' style='margin: auto;'></div>
+    <div id="formId" style="margin: auto;width: 400px"></div>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script type="text/javascript">
     function startYayoi() {
         yayoi.require("yayoi.ui.metro.Wall");
         yayoi.require("yayoi.ui.metro.Tile");
+        yayoi.require("yayoi.ui.common.Button");
+        yayoi.require("yayoi.ui.form.Form");
+        yayoi.require("yayoi.model.JsonModel");
     }
     $(function(){
-        tab = new yayoi.ui.metro.Wall({
+        var tab = new yayoi.ui.metro.Wall({
             selector: "#mertorId"
         });
-        tile = tab.createTile(3, 3);
-        tile = tab.createTile(2, 2);
         tile = tab.createTile(1, 2);
-        tile = tab.createTile(1, 1);
+        tile = tab.createTile(2, 3);
         tile = tab.createTile(2, 1);
-        tile = tab.createTile(1, 2);
-        tile = tab.createTile(2, 2);
-        tile = tab.createTile(1, 1);
-        tile = tab.createTile(2, 2);
-        tile = tab.createTile(3, 1);
+
+        var model = new yayoi.model.JsonModel({
+            colSpan: 1,
+            rowSpan: 1
+        });
+        var form = new yayoi.ui.form.Form({
+            title: "创建Tile",
+            selector: '#formId',
+            columns : 1,
+            fields: [
+                {
+                    type: "text", format: "text", title: "行", name: "rowSpan", router: "rowSpan", hint: "占行高"
+                }, {
+                    type: "text", format: "text",  title: "列", name: "colSpan", router: "colSpan", hint: "占列宽"
+                }
+            ],
+            buttons: [
+                {
+                    text: "确定",
+                    icon: "ok-sign",
+                    click: function() {
+                        form.finishEdit();
+                        tile = tab.createTile(model.getValue("./rowSpan"), model.getValue("./colSpan"));
+                    }
+                }
+            ]
+        });
+        form.setModel(model, "./");
+        form.invalidate();
     })
+
     </script>
 </body>
 </html>
