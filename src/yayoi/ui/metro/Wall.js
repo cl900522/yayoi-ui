@@ -7,7 +7,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.rowSpan = 20;
     this.colSpan = 20;
     this.width = 800;
-    this.height = 600;
+    this.height = 700;
     this.tileWidth = 100;
     this.tileHeight = 100;
     this.tiles = null;
