@@ -139,7 +139,6 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
                 i--;
             }
         }
-        console.log(tiles);
 
         /*延时处理*/
         setTimeout(function() {
@@ -147,7 +146,6 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
                 var tile = tiles[i];
                 if (!tiles[i].dragging) {
                     var autoPos = me.findAutoPosition(tiles[i].width, tiles[i].height);
-                    console.log(autoPos);
                     var affectTiles = me.getTilesInArea(autoPos, {top: autoPos.top + tile.height, left: autoPos.left + tile.width});
                     for (var j=0; j<affectTiles.length; j++) {
                         affectTiles[j].moving = true;
