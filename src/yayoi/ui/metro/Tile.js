@@ -38,7 +38,7 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
         if (this.temp) {
             container.addClass("temp");
         }
-
+        container.html(this.id);
         if (this.dragging) {
             container.css("transition", "0s");
             container.css("z-index", 10);
@@ -59,6 +59,7 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
         tempTile.position.top = me.position.top;
         tempTile.position.left = me.position.left;
         tempTile.temp = true;
+        me.wall.addTile(tempTile);
         tempTile.invalidate();
 
         var movFun = function(event) {
@@ -81,7 +82,7 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
             }
 
             timer = setTimeout(function() {
-                var position = me.wall.getDropPosition(me, {top: newTop, left: newLeft});
+                var position = me.wall.getDropPosition(tempTile, {top: newTop, left: newLeft});
                 tempTile.position = position;
                 tempTile.invalidate();
             }, 20);

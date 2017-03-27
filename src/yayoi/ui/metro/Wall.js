@@ -53,7 +53,6 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
                         continue;
                     }
                     found = !this.hasTilesInArea({top: top, left: left}, {top: bottom, left: right});
-
                     if (found) {
                         return {top: top, left: left};
                     }
@@ -82,6 +81,9 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             position: position,
             wall: this
         });
+        return tile;
+    };
+    this.addTile = function(tile) {
         var container = this.getContainer();
         var tileContainer = $("<div></div>")
         container.append(tileContainer);
@@ -132,9 +134,12 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         for(var i=0; i<tiles.length; i++) {
             tiles[i].moving = true;
             if (tiles[i].temp) {
+                tiles[i].moving = false;
                 tiles.splice(i, 1);
+                i--;
             }
         }
+        console.log(tiles);
 
         /*延时处理*/
         setTimeout(function() {
@@ -142,12 +147,11 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
                 var tile = tiles[i];
                 if (!tiles[i].dragging) {
                     var autoPos = me.findAutoPosition(tiles[i].width, tiles[i].height);
+                    console.log(autoPos);
                     var affectTiles = me.getTilesInArea(autoPos, {top: autoPos.top + tile.height, left: autoPos.left + tile.width});
                     for (var j=0; j<affectTiles.length; j++) {
-                        if (!affectTiles[j].temp) {
-                            affectTiles[j].moving = true;
-                            tiles.push(affectTiles[j]);
-                        }
+                        affectTiles[j].moving = true;
+                        tiles.push(affectTiles[j]);
                     }
 
                     tiles[i].position = autoPos;

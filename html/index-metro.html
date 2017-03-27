@@ -36,8 +36,11 @@
             selector: "#mertorId"
         });
         tile = tab.createTile(1, 2);
+        tab.addTile(tile);
         tile = tab.createTile(1, 1);
+        tab.addTile(tile);
         tile = tab.createTile(2, 1);
+        tab.addTile(tile);
 
         var model = new yayoi.model.JsonModel({
             colSpan: 1,
@@ -61,6 +64,7 @@
                     click: function() {
                         form.finishEdit();
                         tile = tab.createTile(model.getValue("./colSpan"), model.getValue("./rowSpan"));
+                        tab.addTile(tile);
                     }
                 }
             ]
