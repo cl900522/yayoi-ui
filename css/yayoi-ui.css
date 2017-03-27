@@ -892,3 +892,7 @@
     cursor: pointer;
     z-index: 5;
 }
+.yayoi-ui-metro-tile.temp{
+    background-color: white;
+    border: 1px solid rgb(128, 201, 137);
+}

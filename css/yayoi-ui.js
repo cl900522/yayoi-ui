@@ -1078,5 +1078,9 @@ export default StyleSheet.create({
         "position": "absolute",
         "cursor": "pointer",
         "zIndex": 5
+    },
+    "yayoi-ui-metro-tiletemp": {
+        "backgroundColor": "white",
+        "border": "1px solid rgb(128, 201, 137)"
     }
 });

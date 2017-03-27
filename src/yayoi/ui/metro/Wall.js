@@ -61,7 +61,15 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             }
         }
     }
-     this.createTile = function(colSize, rowSize) {
+    this.removeTile = function(tile) {
+        for(var i=0; i<this.tiles.length;i++) {
+            if (this.tiles[i] === tile) {
+                this.tiles.splice(i, 1);
+                tile.getContainer().remove();
+            }
+        }
+    }
+    this.createTile = function(colSize, rowSize) {
         var tileWidth = colSize * this.tileWidth + (colSize - 1) * this.colSpan;
         var tileHeight = rowSize * this.tileHeight + (rowSize - 1) * this.rowSpan;
         var position = this.findAutoPosition(tileWidth, tileHeight);
@@ -93,7 +101,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var tiles = [];
         for(var i=0; i<this.tiles.length; i++) {
             var tile = this.tiles[i];
-            if (tile.moving) {
+            if (tile.moving || tile.dragging) {
                 continue;
             }
             var tileTop = tile.position.top;
@@ -125,13 +133,16 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             if (!tiles[i].dragging) {
                 tiles[i].moving = true;
             }
+            if (tiles[i].temp) {
+                tiles.splice(i, 1);
+            }
         }
 
         /*延时处理*/
         setTimeout(function() {
             for(var i=0; i<tiles.length; i++) {
                 var tile = tiles[i];
-                if (!tiles[i].dragging) {
+                if (!tiles[i].dragging && !tiles[i].temp) {
                     var autoPos = me.findAutoPosition(tiles[i].width, tiles[i].height);
                     var affectTiles = me.getTilesInArea(autoPos, {top: autoPos.top + tile.height, left: autoPos.left + tile.width});
                     for (var j=0; j<affectTiles.length; j++) {
