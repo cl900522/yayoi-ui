@@ -36,7 +36,7 @@
             selector: "#mertorId"
         });
         tile = tab.createTile(1, 2);
-        tile = tab.createTile(2, 3);
+        tile = tab.createTile(1, 1);
         tile = tab.createTile(2, 1);
 
         var model = new yayoi.model.JsonModel({
@@ -60,7 +60,7 @@
                     icon: "ok-sign",
                     click: function() {
                         form.finishEdit();
-                        tile = tab.createTile(model.getValue("./rowSpan"), model.getValue("./colSpan"));
+                        tile = tab.createTile(model.getValue("./colSpan"), model.getValue("./rowSpan"));
                     }
                 }
             ]

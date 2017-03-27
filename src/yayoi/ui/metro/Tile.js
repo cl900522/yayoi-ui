@@ -7,10 +7,12 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
     this.colSize = 1;
     this.width = 0;
     this.height = 0;
+    /*是否被拖动中*/
+    this.dragging = false;
+    /*是否被移动中，通常自动触发*/
     this.moving = false;
-    this.moveStart = null;
     this.position = {top: 0, left: 0};
-    this.prePosition = null;
+    this.movingPos = {top: 0, left: 0};
 
     this.onRendering = function() {
         var container = this.getContainer();
@@ -23,7 +25,7 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
         var container = this.getContainer();
         var me = this;
         container.bind("mousedown", function(event) {
-            me.startMove({x:event.clientX, y:event.clientY});
+            me.startDrag({x:event.clientX, y:event.clientY});
         });
     }
     this.reRender = function() {
@@ -32,39 +34,50 @@ yayoi.extend("yayoi.ui.metro.Tile", "yayoi.ui.common.BasicComponent", [], functi
         container.height(this.height);
         container.css("top", this.position.top);
         container.css("left", this.position.left);
-        container.css("transition", "0.2s");
+        container.css("transition", "0.3s");
     };
-    this.startMove = function(positon) {
+    this.startDrag = function(positon) {
         var container = this.getContainer();
-        this.moving = true;
-        this.moveStart = positon;
-        var top = parseInt(container.css("top").replace("px",""));
-        var left = parseInt(container.css("left").replace("px",""));
         container.css("z-index", 10);
-        this.prePosition = {top: top, left: left};
-
+        this.dragging = true;
         var me = this;
-        var movFun = function(event) {
-            if (me.moving) {
-                var x = me.moveStart.x - event.clientX;
-                var y = me.moveStart.y - event.clientY;
-                var newTop = me.prePosition.top - y;
-                var newLeft = me.prePosition.left - x;
+        var timer = null;
+        var moveStart = positon;
+        var prePosition = {top: me.position.top, left: me.position.left};
 
-                var position = me.wall.findPosition(me, {top: newTop, left: newLeft});
+        var movFun = function(event) {
+            if (timer != null) {
+                clearTimeout(timer);
+            }
+            var x = moveStart.x - event.clientX;
+            var y = moveStart.y - event.clientY;
+            var newTop = prePosition.top - y;
+            var newLeft = prePosition.left - x;
+
+            if (newTop < 0) newTop = 0;
+            if (newLeft < 0) newLeft = 0;
+            if (me.wall.lockHeight) {
+                if (newTop + me.height > me.wall.height) newTop = me.wall.height - me.height;
+            }
+            if (me.wall.lockWidth) {
+                if (newLeft + me.width > me.wall.width) newLeft = me.wall.width - me.width;
+            }
+
+            timer = setTimeout(function() {
+                var position = me.wall.getDropPosition(me, {top: newTop, left: newLeft});
 
                 me.position = position;
                 me.invalidate();
-            }
+            }, 10);
         }
         $(document).bind("mousemove", movFun);
         $(document).bind("mouseup", function(event) {
-            me.stopMove();
+            me.stopDrag();
             $(document).unbind("mousemove", movFun);
             container.css("z-index", 5);
         });
     };
-    this.stopMove = function() {
-        this.moving = false;
+    this.stopDrag = function() {
+        this.dragging = false;
     }
 });
