@@ -7,7 +7,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
     this.rowSpan = 20;
     this.colSpan = 20;
     this.width = 800;
-    this.height = 700;
+    this.height = 600;
     this.tileWidth = 100;
     this.tileHeight = 100;
     this.tiles = null;
@@ -118,7 +118,8 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
             this.tiles[i].getContainer().css("background-color", preColor);
         }
 
-        var tiles = this.getTilesInArea(position, {top: newTop+tile.height, left: newLeft + tile.width});
+        var tiles = this.getTilesInArea(position, {top: position.top + tile.height, left: position.left + tile.width});
+
         for(var i=0; i<tiles.length; i++) {
             if (!tiles[i].moving) {
                 tiles[i].getContainer().css("background-color", "red");
