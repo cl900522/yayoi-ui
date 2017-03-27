@@ -130,9 +130,7 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         /*标记移动*/
         var tiles = this.getTilesInArea(position, {top: position.top + tile.height, left: position.left + tile.width});
         for(var i=0; i<tiles.length; i++) {
-            if (!tiles[i].dragging) {
-                tiles[i].moving = true;
-            }
+            tiles[i].moving = true;
             if (tiles[i].temp) {
                 tiles.splice(i, 1);
             }
@@ -142,12 +140,14 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         setTimeout(function() {
             for(var i=0; i<tiles.length; i++) {
                 var tile = tiles[i];
-                if (!tiles[i].dragging && !tiles[i].temp) {
+                if (!tiles[i].dragging) {
                     var autoPos = me.findAutoPosition(tiles[i].width, tiles[i].height);
                     var affectTiles = me.getTilesInArea(autoPos, {top: autoPos.top + tile.height, left: autoPos.left + tile.width});
                     for (var j=0; j<affectTiles.length; j++) {
-                        affectTiles[j].moving = true;
-                        tiles.push(affectTiles[j]);
+                        if (!affectTiles[j].temp) {
+                            affectTiles[j].moving = true;
+                            tiles.push(affectTiles[j]);
+                        }
                     }
 
                     tiles[i].position = autoPos;
