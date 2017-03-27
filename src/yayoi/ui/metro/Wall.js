@@ -19,44 +19,52 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
 
         this.height = i * this.tileHeight + (i + 1) * this.rowSpan;
         this.width = j * this.tileWidth + (j + 1) * this.colSpan;
+        this.tiles = [];
+        if (this.lockHeight && this.lockWidth) {
+            throw "You can not loack width and height both";
+        }
+        if (!(this.lockHeight || this.lockWidth)) {
+            throw "You should lock either height or width";
+        }
     }
     this.onRendering = function() {
         var container = this.getContainer();
         container.addClass("yayoi-ui-metro-wall");
-        this.tiles = [];
     };
     this.reRender = function() {
         var container = this.getContainer();
         container.width(this.width);
         container.height(this.height);
     };
-    this.getPosition = function(tileWidth, tileHeight) {
+    this.findAutoPosition = function(tileWidth, tileHeight) {
         var top = 0, left = 0, right=0, bottom=0, found=false;
-        for(var j=0; j <100; j++) {
-            for(var i=0; i<100; i++) {
-                top = i * (this.tileHeight) + (i+1) * this.rowSpan;
-                left = j * (this.tileWidth) + (j+1) *this.colSpan;
-                bottom = top + tileHeight;
-                right = left + tileWidth;
-                if (bottom > this.height && this.lockHeight) {
-                    continue;
-                }
-                found = !this.hasTilesInArea({top: top, left: left}, {top: bottom, left: right});
-                // console.log(top, left, right, bottom, found);
-                if(found) {
-                    break;
-                }
+        /*当高度锁定*/
+        if (this.lockHeight) {
+            if (tileWidth + this.tileWidth * 2 > this.width) {
+                throw "tile is too much width";
             }
-            if(found) {
-                break;
+            for(var j=0; j <100; j++) {
+                for(var i=0; i<100; i++) {
+                    top = i * (this.tileHeight) + (i+1) * this.rowSpan;
+                    left = j * (this.tileWidth) + (j+1) *this.colSpan;
+                    bottom = top + tileHeight;
+                    right = left + tileWidth;
+                    if (bottom > this.height) {
+                        continue;
+                    }
+                    found = !this.hasTilesInArea({top: top, left: left}, {top: bottom, left: right});
+
+                    if (found) {
+                        return {top: top, left: left};
+                    }
+                }
             }
         }
-        return {top: top, left: left};
     }
      this.createTile = function(colSize, rowSize) {
         var tileWidth = colSize * this.tileWidth + (colSize - 1) * this.colSpan;
         var tileHeight = rowSize * this.tileHeight + (rowSize - 1) * this.rowSpan;
-        var position = this.getPosition(tileWidth, tileHeight);
+        var position = this.findAutoPosition(tileWidth, tileHeight);
 
         var tile = new yayoi.ui.metro.Tile({
             colSize: colSize,
@@ -85,6 +93,9 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var tiles = [];
         for(var i=0; i<this.tiles.length; i++) {
             var tile = this.tiles[i];
+            if (tile.moving) {
+                continue;
+            }
             var tileTop = tile.position.top;
             var tileLeft = tile.position.left;
             var tileBottom = tileTop + tile.height;
@@ -100,35 +111,45 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         }
         return tiles;
     };
-    this.findPosition = function(tile, newPostion) {
+    this.getDropPosition = function(tile, newPostion) {
+        var me = this;
         var newTop = newPostion.top;
         var newLeft = newPostion.left;
 
-        if (newTop < 0) newTop = 0;
-        if (newLeft < 0) newLeft = 0;
-        if (this.lockHeight) {
-            if (newTop + tile.height > tile.wall.height) newTop = tile.wall.height - tile.height;
-        }
-
         var position = {top: newTop, left: newLeft}
-        position = this.findRightPosition(position);
+        position = this.findFixedPosition(position);
 
-        var preColor = tile.getContainer().css("background-color");
-        for(var i=0; i<this.tiles.length; i++) {
-            this.tiles[i].getContainer().css("background-color", preColor);
-        }
-
+        /*标记移动*/
         var tiles = this.getTilesInArea(position, {top: position.top + tile.height, left: position.left + tile.width});
-
         for(var i=0; i<tiles.length; i++) {
-            if (!tiles[i].moving) {
-                tiles[i].getContainer().css("background-color", "red");
+            if (!tiles[i].dragging) {
+                tiles[i].moving = true;
             }
         }
 
+        /*延时处理*/
+        setTimeout(function() {
+            for(var i=0; i<tiles.length; i++) {
+                var tile = tiles[i];
+                if (!tiles[i].dragging) {
+                    var autoPos = me.findAutoPosition(tiles[i].width, tiles[i].height);
+                    var affectTiles = me.getTilesInArea(autoPos, {top: autoPos.top + tile.height, left: autoPos.left + tile.width});
+                    for (var j=0; j<affectTiles.length; j++) {
+                        affectTiles[j].moving = true;
+                        tiles.push(affectTiles[j]);
+                    }
+
+                    tiles[i].position = autoPos;
+                    tiles[i].moving = false;
+                    tiles[i].invalidate();
+                }
+            }
+        }, 1);
+
         return position;
     };
-    this.findRightPosition = function(position) {
+    /*发现最邻近的吸附位置*/
+    this.findFixedPosition = function(position) {
         var i = (position.top - this.rowSpan) / (this.rowSpan + this.tileHeight);
         var j = (position.left - this.colSpan) / (this.colSpan + this.tileWidth);
         i = Math.round(i);
@@ -137,6 +158,5 @@ yayoi.extend("yayoi.ui.metro.Wall", "yayoi.ui.common.BasicComponent", ["yayoi.ui
         var top = i * this.tileHeight + (i + 1) * this.rowSpan;
         var left = j * this.tileWidth + (j + 1) * this.colSpan;
         return {left: left, top: top};
-        //return position;
-    }
+    };
 });
